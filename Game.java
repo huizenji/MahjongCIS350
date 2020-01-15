@@ -3,7 +3,7 @@
  * Mahjong. It is displayed by the Panel and GUI classes.
  *
  * @Authors: Jillian Huizenga,
- * @Versoin: 1/15/2020
+ * @Version: 1/15/2020
  *********************************************************************/
 public class Game {
 
@@ -14,103 +14,74 @@ public class Game {
      *****************************************************************/
     public Game(){
         tiles = new Tile[144];
-        int tileVal = 1;
 
         // create all 144 Tiles
         for (int numTiles = 0; numTiles < 144; numTiles++){
 
-            // handle Tile values (should loop 1-9)
-            if (tileVal == 10)
-                tileVal = 1;
-
             // create Circle suit (four 1's, four 2's, and so on)
             if (numTiles < 36) {
                 if (numTiles < 4) {
-                    tiles[numTiles] = new Tile("Circle", tileVal);
+                    tiles[numTiles] = new Tile("Circle", 1);
                 } else if (numTiles < 8) {
-                    tileVal++;
-                    tiles[numTiles] = new Tile("Circle", tileVal);
+                    tiles[numTiles] = new Tile("Circle", 2);
                 } else if (numTiles < 12) {
-                    tileVal++;
-                    tiles[numTiles] = new Tile("Circle", tileVal);
+                    tiles[numTiles] = new Tile("Circle", 3);
                 } else if (numTiles < 16) {
-                    tileVal++;
-                    tiles[numTiles] = new Tile("Circle", tileVal);
+                    tiles[numTiles] = new Tile("Circle", 4);
                 } else if (numTiles < 20) {
-                    tileVal++;
-                    tiles[numTiles] = new Tile("Circle", tileVal);
+                    tiles[numTiles] = new Tile("Circle", 5);
                 } else if (numTiles < 24) {
-                    tileVal++;
-                    tiles[numTiles] = new Tile("Circle", tileVal);
+                    tiles[numTiles] = new Tile("Circle", 6);
                 } else if (numTiles < 28) {
-                    tileVal++;
-                    tiles[numTiles] = new Tile("Circle", tileVal);
+                    tiles[numTiles] = new Tile("Circle", 7);
                 } else if (numTiles < 32) {
-                    tileVal++;
-                    tiles[numTiles] = new Tile("Circle", tileVal);
+                    tiles[numTiles] = new Tile("Circle", 8);
                 } else {
-                    tileVal++;
-                    tiles[numTiles] = new Tile("Circle", tileVal);
+                    tiles[numTiles] = new Tile("Circle", 9);
                 }
 
             // create Character suit (four 1's, four 2's, and so on)
             } else if (numTiles < 72) {
                 if (numTiles < 40) {
-                    tiles[numTiles] = new Tile("Character", tileVal);
+                    tiles[numTiles] = new Tile("Character", 1);
                 } else if (numTiles < 44) {
-                    tileVal++;
-                    tiles[numTiles] = new Tile("Character", tileVal);
+                    tiles[numTiles] = new Tile("Character", 2);
                 } else if (numTiles < 48) {
-                    tileVal++;
-                    tiles[numTiles] = new Tile("Character", tileVal);
+                    tiles[numTiles] = new Tile("Character", 3);
                 } else if (numTiles < 52) {
-                    tileVal++;
-                    tiles[numTiles] = new Tile("Character", tileVal);
+                    tiles[numTiles] = new Tile("Character", 4);
                 } else if (numTiles < 56) {
-                    tileVal++;
-                    tiles[numTiles] = new Tile("Character", tileVal);
+                    tiles[numTiles] = new Tile("Character", 5);
                 } else if (numTiles < 60) {
-                    tileVal++;
-                    tiles[numTiles] = new Tile("Character", tileVal);
+                    tiles[numTiles] = new Tile("Character", 6);
                 } else if (numTiles < 64) {
-                    tileVal++;
-                    tiles[numTiles] = new Tile("Character", tileVal);
+                    tiles[numTiles] = new Tile("Character", 7);
                 } else if (numTiles < 68) {
-                    tileVal++;
-                    tiles[numTiles] = new Tile("Character", tileVal);
+                    tiles[numTiles] = new Tile("Character", 8);
                 } else {
-                    tileVal++;
-                    tiles[numTiles] = new Tile("Character", tileVal);
+                    tiles[numTiles] = new Tile("Character", 9);
                 }
 
             // create Bamboo suit (four 1's, four 2's, and so on)
             } else if (numTiles < 108) {
                 if (numTiles < 76) {
-                    tiles[numTiles] = new Tile("Bamboo", tileVal);
+                    tiles[numTiles] = new Tile("Bamboo", 1);
                 } else if (numTiles < 80) {
-                    tileVal++;
-                    tiles[numTiles] = new Tile("Bamboo", tileVal);
+                    tiles[numTiles] = new Tile("Bamboo", 2);
                 } else if (numTiles < 84) {
-                    tileVal++;
-                    tiles[numTiles] = new Tile("Bamboo", tileVal);
+                    tiles[numTiles] = new Tile("Bamboo", 3);
                 } else if (numTiles < 88) {
-                    tileVal++;
-                    tiles[numTiles] = new Tile("Bamboo", tileVal);
+                    tiles[numTiles] = new Tile("Bamboo", 4);
                 } else if (numTiles < 92) {
-                    tileVal++;
-                    tiles[numTiles] = new Tile("Bamboo", tileVal);
+                    tiles[numTiles] = new Tile("Bamboo", 5);
                 } else if (numTiles < 96) {
-                    tileVal++;
-                    tiles[numTiles] = new Tile("Bamboo", tileVal);
+                    tiles[numTiles] = new Tile("Bamboo", 6);
                 } else if (numTiles < 100) {
-                    tileVal++;
-                    tiles[numTiles] = new Tile("Bamboo", tileVal);
+                    tiles[numTiles] = new Tile("Bamboo", 7);
                 } else if (numTiles < 104) {
-                    tileVal++;
-                    tiles[numTiles] = new Tile("Bamboo", tileVal);
+                    tiles[numTiles] = new Tile("Bamboo", 8);
                 } else {
-                    tileVal++;
-                    tiles[numTiles] = new Tile("Bamboo", tileVal);
+                    tiles[numTiles] = new Tile("Bamboo", 9);
                 }
 
             // create Point tiles (12 Dragons, 16 Winds, and 8 Flowers)
