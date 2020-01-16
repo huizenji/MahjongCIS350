@@ -49,6 +49,9 @@ public class Game {
         }
     }
 
+    /*******************************************************************
+     * This method creates all the point tiles.
+     ******************************************************************/
     private void createPointTile(){
 
         String []dragonColor = {"Red","Green","White"};
