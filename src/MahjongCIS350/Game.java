@@ -13,14 +13,28 @@ public class Game {
 
     private ArrayList<Tile> tiles;
 
+    public static void main(String[] args){
+
+        Game test = new Game();
+        Tile test1 = test.getTilesIndex();
+        System.out.println(test1.getType());
+    }
+
     /******************************************************************
      * This is the constructor for the Game class.
      *****************************************************************/
     public Game(){
 
         tiles = new ArrayList<>();
-
         createTile();
+    }
+
+    public Tile getTilesIndex() {
+        return tiles.get(0);
+    }
+
+    public void setTiles(ArrayList<Tile> tiles) {
+        this.tiles = tiles;
     }
 
     /*******************************************************************

@@ -16,4 +16,5 @@ public class Dragon extends Tile{
     public void setColor(String color) {
         Color = color;
     }
+
 }
