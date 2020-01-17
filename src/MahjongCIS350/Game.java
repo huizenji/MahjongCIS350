@@ -11,13 +11,21 @@ import java.util.*;
  *********************************************************************/
 public class Game {
 
+    /** All the tiles in Mahjong **/
     private ArrayList<Tile> tiles;
+
+    /** The max amount of tiles in Mahjong **/
+    private int maxTile;
+
+    /** The current player ,aka, whose turn **/
+    private int currentPlayer; // Change to Player class
+
+    private int startingPlayer; // Change to Player class
+
 
     public static void main(String[] args){
 
         Game test = new Game();
-        Tile test1 = test.getTilesIndex();
-        System.out.println(test1.getType());
     }
 
     /******************************************************************
@@ -26,15 +34,8 @@ public class Game {
     public Game(){
 
         tiles = new ArrayList<>();
+        maxTile = 144;
         createTile();
-    }
-
-    public Tile getTilesIndex() {
-        return tiles.get(0);
-    }
-
-    public void setTiles(ArrayList<Tile> tiles) {
-        this.tiles = tiles;
     }
 
     /*******************************************************************
@@ -93,5 +94,74 @@ public class Game {
 
             tiles.add(new Tile("Flower"));
         }
+    }
+
+    /*******************************************************************
+     * This method shuffles all the tiles that are not in the players
+     * hands.
+     ******************************************************************/
+    private void shuffle(){
+
+        Random rand = new Random();
+        int randNum1;
+        int randNum2;
+
+        for (int i = 0; i < 100000; i++){
+
+            randNum1 = rand.nextInt(maxTile);
+            randNum2 = rand.nextInt(maxTile);
+            swapTile(tiles.get(randNum1),tiles.get(randNum2));
+        }
+    }
+
+    /*******************************************************************
+     * This method swap the position of 2 tiles.
+     *
+     * @param a The first Tile.
+     * @param b The second Tile.
+     ******************************************************************/
+    private void swapTile(Tile a, Tile b){
+
+        Tile temp = a;
+        a = b;
+        b = temp;
+    }
+
+    public int getCurrentPlayer() {
+        return currentPlayer;
+    }
+
+    public void setCurrentPlayer(int currentPlayer) {
+        this.currentPlayer = currentPlayer;
+    }
+
+    public int getStartingPlayer() {
+        return startingPlayer;
+    }
+
+    public void setStartingPlayer(int startingPlayer) {
+        this.startingPlayer = startingPlayer;
+    }
+
+    private void assignStartPlayer(){
+
+        Random rand = new Random();
+    }
+
+    /** Add to Later Whoever has time **/
+    private void isChi(){
+
+    }
+
+    private void isPong(){
+
+    }
+
+    private void isKong(){
+
+    }
+
+    private void mahjongWin(){
+
     }
 }
