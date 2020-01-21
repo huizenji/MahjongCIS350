@@ -55,6 +55,4 @@ public class Hand {
         handTile.remove(p);
     }
 
-    public void autoSort(){};
-
 }
