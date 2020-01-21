@@ -1,3 +1,5 @@
+package MahjongCIS350;
+
 import java.util.ArrayList;
 
 /**
@@ -5,14 +7,15 @@ import java.util.ArrayList;
  * hands are initially empty
  * any types of tiles can be added or removed
  */
-public class Hand {
+public class Player{
+
     private ArrayList<Tile> handTile;
 
     /**
      * create an empty hand
      */
-    public Hand(){
-        hand = new ArrayList<Tile>();
+    public Player(){
+        handTile = new ArrayList<Tile>();
     }
 
     /**
