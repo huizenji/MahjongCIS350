@@ -7,7 +7,7 @@ import java.util.*;
  * Mahjong. It is displayed by the Panel and GUI classes.
  *
  * @Authors: Jillian Huizenga, Wayne Chen
- * @Version: 1/15/2020
+ * @Version: 1/21/2020
  *********************************************************************/
 public class Game {
 
