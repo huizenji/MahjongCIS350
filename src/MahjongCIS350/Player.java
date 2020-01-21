@@ -10,7 +10,10 @@ import java.util.ArrayList;
 public class Player{
 
     /** Player tiles that is in his or her hand **/
-    private ArrayList<Suite> handTile;
+    private ArrayList<Tile> handTile;
+
+    /** Player tiles that is in his or her hand **/
+    private ArrayList<Tile> setPile;
 
     /** The direction of the Player **/
     private String direction;
@@ -20,11 +23,14 @@ public class Player{
      */
     public Player(){
 
-        handTile = new ArrayList<Suite>();
+        handTile = new ArrayList<Tile>();
+        this.setPile = new ArrayList<Tile>();
+        this.direction = null;
     }
 
     public Player(String direction) {
-        this.handTile = new ArrayList<Suite>();
+        this.handTile = new ArrayList<Tile>();
+        this.setPile = new ArrayList<Tile>();
         this.direction = direction;
     }
 
@@ -41,7 +47,7 @@ public class Player{
      * add Tile t to the end of the handTile
      * @param t
      */
-    public void addTile(Suite t){
+    public void addTile(Tile t){
         if(t == null){
             throw new NullPointerException("No such type of tile, can't be added");
         }
@@ -52,7 +58,7 @@ public class Player{
      * remove the Tile t
      * @param t
      */
-    public void removeTile(Suite t){
+    public void removeTile(Tile t){
         if(t == null){
             throw new NullPointerException("No such type of tile, can't be added");
         }
@@ -70,9 +76,10 @@ public class Player{
         handTile.remove(p);
     }
 
-    public ArrayList<Suite> getHandTile() {
+    public ArrayList<Tile> getHandTile() {
         return handTile;
     }
+
 
     public String getDirection() {
         return direction;

@@ -202,9 +202,19 @@ public class Game {
         b = temp;
     }
 
+    /*******************************************************************
+     * This method deals out 14 suite tiles to all players
+     ******************************************************************/
     private void dealTile(){
 
+        for (int i = 0; i < 4 * 14; i++) {
+            playerList[i].addTile(tiles.remove(0));
+        }
 
+        // Giving starting player 1 extra tile
+        playerList[startingPlayer].addTile(tiles.remove(0));
+
+        /** Finish later with discussion about point tiles **/
     }
 
     public int getCurrentPlayer() {
@@ -272,7 +282,7 @@ public class Game {
 
     /*******************************************************************
      * This method compares 2 suite tiles and determines if they are
-     * the same tile.
+     * the same tile. Only works with Suites
      *
      * @param tile1 The first tile that is being compared.
      * @param tile2 The second tile that is being compared.
