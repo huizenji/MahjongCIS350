@@ -17,15 +17,30 @@ public class Game {
     /** The max amount of tiles in Mahjong **/
     private int maxTile;
 
-    /** The current player ,aka, whose turn **/
-    private int currentPlayer; // Change to Player class
+    /** Index of current player ,aka, whose turn **/
+    private int currentPlayer;
 
-    private int startingPlayer; // Change to Player class
+    /** Index of player who has the "East" direction **/
+    private int startingPlayer;
 
+    Player []playerList;
+
+    /** Total number of players per game **/
+    private int TOTAL_PLAYER = 4;
 
     public static void main(String[] args){
 
-        Game test = new Game();
+        Suite a = new Suite("a",2);
+        Suite b = new Suite("a",2);
+
+        if (a.equals(b)){
+
+            System.out.println("Objects are Equal");
+        }
+
+        else{
+            System.out.println("No");
+        }
     }
 
     /******************************************************************
@@ -36,6 +51,9 @@ public class Game {
         tiles = new ArrayList<>();
         maxTile = 144;
         createTile();
+        setupPlayer();
+        shuffle();
+        dealTile();
     }
 
     /*******************************************************************
@@ -97,6 +115,63 @@ public class Game {
     }
 
     /*******************************************************************
+     * This method creates all the players in the game and randomly
+     * assigns one of the player to be the starting player.
+     ******************************************************************/
+    private void setupPlayer(){
+
+        playerList = new Player[TOTAL_PLAYER];
+
+        // Creating 4 players
+        playerList[0] = new Player("East");
+        playerList[1] = new Player("South");
+        playerList[2] = new Player("West");
+        playerList[3] = new Player("North");
+
+        Random rand = new Random();
+        int randVal = rand.nextInt(4) + 1;
+
+        // Rotate the winds of the player to randomly set a starting
+        // player
+        for (int i = 0; i < randVal; i++){
+            for (int j = 0; j < TOTAL_PLAYER; j++){
+
+                rotatePlayer(playerList[j]);
+            }
+        }
+
+        // Find the starting player index
+        startingPlayer = randVal % TOTAL_PLAYER;
+        currentPlayer = startingPlayer;
+    }
+
+    /*******************************************************************
+     * This method rotates the wind direction of each player.
+     ******************************************************************/
+    private void rotatePlayer(Player player){
+
+        if (player.getDirection().equals("East")){
+
+            player.setDirection("South");
+        }
+
+        else if (player.getDirection().equals("South")){
+
+            player.setDirection("West");
+        }
+
+        else if (player.getDirection().equals("West")){
+
+            player.setDirection("North");
+        }
+
+        else if (player.getDirection().equals("North")){
+
+            player.setDirection("East");
+        }
+    }
+
+    /*******************************************************************
      * This method shuffles all the tiles that are not in the players
      * hands.
      ******************************************************************/
@@ -127,6 +202,11 @@ public class Game {
         b = temp;
     }
 
+    private void dealTile(){
+
+
+    }
+
     public int getCurrentPlayer() {
         return currentPlayer;
     }
@@ -143,18 +223,43 @@ public class Game {
         this.startingPlayer = startingPlayer;
     }
 
-    private void assignStartPlayer(){
-
-        Random rand = new Random();
-    }
-
     /** Add to Later Whoever has time **/
     private void isChi(){
 
     }
 
-    private void isPong(){
+    /*******************************************************************
+     * This method checks if there is a pong for a specific player.
+     *
+     * @param handTile The hand of the player that is being checked
+     *                 for a pong.
+     * @param discard The tile that was last discarded.
+     ******************************************************************/
+    private boolean isPong(ArrayList<Suite> handTile, Suite discard){
 
+        // Number of Tiles in player hand that can used for a pong
+        int matchTile = 0;
+
+        // Scan through the hand and determine if there is a matching
+        // tile
+        for(int i = 0; i < handTile.size(); i++){
+
+            if (compareSuite(handTile.get(i),discard)){
+
+                matchTile++;
+            }
+        }
+
+        // If there is 2 or more matching tile, then there is a pong
+        if (matchTile >= 2){
+
+            return true;
+        }
+
+        else{
+
+            return false;
+        }
     }
 
     private void isKong(){
@@ -163,5 +268,36 @@ public class Game {
 
     private void mahjongWin(){
 
+    }
+
+    /*******************************************************************
+     * This method compares 2 suite tiles and determines if they are
+     * the same tile.
+     *
+     * @param tile1 The first tile that is being compared.
+     * @param tile2 The second tile that is being compared.
+     * @return true if both tiles are the same.
+     ******************************************************************/
+    private boolean compareSuite(Suite tile1, Suite tile2){
+
+        if (tile1 == null){
+
+            throw new NullPointerException("Argument 1 - tile1 has a" +
+                    "null object.\n");
+        }
+
+        if (tile2 == null){
+
+            throw new NullPointerException("Argument 2 - tile1 has a" +
+                    "null object.\n");
+        }
+
+        if (tile1.getDesign().equals(tile2.getDesign()) &&
+                tile1.getValue() == tile2.getValue()){
+
+            return true;
+        }
+
+        return false;
     }
 }

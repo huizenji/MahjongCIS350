@@ -9,14 +9,26 @@ import java.util.ArrayList;
  */
 public class Player{
 
-    private ArrayList<Tile> handTile;
+    /** Player tiles that is in his or her hand **/
+    private ArrayList<Suite> handTile;
+
+    /** The direction of the Player **/
+    private String direction;
 
     /**
      * create an empty hand
      */
     public Player(){
-        handTile = new ArrayList<Tile>();
+
+        handTile = new ArrayList<Suite>();
     }
+
+    public Player(String direction) {
+        this.handTile = new ArrayList<Suite>();
+        this.direction = direction;
+    }
+
+
 
     /**
      * clear the hand
@@ -29,7 +41,7 @@ public class Player{
      * add Tile t to the end of the handTile
      * @param t
      */
-    public void addTile(Tile t){
+    public void addTile(Suite t){
         if(t == null){
             throw new NullPointerException("No such type of tile, can't be added");
         }
@@ -40,7 +52,7 @@ public class Player{
      * remove the Tile t
      * @param t
      */
-    public void removeTile(Tile t){
+    public void removeTile(Suite t){
         if(t == null){
             throw new NullPointerException("No such type of tile, can't be added");
         }
@@ -49,7 +61,7 @@ public class Player{
 
     /**
      * remove a tile from a specific position
-     * @param position p
+     * @param p
      */
     public void removeTile(int p){
         if(p<0 || p>= handTile.size()){
@@ -58,4 +70,15 @@ public class Player{
         handTile.remove(p);
     }
 
+    public ArrayList<Suite> getHandTile() {
+        return handTile;
+    }
+
+    public String getDirection() {
+        return direction;
+    }
+
+    public void setDirection(String direction) {
+        this.direction = direction;
+    }
 }
