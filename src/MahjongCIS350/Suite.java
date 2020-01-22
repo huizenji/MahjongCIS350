@@ -15,6 +15,13 @@ public class Suite extends Tile {
     /** Numerical value of the tile **/
     private int value;
 
+    public Suite() {
+
+        super("Suite");
+        this.design = null;
+        this.value = 0;
+    }
+
     /*******************************************************************
      * Constructor for a suite tile.
      *

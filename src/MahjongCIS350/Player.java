@@ -33,9 +33,7 @@ public class Player{
         this.setPile = new ArrayList<Tile>();
         this.direction = direction;
     }
-
-
-
+    
     /**
      * clear the hand
      */
@@ -76,10 +74,15 @@ public class Player{
         handTile.remove(p);
     }
 
+
+
     public ArrayList<Tile> getHandTile() {
         return handTile;
     }
 
+    public void setHandTile(ArrayList<Tile> handTile) {
+        this.handTile = handTile;
+    }
 
     public String getDirection() {
         return direction;
