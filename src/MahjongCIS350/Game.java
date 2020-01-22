@@ -4,7 +4,7 @@ import java.util.*;
 
 /**********************************************************************
  * This class contains all pieces and rule functionality for the game
- * Mahjong. It is displayed by the Panel and GUI classes.
+ * Mahjong. It is displayed by the Board and GUI classes.
  *
  * @Authors: Jillian Huizenga, Wayne Chen
  * @Version: 1/21/2020
