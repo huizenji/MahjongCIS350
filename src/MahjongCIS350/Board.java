@@ -7,6 +7,9 @@ import javax.swing.*;
 public class Board extends JPanel{
 
     private Game game;
+    private JButton[][] drawPile;
+            //discardPile, playerHand1, playerHand2, playerHand3, playerHand4;
+    private JPanel drawPilePanel;
 
     private ImageIcon circle1;
     private ImageIcon circle2;
@@ -38,9 +41,37 @@ public class Board extends JPanel{
     private ImageIcon character8;
     private ImageIcon character9;
 
+    private ImageIcon flower1;
+    private ImageIcon flower2;
+    private ImageIcon flower3;
+    private ImageIcon flower4;
+    private ImageIcon flower5;
+    private ImageIcon flower6;
+    private ImageIcon flower7;
+    private ImageIcon flower8;
+
+    private ImageIcon redDragon;
+    private ImageIcon greenDragon;
+    private ImageIcon whiteDragon;
+
+    private ImageIcon eastWind;
+    private ImageIcon southWind;
+    private ImageIcon westWind;
+    private ImageIcon northWind;
+
+    private listener listener;
+
 
     public Board(){
         game = new Game();
+
+        drawPile = new JButton[18][18];
+        drawPilePanel = new JPanel();
+        drawPilePanel.setLayout(new GridLayout(18, 18, 2, 2));
+
+        listener = new listener();
+
+
 
         createIcons();
 
@@ -48,8 +79,17 @@ public class Board extends JPanel{
     }
 
 
+    private void placeDrawPile(int r, int c){
+        if (game.getTile(r*c).getType().equals("Suite")) {
+            drawPile[r][c] = new JButton(null, circle1);
+            drawPile[r][c].addActionListener(listener);
+        }
+
+
+    }
+
     private void createIcons() {
-        // Sets the Image for circle pieces
+        // Sets the Image for circle tiles
         circle1 = new ImageIcon("./src/MahjongCIS350/Images/circle1.jpg");
         circle2 = new ImageIcon("./src/MahjongCIS350/Images/circle2.jpg");
         circle3 = new ImageIcon("./src/MahjongCIS350/Images/circle3.jpg");
@@ -60,7 +100,7 @@ public class Board extends JPanel{
         circle8 = new ImageIcon("./src/MahjongCIS350/Images/circle8.jpg");
         circle9 = new ImageIcon("./src/MahjongCIS350/Images/circle9.jpg");
 
-        // Sets the Image for bamboo pieces
+        // Sets the Image for bamboo tiles
         bamboo1 = new ImageIcon("./src/MahjongCIS350/Images/bamboo1.jpg");
         bamboo2 = new ImageIcon("./src/MahjongCIS350/Images/bamboo2.jpg");
         bamboo3 = new ImageIcon("./src/MahjongCIS350/Images/bamboo3.jpg");
@@ -71,7 +111,7 @@ public class Board extends JPanel{
         bamboo8 = new ImageIcon("./src/MahjongCIS350/Images/bamboo8.jpg");
         bamboo9 = new ImageIcon("./src/MahjongCIS350/Images/bamboo9.jpg");
 
-        // Sets the Image for character pieces
+        // Sets the Image for character tiles
         character1 = new ImageIcon("./src/MahjongCIS350/Images/character1.jpg");
         character2 = new ImageIcon("./src/MahjongCIS350/Images/character2.jpg");
         character3 = new ImageIcon("./src/MahjongCIS350/Images/character3.jpg");
@@ -81,6 +121,45 @@ public class Board extends JPanel{
         character7 = new ImageIcon("./src/MahjongCIS350/Images/character7.jpg");
         character8 = new ImageIcon("./src/MahjongCIS350/Images/character8.jpg");
         character9 = new ImageIcon("./src/MahjongCIS350/Images/character9.jpg");
+
+        // Sets the Image for flower tiles
+        flower1 = new ImageIcon("./src/MahjongCIS350/Images/flower1.jpg");
+        flower2 = new ImageIcon("./src/MahjongCIS350/Images/flower2.jpg");
+        flower3 = new ImageIcon("./src/MahjongCIS350/Images/flower3.jpg");
+        flower4 = new ImageIcon("./src/MahjongCIS350/Images/flower4.jpg");
+        flower5 = new ImageIcon("./src/MahjongCIS350/Images/flower5.jpg");
+        flower6 = new ImageIcon("./src/MahjongCIS350/Images/flower6.jpg");
+        flower7 = new ImageIcon("./src/MahjongCIS350/Images/flower7.jpg");
+        flower8 = new ImageIcon("./src/MahjongCIS350/Images/flower8.jpg");
+
+        // Sets the Image for dragon tiles
+        redDragon = new ImageIcon("./src/MahjongCIS350/Images/redDragon.jpg");
+        greenDragon = new ImageIcon("./src/MahjongCIS350/Images/greenDragon.jpg");
+        whiteDragon = new ImageIcon("./src/MahjongCIS350/Images/whiteDragon.jpg");
+
+        // Sets the Image for the wind tiles
+        eastWind = new ImageIcon("./src/MahjongCIS350/Images/eastWind.jpg");
+        southWind = new ImageIcon("./src/MahjongCIS350/Images/eastWind.jpg");
+        westWind = new ImageIcon("./src/MahjongCIS350/Images/eastWind.jpg");
+        northWind = new ImageIcon("./src/MahjongCIS350/Images/eastWind.jpg");
+
     }
 
+
+    private void displayBoard(){
+
+    }
+
+
+    // inner class that represents action listener for buttons
+    private class listener implements ActionListener {
+        public void actionPerformed(ActionEvent event) {
+
+        }
+
+    }
+
+
 }
+
+
