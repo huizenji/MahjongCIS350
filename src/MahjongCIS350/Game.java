@@ -1,12 +1,14 @@
 package MahjongCIS350;
 
+import com.sun.org.apache.bcel.internal.generic.ARRAYLENGTH;
+
 import java.util.*;
 
 /**********************************************************************
  * This class contains all pieces and rule functionality for the game
  * Mahjong. It is displayed by the Panel and GUI classes.
  *
- * @Authors: Jillian Huizenga, Wayne Chen
+ * @Authors: Jillian Huizenga, Wayne Chen, Aron Zhao
  * @Version: 1/21/2020
  *********************************************************************/
 public class Game {
@@ -30,17 +32,16 @@ public class Game {
 
     public static void main(String[] args){
 
-        Suite a = new Suite("a",2);
-        Suite b = new Suite("a",2);
+        ArrayList<Integer> a = new ArrayList<>();
+        ArrayList<Integer> b = new ArrayList<>();
 
-        if (a.equals(b)){
+        a.add(1);
+        a.add(2);
+        b.add(3);
 
-            System.out.println("Objects are Equal");
-        }
-
-        else{
-            System.out.println("No");
-        }
+        System.out.println(a);
+        a= b;
+        System.out.println(a);
     }
 
     /******************************************************************
@@ -110,7 +111,7 @@ public class Game {
         // Creating Flower tiles
         for (int i = 0; i < 8; i++){
 
-            tiles.add(new Tile("Flower"));
+            tiles.add(new Flower());
         }
     }
 
@@ -233,8 +234,19 @@ public class Game {
         this.startingPlayer = startingPlayer;
     }
 
+    private void setNextStartingPlayer(){
+
+        startingPlayer = (startingPlayer + 1) % 4;
+    }
+
+    private void setNextCurrentPlayer(){
+
+        currentPlayer = (currentPlayer + 1) % 4;
+    }
+
     /** Add to Later Whoever has time **/
     private void isChi(){
+
 
     }
 
@@ -243,9 +255,9 @@ public class Game {
      *
      * @param handTile The hand of the player that is being checked
      *                 for a pong.
-     * @param discard The tile that was last discarded.
+     * @param check The tile checked if it can be made into a pong
      ******************************************************************/
-    private boolean isPong(ArrayList<Suite> handTile, Suite discard){
+    private boolean isPong(ArrayList<Suite> handTile, Suite check){
 
         // Number of Tiles in player hand that can used for a pong
         int matchTile = 0;
@@ -254,7 +266,7 @@ public class Game {
         // tile
         for(int i = 0; i < handTile.size(); i++){
 
-            if (compareSuite(handTile.get(i),discard)){
+            if (compareSuite(handTile.get(i),check)){
 
                 matchTile++;
             }
@@ -272,12 +284,74 @@ public class Game {
         }
     }
 
-    private void isKong(){
+    private void isKongDiscard(){
+
+    }
+
+    private void isKongDraw(){
 
     }
 
     private void mahjongWin(){
 
+    }
+
+    /*******************************************************************
+     * This method sorts the players hand with by circle, bamboo, and
+     * character with the value incremented.
+     *
+     * @param player The player hand that is being sorted.
+     ******************************************************************/
+    private void autoSort(Player player){
+
+        ArrayList<Tile> temp = new ArrayList<>();
+        Suite comp = new Suite(); // Suite that will be placed first
+        Suite playerTile; // Tile from player that is being checked
+
+        // Adding Circle Tiles
+        comp.setDesign("Circle");
+        for(int i = 0; i < player.getHandTile().size(); i++){
+
+            playerTile = (Suite)player.getHandTile().get(i);
+            for(int value = 1; value <= 9; value++){
+
+                comp.setValue(value);
+                if (compareSuite(comp,playerTile));
+
+                temp.add(playerTile);
+            }
+        }
+
+        // Adding Bamboo Tiles
+        comp.setDesign("Bamboo");
+        for(int i = 0; i < player.getHandTile().size(); i++){
+
+            playerTile = (Suite)player.getHandTile().get(i);
+            for(int value = 1; value <= 9; value++){
+
+                comp.setValue(value);
+                if (compareSuite(comp,playerTile));
+
+                temp.add(playerTile);
+            }
+        }
+
+        // Adding Character Tiles
+        comp.setDesign("Character");
+        for(int i = 0; i < player.getHandTile().size(); i++){
+
+            playerTile = (Suite)player.getHandTile().get(i);
+            for(int value = 1; value <= 9; value++){
+
+                comp.setValue(value);
+                if (compareSuite(comp,playerTile));
+
+                temp.add(playerTile);
+            }
+        }
+
+        // Setting the sorted hand to player
+        player.setHandTile(temp);
     }
 
     /*******************************************************************
