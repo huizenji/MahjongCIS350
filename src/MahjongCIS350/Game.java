@@ -212,7 +212,8 @@ public class Game {
     }
 
     /*******************************************************************
-     * This method deals out 14 suite tiles to all players
+     * This method deals out 13 suite tiles to three players, and 14
+     * tiles to the East player
      ******************************************************************/
     private void dealTile(){
 
