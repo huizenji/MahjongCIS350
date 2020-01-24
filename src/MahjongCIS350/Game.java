@@ -1,7 +1,5 @@
 package MahjongCIS350;
 
-import com.sun.org.apache.bcel.internal.generic.ARRAYLENGTH;
-
 import java.util.*;
 
 /**********************************************************************
@@ -114,6 +112,15 @@ public class Game {
 
             tiles.add(new Flower());
         }
+    }
+
+    /******************************************************************
+     * A getter function for individual tiles
+     * @param index
+     * @return tile at indicated index
+     *****************************************************************/
+    public Tile getTile(int index) {
+        return tiles.get(index);
     }
 
     /*******************************************************************
