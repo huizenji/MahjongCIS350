@@ -7,7 +7,7 @@ import javax.swing.*;
 public class Board extends JPanel{
 
     private Game game;
-    private JButton[][] drawPile;
+    private JButton[][][] drawPile;
             //discardPile, playerHand1, playerHand2, playerHand3, playerHand4;
     private JPanel drawPilePanel;
 
@@ -65,24 +65,60 @@ public class Board extends JPanel{
     public Board(){
         game = new Game();
 
-        drawPile = new JButton[18][18];
+        drawPile = new JButton[18][18][2];
         drawPilePanel = new JPanel();
-        drawPilePanel.setLayout(new GridLayout(18, 18, 2, 2));
+        drawPilePanel.setLayout(new GridLayout(18, 18, 1, 1));
 
         listener = new listener();
 
-
+        int row = 0, col = 0, depth = 0;
+        drawPilePanel.add(drawPile[row][col][depth]);
 
         createIcons();
-
 
     }
 
 
-    private void placeDrawPile(int r, int c){
-        if (game.getTile(r*c).getType().equals("Suite")) {
-            drawPile[r][c] = new JButton(null, circle1);
-            drawPile[r][c].addActionListener(listener);
+    private void placeDrawPile(int r, int c, int d){
+        Tile tile = game.getTile(r*c);
+        if (tile instanceof Suite) {
+            if (((Suite) tile).getDesign().equals("Circle")) {
+                if (((Suite) tile).getValue() == 1) {
+                    drawPile[r][c][d] = new JButton(null, circle1);
+                    drawPile[r][c][d].addActionListener(listener);
+                }
+                if (((Suite) tile).getValue() == 2) {
+                    drawPile[r][c][d] = new JButton(null, circle2);
+                    drawPile[r][c][d].addActionListener(listener);
+                }
+                if (((Suite) tile).getValue() == 3) {
+                    drawPile[r][c][d] = new JButton(null, circle3);
+                    drawPile[r][c][d].addActionListener(listener);
+                }
+                if (((Suite) tile).getValue() == 4) {
+                    drawPile[r][c][d] = new JButton(null, circle4);
+                    drawPile[r][c][d].addActionListener(listener);
+                }
+            }
+
+            if (((Suite) tile).getDesign().equals("Bamboo")) {
+                if (((Suite) tile).getValue() == 1) {
+                    drawPile[r][c][d] = new JButton(null, bamboo1);
+                    drawPile[r][c][d].addActionListener(listener);
+                }
+                if (((Suite) tile).getValue() == 2) {
+                    drawPile[r][c][0] = new JButton(null, bamboo2);
+                    drawPile[r][c][0].addActionListener(listener);
+                }
+                if (((Suite) tile).getValue() == 3) {
+                    drawPile[r][c][d] = new JButton(null, bamboo3);
+                    drawPile[r][c][d].addActionListener(listener);
+                }
+                if (((Suite) tile).getValue() == 4) {
+                    drawPile[r][c][d] = new JButton(null, bamboo4);
+                    drawPile[r][c][d].addActionListener(listener);
+                }
+            }
         }
 
 
