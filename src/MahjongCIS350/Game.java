@@ -54,7 +54,7 @@ public class Game {
         createTile();
         setupPlayer();
         shuffle();
-        dealTile();
+        //dealTile();
     }
 
     /*******************************************************************
@@ -78,6 +78,7 @@ public class Game {
                 for (int i = 0; i < 4; i++) {
 
                     tiles.add(new Suite(design[index], numtile));
+
                 }
             }
         }
@@ -101,7 +102,7 @@ public class Game {
         }
 
         // Creating Wind Tiles
-        for (int index = 4; index < 4; index++){
+        for (int index = 0; index < 4; index++){
             for (int i = 0; i < 4; i++){
 
                 tiles.add(new Wind(windDir[index]));
