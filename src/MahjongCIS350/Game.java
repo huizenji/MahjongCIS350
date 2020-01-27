@@ -194,20 +194,11 @@ public class Game {
 
             randNum1 = rand.nextInt(maxTile);
             randNum2 = rand.nextInt(maxTile);
-            swapTile(tiles.get(randNum1),tiles.get(randNum2));
+
+            Tile temp = tiles.get(randNum2);
+            tiles.set(randNum2,tiles.get(randNum1));
+            tiles.set(randNum1,temp);
         }
-    }
-
-    /*******************************************************************
-     * This method swap the position of 2 tiles.
-     *
-     * @param a The first Tile.
-     * @param b The second Tile.
-     ******************************************************************/
-    private void swapTile(Tile a, Tile b){
-
-        Tile temp = a;
-
     }
 
     /*******************************************************************
