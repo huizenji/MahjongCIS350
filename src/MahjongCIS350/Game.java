@@ -14,6 +14,8 @@ public class Game {
     /** All the tiles in Mahjong **/
     private ArrayList<Tile> tiles;
 
+    private ArrayList<Tile> discardPile;
+
     /** The max amount of tiles in Mahjong **/
     private int maxTile;
 
@@ -48,6 +50,7 @@ public class Game {
     public Game(){
 
         tiles = new ArrayList<>();
+        discardPile = new ArrayList<>();
         maxTile = 144;
         createTile();
         setupPlayer();
@@ -257,6 +260,13 @@ public class Game {
         return playerList[playerNum - 1];
     }
 
+    public ArrayList<Tile> getDiscardPile() {
+        return discardPile;
+    }
+
+    public void setDiscardPile(ArrayList<Tile> discardPile) {
+        this.discardPile = discardPile;
+    }
 
     /** Add to Later Whoever has time **/
     private void isChi(){
@@ -310,9 +320,36 @@ public class Game {
 
     }
 
-    private void takePong(){
+    private void takePong(Player pl){
 
 
+    }
+
+    /*******************************************************************
+     * This method finds the desired tiles of an arraylist and returns
+     * the index from the players hand that they are located at.
+     *
+     * @param playerHand
+     * @param desired
+     * @return
+     */
+    private ArrayList<Integer> findTile(ArrayList<Tile> playerHand,
+                                        ArrayList<Tile> desired){
+
+        ArrayList index_loc = new ArrayList();
+        for (int i = 0; i < desired.size(); i++) {
+
+            for (int hand_index = 0; hand_index < playerHand.size();
+                 hand_index++) {
+
+
+                if (compareSuite((Suite)desired.get(i), (Suite)playerHand.get(hand_index))){
+
+                }
+            }
+        }
+
+        return index_loc;
     }
 
 
