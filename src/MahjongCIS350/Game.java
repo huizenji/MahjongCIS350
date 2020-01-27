@@ -14,6 +14,7 @@ public class Game {
     /** All the tiles in Mahjong **/
     private ArrayList<Tile> tiles;
 
+    /** All the tiles in Mahjong that is discarded **/
     private ArrayList<Tile> discardPile;
 
     /** The max amount of tiles in Mahjong **/
@@ -256,6 +257,11 @@ public class Game {
         currentPlayer = (currentPlayer + 1) % 4;
     }
 
+    private void setNextCurrentPlayer(int player){
+
+        currentPlayer = (player + 1) % 4;
+    }
+
     public Player getPlayerList(int playerNum) {
         return playerList[playerNum - 1];
     }
@@ -326,25 +332,30 @@ public class Game {
     }
 
     /*******************************************************************
-     * This method finds the desired tiles of an arraylist and returns
+     * This method finds the desired tiles of an ArrayList and returns
      * the index from the players hand that they are located at.
      *
-     * @param playerHand
-     * @param desired
-     * @return
-     */
+     * @param playerHand The hand that is searched.
+     * @param desired ArrayList of desired Tiles
+     * @return The index of the playerHand where the tile is located.
+     ******************************************************************/
     private ArrayList<Integer> findTile(ArrayList<Tile> playerHand,
                                         ArrayList<Tile> desired){
 
-        ArrayList index_loc = new ArrayList();
+        ArrayList<Integer> index_loc = new ArrayList<>();
         for (int i = 0; i < desired.size(); i++) {
 
             for (int hand_index = 0; hand_index < playerHand.size();
                  hand_index++) {
 
+                if (compareSuite((Suite)desired.get(i),
+                        (Suite)playerHand.get(hand_index))){
 
-                if (compareSuite((Suite)desired.get(i), (Suite)playerHand.get(hand_index))){
+                    if (!index_loc.contains(hand_index)){
 
+                        index_loc.add(hand_index);
+                        continue;
+                    }
                 }
             }
         }
