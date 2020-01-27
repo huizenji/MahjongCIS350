@@ -146,7 +146,7 @@ public class Game {
         for (int i = 0; i < randVal; i++){
             for (int j = 0; j < TOTAL_PLAYER; j++){
 
-                rotatePlayer(playerList[j]);
+                rotatePlayerDir(playerList[j]);
             }
         }
 
@@ -158,7 +158,7 @@ public class Game {
     /*******************************************************************
      * This method rotates the wind direction of each player.
      ******************************************************************/
-    private void rotatePlayer(Player player){
+    private void rotatePlayerDir(Player player){
 
         if (player.getDirection().equals("East")){
 
@@ -306,9 +306,15 @@ public class Game {
 
     }
 
-    private void mahjongWin(){
+    private void isMahjong(){
 
     }
+
+    private void takePong(){
+
+
+    }
+
 
     /*******************************************************************
      * This method sorts the players hand with by circle, bamboo, and
