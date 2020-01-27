@@ -207,18 +207,18 @@ public class Game {
     private void swapTile(Tile a, Tile b){
 
         Tile temp = a;
-        a = b;
-        b = temp;
+
     }
 
     /*******************************************************************
      * This method deals out 13 suite tiles to three players, and 14
      * tiles to the East player
      ******************************************************************/
-    private void dealTile(){
+    private void dealTile_13(){
 
-        for (int i = 0; i < 4 * 14; i++) {
-            playerList[i].addTile(tiles.remove(0));
+        for (int index = 0; index < 4; index++) {
+            for (int i = 0; i < 4; )
+            playerList[index].addTile(tiles.remove(0));
         }
 
         // Giving starting player 1 extra tile
@@ -252,6 +252,11 @@ public class Game {
 
         currentPlayer = (currentPlayer + 1) % 4;
     }
+
+    public Player getPlayerList(int playerNum) {
+        return playerList[playerNum - 1];
+    }
+
 
     /** Add to Later Whoever has time **/
     private void isChi(){
