@@ -109,7 +109,7 @@ public class Board extends JPanel {
     private void placePlayerTiles(){
 
         // next step: get access to Players from Game
-      //  game.getStartingPlayer().getHandTile()
+
 
 
     }
