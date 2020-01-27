@@ -52,7 +52,7 @@ public class Game {
         createTile();
         setupPlayer();
         shuffle();
-        //dealTile();
+        //dealTile_13();
     }
 
     /*******************************************************************
@@ -69,7 +69,7 @@ public class Game {
      ******************************************************************/
     private void createSuiteTile(){
 
-        String []design = {"Circle","Character","Bamboo"};
+        String []design = {"Circle","Bamboo","Character"};
 
         for (int index = 0; index < 3; index++) {
             for (int numtile = 1; numtile <= 9; numtile++) {
@@ -116,6 +116,7 @@ public class Game {
 
     /******************************************************************
      * A getter function for individual tiles
+     *
      * @param index
      * @return tile at indicated index
      *****************************************************************/
@@ -207,15 +208,23 @@ public class Game {
      ******************************************************************/
     private void dealTile_13(){
 
+        // Give out 12 Tiles
         for (int index = 0; index < 4; index++) {
-            for (int i = 0; i < 4; )
-            playerList[index].addTile(tiles.remove(0));
+            for (int i = 0; i < 3; i++){
+                for (int j = 0; j < 4; j++){
+                    playerList[index].addTile(tiles.remove(0));
+                }
+            }
         }
 
+        // Give out the 13 Tile
+        for (int index = 0; index < 4; index++) {
+                for (int j = 0; j < 4; j++){
+                    playerList[index].addTile(tiles.remove(0));
+                }
+        }
         // Giving starting player 1 extra tile
         playerList[startingPlayer].addTile(tiles.remove(0));
-
-        /** Finish later with discussion about point tiles **/
     }
 
     public int getCurrentPlayer() {
