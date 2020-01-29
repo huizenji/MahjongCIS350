@@ -88,7 +88,14 @@ public class Player{
         handTile.remove(p);
     }
 
-
+    /**
+     * get the last tile of the handtile or pile
+     * @param handTile
+     * @return  last Tile
+     */
+    public Tile lastTile(ArrayList<Suite> handTile){
+        return handTile.get(handTile.size() - 1);
+    }
 
     public ArrayList<Tile> getHandTile() {
         return handTile;
