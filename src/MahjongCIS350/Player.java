@@ -103,6 +103,10 @@ public class Player{
         return handTile;
     }
 
+    public Tile getTileFromHand(int index){
+        return handTile.get(index);
+    }
+
     public void setHandTile(ArrayList<Tile> handTile) {
         this.handTile = handTile;
     }

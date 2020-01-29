@@ -108,8 +108,8 @@ public class Board extends JPanel {
 
     private void placePlayerTiles(){
 
-        // next step: get access to Players from Game
 
+        //add a update ImageIcon method
 
 
     }
