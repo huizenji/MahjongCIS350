@@ -114,6 +114,33 @@ public class Board extends JPanel {
 
     }
 
+//    private ImageIcon updatedImage(Tile tile){
+//
+//        if (tile instanceof Suite){
+//            switch (((Suite) tile).getDesign()){
+//
+//            }
+//
+//        }
+//
+//
+//    }
+
+
+//    private ImageIcon getCircleImage(){
+//
+//        return circle1;
+//    }
+//
+//    private ImageIcon getBambooImage(){
+//
+//        return circle1;
+//    }
+//
+//    private ImageIcon getCharacterImage(){
+//
+//        return circle1;
+//    }
 
 
     private void placeDrawPile() {

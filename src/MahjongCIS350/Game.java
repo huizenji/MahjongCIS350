@@ -123,7 +123,7 @@ public class Game {
         // Creating Flower tiles
         for (int i = 0; i < 8; i++) {
 
-            tiles.add(new Flower());
+            tiles.add(new Flower(i));
         }
     }
 
