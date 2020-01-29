@@ -61,6 +61,7 @@ public class Player{
      * @param t
      */
     public void removeTile(Tile t){
+
         Suite s = (Suite)t;
         if(t == null){
             throw new NullPointerException("No such type of tile, can't be added");
@@ -77,6 +78,7 @@ public class Player{
      * @param p
      */
     public void removeTile(int p){
+
         if(p<0 || p>= handTile.size()){
             throw new IllegalArgumentException("Invalid position: " + p);
         }
@@ -88,7 +90,14 @@ public class Player{
         handTile.remove(p);
     }
 
-
+    /**
+     * get the last tile of the handtile or pile
+     * @param handTile
+     * @return  last Tile
+     */
+    public Tile lastTile(ArrayList<Suite> handTile){
+        return handTile.get(handTile.size() - 1);
+    }
 
     public ArrayList<Tile> getHandTile() {
         return handTile;
@@ -106,7 +115,7 @@ public class Player{
         this.direction = direction;
     }
 
-    public ArrayList<Tile> getSetPile(){return setPile;};
+    public ArrayList<Tile> getSetPile(){return setPile;}
 
     public void setSetPile(ArrayList<Tile> setPile){this.setPile = setPile;};
 }
