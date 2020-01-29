@@ -65,7 +65,7 @@ public class Game {
         createTile();
         setupPlayer();
         shuffle();
-        //dealTile_13();
+        dealTile_13();
     }
 
     /*******************************************************************
@@ -234,42 +234,12 @@ public class Game {
         playerList[startingPlayer].addTile(tiles.remove(0));
     }
 
-    public int getCurrentPlayer() {
-        return currentPlayer;
-    }
+    /*******************************************************************
+     * This method replaces all the point tiles with suite tiles
+     */
+    private void replaceFlower(){
 
-    public void setCurrentPlayer(int currentPlayer) {
-        this.currentPlayer = currentPlayer;
-    }
 
-    public int getStartingPlayer() {
-        return startingPlayer;
-    }
-
-    public void setStartingPlayer(int startingPlayer) {
-        this.startingPlayer = startingPlayer;
-    }
-
-    private void setNextStartingPlayer() {
-
-        startingPlayer = (startingPlayer + 1) % 4;
-    }
-
-    private void setNextCurrentPlayer() {
-
-        currentPlayer = (currentPlayer + 1) % 4;
-    }
-
-    public Player getPlayerList(int playerNum) {
-        return playerList[playerNum - 1];
-    }
-
-    public ArrayList<Tile> getDiscardPile() {
-        return discardPile;
-    }
-
-    public void setDiscardPile(ArrayList<Tile> discardPile) {
-        this.discardPile = discardPile;
     }
 
     /**
@@ -348,9 +318,18 @@ public class Game {
 
     }
 
-    private void takePong(Player pl) {
+    private void takePong(Player pl, Suite tile) {
 
+        ArrayList<Tile> desired = new ArrayList<>();
+        desired.add(tile);
+        desired.add(tile);
 
+        ArrayList<Integer> loc = findTile(pl.getHandTile(),desired);
+
+        for (int i = loc.size() - 1; i >= 0; i--){
+
+            pl.removeTile(loc.get(i));
+        }
     }
 
     /*******************************************************************
@@ -371,7 +350,8 @@ public class Game {
                  hand_index++) {
 
 
-                if (compareSuite((Suite) desired.get(i), (Suite) playerHand.get(hand_index))) {
+                if (compareSuite((Suite) desired.get(i),
+                        (Suite) playerHand.get(hand_index))) {
 
                 }
             }
@@ -502,5 +482,44 @@ public class Game {
             }
         }
         return false;
+    }
+
+
+    public int getCurrentPlayer() {
+        return currentPlayer;
+    }
+
+    public void setCurrentPlayer(int currentPlayer) {
+        this.currentPlayer = currentPlayer;
+    }
+
+    public int getStartingPlayer() {
+        return startingPlayer;
+    }
+
+    public void setStartingPlayer(int startingPlayer) {
+        this.startingPlayer = startingPlayer;
+    }
+
+    private void setNextStartingPlayer() {
+
+        startingPlayer = (startingPlayer + 1) % 4;
+    }
+
+    private void setNextCurrentPlayer() {
+
+        currentPlayer = (currentPlayer + 1) % 4;
+    }
+
+    public Player getPlayerList(int playerNum) {
+        return playerList[playerNum];
+    }
+
+    public ArrayList<Tile> getDiscardPile() {
+        return discardPile;
+    }
+
+    public void setDiscardPile(ArrayList<Tile> discardPile) {
+        this.discardPile = discardPile;
     }
 }
