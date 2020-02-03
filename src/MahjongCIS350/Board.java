@@ -141,33 +141,123 @@ public class Board extends JPanel {
 
 
     private ImageIcon getCircleImage(int value){
-
-        return circle1;
+        switch (value){
+            case 1:
+                return circle1;
+            case 2:
+                return circle2;
+            case 3:
+                return circle3;
+            case 4:
+                return circle4;
+            case 5:
+                return circle5;
+            case 6:
+                return circle6;
+            case 7:
+                return circle7;
+            case 8:
+                return circle8;
+            case 9:
+                return circle9;
+        }
+        return tileBack;
     }
 
     private ImageIcon getBambooImage(int value){
-
-        return circle1;
+        switch (value){
+            case 1:
+                return bamboo1;
+            case 2:
+                return bamboo2;
+            case 3:
+                return bamboo3;
+            case 4:
+                return bamboo4;
+            case 5:
+                return bamboo5;
+            case 6:
+                return bamboo6;
+            case 7:
+                return bamboo7;
+            case 8:
+                return bamboo8;
+            case 9:
+                return bamboo9;
+        }
+        return tileBack;
     }
 
     private ImageIcon getCharacterImage(int value){
-
-        return circle1;
+        switch (value){
+            case 1:
+                return character1;
+            case 2:
+                return character2;
+            case 3:
+                return character3;
+            case 4:
+                return character4;
+            case 5:
+                return character5;
+            case 6:
+                return character6;
+            case 7:
+                return character7;
+            case 8:
+                return character8;
+            case 9:
+                return character9;
+        }
+        return tileBack;
     }
 
     private ImageIcon getDragonImage(String color){
-
-        return redDragon;
+        switch (color){
+            case "Red":
+                return redDragon;
+            case "Green":
+                return greenDragon;
+            case "White":
+                return whiteDragon;
+        }
+        return tileBack;
     }
 
     private ImageIcon getWindImage(String direction){
-
-        return circle1;
+        switch (direction){
+            case "East":
+                return eastWind;
+            case "South":
+                return southWind;
+            case "West":
+                return westWind;
+            case "North":
+                return northWind;
+        }
+        return tileBack;
     }
 
     private ImageIcon getFlowerImage(int number){
-
-        return circle1;
+        switch (number){
+            case 1:
+                return flower1;
+            case 2:
+                return flower2;
+            case 3:
+                return flower3;
+            case 4:
+                return flower4;
+            case 5:
+                return flower5;
+            case 6:
+                return flower6;
+            case 7:
+                return flower7;
+            case 8:
+                return flower8;
+        }
+        return tileBack;
     }
 
 
