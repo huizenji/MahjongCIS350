@@ -10,7 +10,7 @@ public class Board extends JPanel {
 
     private Game game;
     private ArrayList<JButton> drawPile, discardPile, p1Hand, p2Hand, p3Hand, p4Hand;
-    private JPanel drawPilePanel, discardPilePanel, player1Panel, player2Panel, player3Panel, player4Panel;
+    private JPanel drawPilePanel, discardPilePanel, player1Panel, player2Panel, player3Panel, player4Panel, gameBoard;
 
     private ImageIcon circle1;
     private ImageIcon circle2;
@@ -66,44 +66,75 @@ public class Board extends JPanel {
 
 
     public Board() {
+
+        // create Game
         game = new Game();
 
+        // create piles and hands
         drawPile = new ArrayList<>();
+        discardPile = new ArrayList<>();
         p1Hand = new ArrayList<>();
         p2Hand = new ArrayList<>();
         p3Hand = new ArrayList<>();
         p4Hand = new ArrayList<>();
 
+        // create Panels
         drawPilePanel = new JPanel();
         discardPilePanel = new JPanel();
         player1Panel = new JPanel();
         player2Panel = new JPanel();
         player3Panel = new JPanel();
         player4Panel = new JPanel();
+        gameBoard = new JPanel();
 
+        // set Layouts
         drawPilePanel.setLayout(new GridBagLayout());
         discardPilePanel.setLayout(new GridLayout(10, 10,1, 1));
         player1Panel.setLayout(new GridBagLayout());
         player2Panel.setLayout(new GridBagLayout());
         player3Panel.setLayout(new GridBagLayout());
         player4Panel.setLayout(new GridBagLayout());
+        gameBoard.setLayout(new GridBagLayout());
 
+        // create Icons
         createIcons();
 
+        // set listeners for JButtons
         listener = new listener();
 
-        // create and place JButton tiles into drawPile
+        // create and place JButton tiles into drawPile and then deal
         placeDrawPile();
-   //     add(drawPilePanel, BorderLayout.CENTER);
-
         dealPlayerTiles();
 
-  //      add(discardPilePanel, BorderLayout.CENTER);
-        add(player1Panel, BorderLayout.SOUTH);
-        add(player2Panel, BorderLayout.WEST);
-        add(player3Panel, BorderLayout.NORTH);
-        add(player4Panel, BorderLayout.EAST);
+        // place Panels
+        GridBagConstraints c = new GridBagConstraints();
 
+        c.ipadx = 75;
+        c.ipady = 75;
+
+        c.gridx = 1;
+        c.gridy = 1;
+        gameBoard.add(drawPilePanel, c);
+        gameBoard.add(discardPilePanel, c);
+
+        c.ipady = 25;
+        c.gridy = 2;
+        gameBoard.add(player1Panel, c);
+
+        c.ipady = 75;
+        c.gridx = 0;
+        c.gridy = 1;
+        gameBoard.add(player2Panel, c);
+
+        c.gridx = 1;
+        c.gridy = 0;
+        gameBoard.add(player3Panel, c);
+
+        c.gridx = 2;
+        c.gridy = 1;
+        gameBoard.add(player4Panel, c);
+
+        add(gameBoard, BorderLayout.CENTER);
     }
 
 
@@ -113,7 +144,7 @@ public class Board extends JPanel {
 
         GridBagConstraints c = new GridBagConstraints();
 
-        for (int i = 0; i < 13; i++){
+        for (int i = 0; i < 14; i++){
             p1Hand.add(drawPile.get(143 - i));
             drawPile.remove(143 - i);
 
@@ -122,12 +153,13 @@ public class Board extends JPanel {
 
             c.gridx = i;
             c.gridy = 0;
+            p1Hand.get(i).setPreferredSize(new Dimension(50,50));
             player1Panel.add(p1Hand.get(i), c);
         }
 
         for (int i = 0; i < 13; i++){
-            p2Hand.add(drawPile.get(130 - i));
-            drawPile.remove(130 - i);
+            p2Hand.add(drawPile.get(129 - i));
+            drawPile.remove(129 - i);
 
             c.gridx = 0;
             c.gridy = i;
@@ -135,8 +167,8 @@ public class Board extends JPanel {
         }
 
         for (int i = 0; i < 13; i++){
-            p3Hand.add(drawPile.get(117 - i));
-            drawPile.remove(117 - i);
+            p3Hand.add(drawPile.get(116 - i));
+            drawPile.remove(116 - i);
 
             c.gridx = i;
             c.gridy = 0;
@@ -144,8 +176,8 @@ public class Board extends JPanel {
         }
 
         for (int i = 0; i < 13; i++){
-            p4Hand.add(drawPile.get(104 - i));
-            drawPile.remove(104 - i);
+            p4Hand.add(drawPile.get(103 - i));
+            drawPile.remove(103 - i);
 
             c.gridx = 0;
             c.gridy = i;
