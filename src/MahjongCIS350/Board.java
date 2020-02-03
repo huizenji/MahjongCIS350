@@ -114,33 +114,61 @@ public class Board extends JPanel {
 
     }
 
-//    private ImageIcon updatedImage(Tile tile){
-//
-//        if (tile instanceof Suite){
-//            switch (((Suite) tile).getDesign()){
-//
-//            }
-//
-//        }
-//
-//
-//    }
+    private ImageIcon updatedImage(Tile tile){
+
+        if (tile instanceof Suite){
+            switch (((Suite) tile).getDesign()){
+                case "Circle":
+                    return getCircleImage(((Suite) tile).getValue());
+                case "Bamboo":
+                    return getBambooImage((((Suite) tile).getValue()));
+                case "Character":
+                    return getCharacterImage(((Suite) tile).getValue());
+            }
+
+        } else{
+            switch (tile.getType()){
+                case "Dragon":
+                    return getDragonImage(((Dragon) tile).getColor());
+                case "Wind":
+                    return getWindImage(((Wind) tile).getDirection());
+                case "Flower":
+                    return getFlowerImage(((Flower) tile).getNumber());
+            }
+        }
+        return tileBack;
+    }
 
 
-//    private ImageIcon getCircleImage(){
-//
-//        return circle1;
-//    }
-//
-//    private ImageIcon getBambooImage(){
-//
-//        return circle1;
-//    }
-//
-//    private ImageIcon getCharacterImage(){
-//
-//        return circle1;
-//    }
+    private ImageIcon getCircleImage(int value){
+
+        return circle1;
+    }
+
+    private ImageIcon getBambooImage(int value){
+
+        return circle1;
+    }
+
+    private ImageIcon getCharacterImage(int value){
+
+        return circle1;
+    }
+
+    private ImageIcon getDragonImage(String color){
+
+        return redDragon;
+    }
+
+    private ImageIcon getWindImage(String direction){
+
+        return circle1;
+    }
+
+    private ImageIcon getFlowerImage(int number){
+
+        return circle1;
+    }
 
 
     private void placeDrawPile() {
