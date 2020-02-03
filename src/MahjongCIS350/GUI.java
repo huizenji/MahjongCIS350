@@ -14,7 +14,7 @@ public class GUI {
         frame.getContentPane().add(board);
 
         frame.setResizable(true);
-        frame.setPreferredSize(new Dimension(2000, 1000));
+        frame.setPreferredSize(new Dimension(1000, 1000));
         frame.pack();
         frame.setVisible(true);
     }
