@@ -10,9 +10,6 @@ public class GUI {
         JFrame frame = new JFrame("Mahjong");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
-        // doesn't work?
-        //frame.getContentPane().setBackground(Color.GREEN);
-
         Board board = new Board();
         frame.getContentPane().add(board);
 

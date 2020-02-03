@@ -87,6 +87,16 @@ public class Board extends JPanel {
         player4Panel = new JPanel();
         gameBoard = new JPanel();
 
+        Color darkGreen = new Color(0, 150, 100);
+        drawPilePanel.setBackground(darkGreen);
+        discardPilePanel.setBackground(darkGreen);
+        player1Panel.setBackground(darkGreen);
+        player2Panel.setBackground(darkGreen);
+        player3Panel.setBackground(darkGreen);
+        player4Panel.setBackground(darkGreen);
+        gameBoard.setBackground(darkGreen);
+
+
         // set Layouts
         drawPilePanel.setLayout(new GridBagLayout());
         discardPilePanel.setLayout(new GridLayout(10, 10,1, 1));
