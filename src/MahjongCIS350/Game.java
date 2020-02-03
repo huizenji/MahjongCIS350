@@ -121,7 +121,7 @@ public class Game {
         }
 
         // Creating Flower tiles
-        for (int i = 0; i < 8; i++) {
+        for (int i = 1; i < 9; i++) {
 
             tiles.add(new Flower(i));
         }

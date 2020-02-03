@@ -83,10 +83,10 @@ public class Board extends JPanel {
 
         drawPilePanel.setLayout(new GridBagLayout());
         discardPilePanel.setLayout(new GridLayout(10, 10,1, 1));
-        player1Panel.setLayout(new GridLayout(1,14));
-        player2Panel.setLayout(new GridLayout(1,14));
-        player3Panel.setLayout(new GridLayout(1,14));
-        player4Panel.setLayout(new GridLayout(1,14));
+        player1Panel.setLayout(new GridBagLayout());
+        player2Panel.setLayout(new GridBagLayout());
+        player3Panel.setLayout(new GridBagLayout());
+        player4Panel.setLayout(new GridBagLayout());
 
         createIcons();
 
@@ -94,12 +94,11 @@ public class Board extends JPanel {
 
         // create and place JButton tiles into drawPile
         placeDrawPile();
-        add(drawPilePanel, BorderLayout.CENTER);
+   //     add(drawPilePanel, BorderLayout.CENTER);
 
         dealPlayerTiles();
 
-
-        add(discardPilePanel, BorderLayout.CENTER);
+  //      add(discardPilePanel, BorderLayout.CENTER);
         add(player1Panel, BorderLayout.SOUTH);
         add(player2Panel, BorderLayout.WEST);
         add(player3Panel, BorderLayout.NORTH);
@@ -112,31 +111,45 @@ public class Board extends JPanel {
 
     private void dealPlayerTiles(){
 
+        GridBagConstraints c = new GridBagConstraints();
+
         for (int i = 0; i < 13; i++){
             p1Hand.add(drawPile.get(143 - i));
             drawPile.remove(143 - i);
 
             p1Hand.get(i).setIcon(updatedImage(game.getPlayerList
                     (game.getStartingPlayer()).getTileFromHand(i)));
-            player1Panel.add(p1Hand.get(i));
+
+            c.gridx = i;
+            c.gridy = 0;
+            player1Panel.add(p1Hand.get(i), c);
         }
 
         for (int i = 0; i < 13; i++){
             p2Hand.add(drawPile.get(130 - i));
             drawPile.remove(130 - i);
-            player2Panel.add(p2Hand.get(i));
+
+            c.gridx = 0;
+            c.gridy = i;
+            player2Panel.add(p2Hand.get(i), c);
         }
 
         for (int i = 0; i < 13; i++){
             p3Hand.add(drawPile.get(117 - i));
             drawPile.remove(117 - i);
-            player3Panel.add(p3Hand.get(i));
+
+            c.gridx = i;
+            c.gridy = 0;
+            player3Panel.add(p3Hand.get(i), c);
         }
 
         for (int i = 0; i < 13; i++){
             p4Hand.add(drawPile.get(104 - i));
             drawPile.remove(104 - i);
-            player4Panel.add(p4Hand.get(i));
+
+            c.gridx = 0;
+            c.gridy = i;
+            player4Panel.add(p4Hand.get(i), c);
         }
     }
 
@@ -162,130 +175,9 @@ public class Board extends JPanel {
                     return getFlowerImage(((Flower) tile).getNumber());
             }
         }
+        System.out.println("Error in updatedImage()");
         return tileBack;
     }
-
-
-    private ImageIcon getCircleImage(int value){
-        switch (value){
-            case 1:
-                return circle1;
-            case 2:
-                return circle2;
-            case 3:
-                return circle3;
-            case 4:
-                return circle4;
-            case 5:
-                return circle5;
-            case 6:
-                return circle6;
-            case 7:
-                return circle7;
-            case 8:
-                return circle8;
-            case 9:
-                return circle9;
-        }
-        return tileBack;
-    }
-
-    private ImageIcon getBambooImage(int value){
-        switch (value){
-            case 1:
-                return bamboo1;
-            case 2:
-                return bamboo2;
-            case 3:
-                return bamboo3;
-            case 4:
-                return bamboo4;
-            case 5:
-                return bamboo5;
-            case 6:
-                return bamboo6;
-            case 7:
-                return bamboo7;
-            case 8:
-                return bamboo8;
-            case 9:
-                return bamboo9;
-        }
-        return tileBack;
-    }
-
-    private ImageIcon getCharacterImage(int value){
-        switch (value){
-            case 1:
-                return character1;
-            case 2:
-                return character2;
-            case 3:
-                return character3;
-            case 4:
-                return character4;
-            case 5:
-                return character5;
-            case 6:
-                return character6;
-            case 7:
-                return character7;
-            case 8:
-                return character8;
-            case 9:
-                return character9;
-        }
-        return tileBack;
-    }
-
-    private ImageIcon getDragonImage(String color){
-        switch (color){
-            case "Red":
-                return redDragon;
-            case "Green":
-                return greenDragon;
-            case "White":
-                return whiteDragon;
-        }
-        return tileBack;
-    }
-
-    private ImageIcon getWindImage(String direction){
-        switch (direction){
-            case "East":
-                return eastWind;
-            case "South":
-                return southWind;
-            case "West":
-                return westWind;
-            case "North":
-                return northWind;
-        }
-        return tileBack;
-    }
-
-    private ImageIcon getFlowerImage(int number){
-        switch (number){
-            case 1:
-                return flower1;
-            case 2:
-                return flower2;
-            case 3:
-                return flower3;
-            case 4:
-                return flower4;
-            case 5:
-                return flower5;
-            case 6:
-                return flower6;
-            case 7:
-                return flower7;
-            case 8:
-                return flower8;
-        }
-        return tileBack;
-    }
-
 
     private void placeDrawPile() {
 
@@ -376,7 +268,131 @@ public class Board extends JPanel {
         tileBack = new ImageIcon("./src/MahjongCIS350/Images/tileBack.jpg");
     }
 
+    private ImageIcon getCircleImage(int value){
+        switch (value){
+            case 1:
+                return circle1;
+            case 2:
+                return circle2;
+            case 3:
+                return circle3;
+            case 4:
+                return circle4;
+            case 5:
+                return circle5;
+            case 6:
+                return circle6;
+            case 7:
+                return circle7;
+            case 8:
+                return circle8;
+            case 9:
+                return circle9;
+        }
+        System.out.println("Error in circleImage");
+        return tileBack;
+    }
 
+    private ImageIcon getBambooImage(int value){
+        switch (value){
+            case 1:
+                return bamboo1;
+            case 2:
+                return bamboo2;
+            case 3:
+                return bamboo3;
+            case 4:
+                return bamboo4;
+            case 5:
+                return bamboo5;
+            case 6:
+                return bamboo6;
+            case 7:
+                return bamboo7;
+            case 8:
+                return bamboo8;
+            case 9:
+                return bamboo9;
+        }
+        System.out.println("Error in bambooImage");
+        return tileBack;
+    }
+
+    private ImageIcon getCharacterImage(int value){
+        switch (value){
+            case 1:
+                return character1;
+            case 2:
+                return character2;
+            case 3:
+                return character3;
+            case 4:
+                return character4;
+            case 5:
+                return character5;
+            case 6:
+                return character6;
+            case 7:
+                return character7;
+            case 8:
+                return character8;
+            case 9:
+                return character9;
+        }
+        System.out.println("Error in characterImage");
+        return tileBack;
+    }
+
+    private ImageIcon getDragonImage(String color){
+        switch (color){
+            case "Red":
+                return redDragon;
+            case "Green":
+                return greenDragon;
+            case "White":
+                return whiteDragon;
+        }
+        System.out.println("Error in dragonImage");
+        return tileBack;
+    }
+
+    private ImageIcon getWindImage(String direction){
+        switch (direction){
+            case "East":
+                return eastWind;
+            case "South":
+                return southWind;
+            case "West":
+                return westWind;
+            case "North":
+                return northWind;
+        }
+        System.out.println("Error in windImage");
+        return tileBack;
+    }
+
+    private ImageIcon getFlowerImage(int number){
+        switch (number){
+            case 1:
+                return flower1;
+            case 2:
+                return flower2;
+            case 3:
+                return flower3;
+            case 4:
+                return flower4;
+            case 5:
+                return flower5;
+            case 6:
+                return flower6;
+            case 7:
+                return flower7;
+            case 8:
+                return flower8;
+        }
+        System.out.println("Error in flowerImage");
+        return tileBack;
+    }
 
     // updates images and JButtons based on ArrayLists in Game
     private void displayBoard() {
