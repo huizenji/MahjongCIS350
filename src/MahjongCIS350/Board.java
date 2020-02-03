@@ -69,6 +69,10 @@ public class Board extends JPanel {
         game = new Game();
 
         drawPile = new ArrayList<>();
+        p1Hand = new ArrayList<>();
+        p2Hand = new ArrayList<>();
+        p3Hand = new ArrayList<>();
+        p4Hand = new ArrayList<>();
 
         drawPilePanel = new JPanel();
         discardPilePanel = new JPanel();
@@ -92,7 +96,7 @@ public class Board extends JPanel {
         placeDrawPile();
         add(drawPilePanel, BorderLayout.CENTER);
 
-        placePlayerTiles();
+        dealPlayerTiles();
 
 
         add(discardPilePanel, BorderLayout.CENTER);
@@ -106,12 +110,34 @@ public class Board extends JPanel {
 
 
 
-    private void placePlayerTiles(){
+    private void dealPlayerTiles(){
 
+        for (int i = 0; i < 13; i++){
+            p1Hand.add(drawPile.get(143 - i));
+            drawPile.remove(143 - i);
 
-        //add a update ImageIcon method
+            p1Hand.get(i).setIcon(updatedImage(game.getPlayerList
+                    (game.getStartingPlayer()).getTileFromHand(i)));
+            player1Panel.add(p1Hand.get(i));
+        }
 
+        for (int i = 0; i < 13; i++){
+            p2Hand.add(drawPile.get(130 - i));
+            drawPile.remove(130 - i);
+            player2Panel.add(p2Hand.get(i));
+        }
 
+        for (int i = 0; i < 13; i++){
+            p3Hand.add(drawPile.get(117 - i));
+            drawPile.remove(117 - i);
+            player3Panel.add(p3Hand.get(i));
+        }
+
+        for (int i = 0; i < 13; i++){
+            p4Hand.add(drawPile.get(104 - i));
+            drawPile.remove(104 - i);
+            player4Panel.add(p4Hand.get(i));
+        }
     }
 
     private ImageIcon updatedImage(Tile tile){
