@@ -10,7 +10,8 @@ public class Board extends JPanel {
 
     private Game game;
     private ArrayList<JButton> drawPile, discardPile, p1Hand, p2Hand, p3Hand, p4Hand;
-    private JPanel drawPilePanel, discardPilePanel, player1Panel, player2Panel, player3Panel, player4Panel, gameBoard;
+    private JPanel drawPilePanel, discardPilePanel, player1Panel, player2Panel, player3Panel, player4Panel;
+    private JLayeredPane gameBoard;
 
     private ImageIcon circle1;
     private ImageIcon circle2;
@@ -85,7 +86,7 @@ public class Board extends JPanel {
         player2Panel = new JPanel();
         player3Panel = new JPanel();
         player4Panel = new JPanel();
-        gameBoard = new JPanel();
+        gameBoard = new JLayeredPane();
 
         Color darkGreen = new Color(0, 150, 100);
         drawPilePanel.setBackground(darkGreen);
@@ -125,7 +126,9 @@ public class Board extends JPanel {
         c.gridx = 1;
         c.gridy = 1;
         gameBoard.add(drawPilePanel, c);
+        gameBoard.setLayer(drawPilePanel, 1);
         gameBoard.add(discardPilePanel, c);
+        gameBoard.setLayer(discardPilePanel, 0);
 
         c.ipady = 25;
         c.gridy = 2;
@@ -149,12 +152,11 @@ public class Board extends JPanel {
 
 
 
-
     private void dealPlayerTiles(){
 
         GridBagConstraints c = new GridBagConstraints();
 
-        for (int i = 0; i < 14; i++){
+        for (int i = 0; i < 13; i++){
             p1Hand.add(drawPile.get(143 - i));
             drawPile.remove(143 - i);
 
@@ -168,8 +170,8 @@ public class Board extends JPanel {
         }
 
         for (int i = 0; i < 13; i++){
-            p2Hand.add(drawPile.get(129 - i));
-            drawPile.remove(129 - i);
+            p2Hand.add(drawPile.get(130 - i));
+            drawPile.remove(130 - i);
 
             c.gridx = 0;
             c.gridy = i;
@@ -177,8 +179,8 @@ public class Board extends JPanel {
         }
 
         for (int i = 0; i < 13; i++){
-            p3Hand.add(drawPile.get(116 - i));
-            drawPile.remove(116 - i);
+            p3Hand.add(drawPile.get(117 - i));
+            drawPile.remove(117 - i);
 
             c.gridx = i;
             c.gridy = 0;
@@ -186,12 +188,36 @@ public class Board extends JPanel {
         }
 
         for (int i = 0; i < 13; i++){
-            p4Hand.add(drawPile.get(103 - i));
-            drawPile.remove(103 - i);
+            p4Hand.add(drawPile.get(104 - i));
+            drawPile.remove(104 - i);
 
             c.gridx = 0;
             c.gridy = i;
             player4Panel.add(p4Hand.get(i), c);
+        }
+
+        // give starting Player one more Tile
+        for (int i = 0; i < 4; i++){
+            if (game.getStartingPlayer() == i){
+                switch (i){
+                    case 0:
+                        p1Hand.add(drawPile.get(91));
+                        drawPile.remove(91);
+                        break;
+                    case 1:
+                        p2Hand.add(drawPile.get(91));
+                        drawPile.remove(91);
+                        break;
+                    case 2:
+                        p3Hand.add(drawPile.get(91));
+                        drawPile.remove(91);
+                        break;
+                    case 3:
+                        p4Hand.add(drawPile.get(91));
+                        drawPile.remove(91);
+                        break;
+                }
+            }
         }
     }
 
