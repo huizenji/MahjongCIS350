@@ -226,21 +226,37 @@ public class Game {
 
         // Give out the 13 Tile
         for (int index = 0; index < 4; index++) {
-            for (int j = 0; j < 4; j++) {
                 playerList[index].addTile(tiles.remove(0));
-            }
         }
         // Giving starting player 1 extra tile
-        playerList[startingPlayer].addTile(tiles.remove(0));
+        //playerList[startingPlayer].addTile(tiles.remove(0));
+
+        replacePointTile();
     }
 
-    /*******************************************************************
-     * This method replaces all the point tiles with suite tiles
-     */
-    private void replaceFlower(){
+    private void replacePointTile(){
 
+        // Looping through each players hand
+        for (int index = 0; index < 4; index++){
 
+            // Keep replacing tile until no point tile is in hand
+            for (int i = 0; i < playerList[index].
+                    getHandTile().size(); i++){
+
+                // Check tile if it is a point tile
+                if (!(playerList[index].getHandTile().get(i)
+                        instanceof Suite)){
+
+                    /** change to a function later **/
+                    playerList[index].getSetPile().add(playerList[index].getHandTile().remove(i));
+                    i--;
+                }
+            }
+
+            //autoSort(playerList[index]);
+        }
     }
+
 
     /**
      * To check if there is chi for a specific player
@@ -381,9 +397,9 @@ public class Game {
             for (int value = 1; value <= 9; value++) {
 
                 comp.setValue(value);
-                if (compareSuite(comp, playerTile)) ;
-
-                temp.add(playerTile);
+                if (compareSuite(comp, playerTile)) {
+                    temp.add(playerTile);
+                }
             }
         }
 
@@ -395,9 +411,10 @@ public class Game {
             for (int value = 1; value <= 9; value++) {
 
                 comp.setValue(value);
-                if (compareSuite(comp, playerTile)) ;
+                if (compareSuite(comp, playerTile)) {
 
-                temp.add(playerTile);
+                    temp.add(playerTile);
+                }
             }
         }
 
@@ -409,9 +426,9 @@ public class Game {
             for (int value = 1; value <= 9; value++) {
 
                 comp.setValue(value);
-                if (compareSuite(comp, playerTile)) ;
-
-                temp.add(playerTile);
+                if (compareSuite(comp, playerTile)) {
+                    temp.add(playerTile);
+                }
             }
         }
 
