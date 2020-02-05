@@ -154,9 +154,14 @@ public class Board extends JPanel {
 
         GridBagConstraints c = new GridBagConstraints();
 
-        for (int i = 0; i < 14; i++){
+        int plHand_Size = game.getPlayerList(game.getCurrentPlayer()).
+                getHandTile().size();
+
+        // Starting player gets 1 extra tile
+        for (int i = 0; i < 13; i++){
             p1Hand.add(drawPile.get(143 - i));
             drawPile.remove(143 - i);
+
 
             p1Hand.get(i).setIcon(updatedImage(game.getPlayerList
                     (game.getStartingPlayer()).getTileFromHand(i)));
