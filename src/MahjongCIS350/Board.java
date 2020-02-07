@@ -107,6 +107,9 @@ public class Board extends JPanel {
         p4HandPanel.setLayout(new GridBagLayout());
         gameBoard.setLayout(new GridBagLayout());
 
+        discardPilePanel.setBorder(BorderFactory.createBevelBorder(1));
+        discardPilePanel.setPreferredSize(new Dimension(300,200));
+
         // create Icons
         createIcons();
 
@@ -126,9 +129,9 @@ public class Board extends JPanel {
         c.gridx = 1;
         c.gridy = 1;
         gameBoard.add(drawPilePanel, c);
-        gameBoard.setLayer(drawPilePanel, 5);
+        gameBoard.setLayer(drawPilePanel, 0);
         gameBoard.add(discardPilePanel, c);
-        gameBoard.setLayer(discardPilePanel, 0);
+        gameBoard.setLayer(discardPilePanel, 1);
 
         c.ipady = 25;
         c.gridy = 2;
@@ -463,16 +466,19 @@ public class Board extends JPanel {
     private class listener implements ActionListener {
         public void actionPerformed(ActionEvent event) {
 
+            int p1HandSize = game.getPlayerList(0).getHandTile().size();
+
             // when Tile is selected for discard
             // currently errors when clicking on non-Suite Tiles
-            for (int i = 0; i < 14; i++) {
+            for (int i = 0; i < p1HandSize; i++) {
                 if (p1Hand.get(i) == event.getSource()) {
                     discardPile.add(p1Hand.get(i));
+                    discardPile.get(discardPile.size() - 1).setPreferredSize(new Dimension(10,10));
                     discardPilePanel.add(discardPile.get(discardPile.size() - 1));
 
                     p1Hand.remove(i);
                     game.getPlayerList(game.getCurrentPlayer()).removeTile(i);
-                    //call autosort
+                    break;
                 }
             }
 
