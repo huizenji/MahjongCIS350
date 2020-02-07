@@ -226,34 +226,34 @@ public class Game {
 
         // Give out the 13 Tile
         for (int index = 0; index < 4; index++) {
-                playerList[index].addTile(tiles.remove(0));
+            playerList[index].addTile(tiles.remove(0));
         }
         // Giving starting player 1 extra tile
-        //playerList[startingPlayer].addTile(tiles.remove(0));
+        // playerList[startingPlayer].addTile(tiles.remove(0));
 
         replacePointTile();
     }
 
-    private void replacePointTile(){
+    private void replacePointTile() {
 
         // Looping through each players hand
-        for (int index = 0; index < 4; index++){
+        for (int index = 0; index < 4; index++) {
 
             // Keep replacing tile until no point tile is in hand
             for (int i = 0; i < playerList[index].
-                    getHandTile().size(); i++){
+                    getHandTile().size(); i++) {
 
                 // Check tile if it is a point tile
                 if (!(playerList[index].getHandTile().get(i)
-                        instanceof Suite)){
+                        instanceof Suite)) {
 
-                    /** change to a function later **/
                     playerList[index].getSetPile().add(playerList[index].getHandTile().remove(i));
+                    playerList[index].getHandTile().add(tiles.remove(0));
                     i--;
                 }
             }
 
-            //autoSort(playerList[index]);
+            autoSort(playerList[index]);
         }
     }
 
@@ -280,8 +280,8 @@ public class Game {
         //check if their values are consecutive
         if (matchdesign >= 2) {
             for (int i = 0; i < handTile.size() - 1; ++i) {
-                for (int j = i+1; j < handTile.size(); ++j){
-                    if(compareConsecutive(handTile.get(i),handTile.get(j),check)){
+                for (int j = i + 1; j < handTile.size(); ++j) {
+                    if (compareConsecutive(handTile.get(i), handTile.get(j), check)) {
                         return true;
                     }
                 }
@@ -340,9 +340,9 @@ public class Game {
         desired.add(tile);
         desired.add(tile);
 
-        ArrayList<Integer> loc = findTile(pl.getHandTile(),desired);
+        ArrayList<Integer> loc = findTile(pl.getHandTile(), desired);
 
-        for (int i = loc.size() - 1; i >= 0; i--){
+        for (int i = loc.size() - 1; i >= 0; i--) {
 
             pl.removeTile(loc.get(i));
         }
@@ -391,11 +391,13 @@ public class Game {
 
         // Adding Circle Tiles
         comp.setDesign("Circle");
-        for (int i = 0; i < player.getHandTile().size(); i++) {
 
-            playerTile = (Suite) player.getHandTile().get(i);
-            for (int value = 1; value <= 9; value++) {
 
+        for (int value = 1; value <= 9; value++) {
+
+            for (int i = 0; i < player.getHandTile().size(); i++) {
+
+                playerTile = (Suite) player.getHandTile().get(i);
                 comp.setValue(value);
                 if (compareSuite(comp, playerTile)) {
                     temp.add(playerTile);
@@ -405,11 +407,11 @@ public class Game {
 
         // Adding Bamboo Tiles
         comp.setDesign("Bamboo");
-        for (int i = 0; i < player.getHandTile().size(); i++) {
 
-            playerTile = (Suite) player.getHandTile().get(i);
-            for (int value = 1; value <= 9; value++) {
+        for (int value = 1; value <= 9; value++) {
+            for (int i = 0; i < player.getHandTile().size(); i++) {
 
+                playerTile = (Suite) player.getHandTile().get(i);
                 comp.setValue(value);
                 if (compareSuite(comp, playerTile)) {
 
@@ -420,11 +422,11 @@ public class Game {
 
         // Adding Character Tiles
         comp.setDesign("Character");
-        for (int i = 0; i < player.getHandTile().size(); i++) {
 
-            playerTile = (Suite) player.getHandTile().get(i);
-            for (int value = 1; value <= 9; value++) {
+        for (int value = 1; value <= 9; value++) {
+            for (int i = 0; i < player.getHandTile().size(); i++) {
 
+                playerTile = (Suite) player.getHandTile().get(i);
                 comp.setValue(value);
                 if (compareSuite(comp, playerTile)) {
                     temp.add(playerTile);
@@ -469,31 +471,33 @@ public class Game {
 
     /**
      * This method compares 3 suite tiles and determine if they are consecutive and belong to the same design of suite
+     *
      * @param tile1
      * @param tile2
      * @param tile3
      * @return
      */
-    private boolean compareConsecutive(Suite tile1, Suite tile2, Suite tile3){
+    private boolean compareConsecutive(Suite tile1, Suite tile2, Suite tile3) {
         //make an array to hold the three values of the three tiles
-        int[] array = {tile1.getValue(),tile2.getValue(),tile3.getValue()};
+        int[] array = {tile1.getValue(), tile2.getValue(), tile3.getValue()};
         //find min and max value
-        int min = tile1.getValue();int max = tile1.getValue();
-        for(int i =0; i < 3; i++){
-            if(array[i]<min){
+        int min = tile1.getValue();
+        int max = tile1.getValue();
+        for (int i = 0; i < 3; i++) {
+            if (array[i] < min) {
                 min = array[i];
             }
         }
-        for(int i = 0; i<3; i++){
-            if(array[i]>max){
+        for (int i = 0; i < 3; i++) {
+            if (array[i] > max) {
                 max = array[i];
             }
         }
         //check if they are consecutive and values are not equal to each other
         boolean[] visited = new boolean[3];
-        if(tile1.getDesign().equals(tile2.getDesign())&&tile1.getDesign().equals(tile3.getDesign())){
-            if(max-min+1 == 3){
-                if(array[0]!=array[1]&&array[1]!=array[2]&&array[0]!=array[2]){
+        if (tile1.getDesign().equals(tile2.getDesign()) && tile1.getDesign().equals(tile3.getDesign())) {
+            if (max - min + 1 == 3) {
+                if (array[0] != array[1] && array[1] != array[2] && array[0] != array[2]) {
                     return true;
                 }
             }
