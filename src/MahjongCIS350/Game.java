@@ -229,7 +229,7 @@ public class Game {
             playerList[index].addTile(tiles.remove(0));
         }
         // Giving starting player 1 extra tile
-        // playerList[startingPlayer].addTile(tiles.remove(0));
+         playerList[startingPlayer].addTile(tiles.remove(0));
 
         replacePointTile();
     }
