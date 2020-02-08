@@ -3,14 +3,14 @@ package MahjongCIS350;
 import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
-import javax.swing.border.Border;
 import java.util.*;
 
 public class Board extends JPanel {
 
     private Game game;
     private ArrayList<JButton> drawPile, discardPile, p1Hand, p2Hand, p3Hand, p4Hand;
-    private JPanel drawPilePanel, discardPilePanel, player1Panel, player2Panel, player3Panel, player4Panel;
+    // should the setPiles be an ArrayList of arrays?
+    private JPanel drawPilePanel, discardPilePanel, p1HandPanel, p2HandPanel, p3HandPanel, p4HandPanel;
     private JLayeredPane gameBoard;
 
     private ImageIcon circle1;
@@ -82,30 +82,33 @@ public class Board extends JPanel {
         // create Panels
         drawPilePanel = new JPanel();
         discardPilePanel = new JPanel();
-        player1Panel = new JPanel();
-        player2Panel = new JPanel();
-        player3Panel = new JPanel();
-        player4Panel = new JPanel();
+        p1HandPanel = new JPanel();
+        p2HandPanel = new JPanel();
+        p3HandPanel = new JPanel();
+        p4HandPanel = new JPanel();
         gameBoard = new JLayeredPane();
 
         Color darkGreen = new Color(0, 150, 100);
         drawPilePanel.setBackground(darkGreen);
         discardPilePanel.setBackground(darkGreen);
-        player1Panel.setBackground(darkGreen);
-        player2Panel.setBackground(darkGreen);
-        player3Panel.setBackground(darkGreen);
-        player4Panel.setBackground(darkGreen);
+        p1HandPanel.setBackground(darkGreen);
+        p2HandPanel.setBackground(darkGreen);
+        p3HandPanel.setBackground(darkGreen);
+        p4HandPanel.setBackground(darkGreen);
         gameBoard.setBackground(darkGreen);
 
 
         // set Layouts
         drawPilePanel.setLayout(new GridBagLayout());
         discardPilePanel.setLayout(new GridLayout(10, 10,1, 1));
-        player1Panel.setLayout(new GridBagLayout());
-        player2Panel.setLayout(new GridBagLayout());
-        player3Panel.setLayout(new GridBagLayout());
-        player4Panel.setLayout(new GridBagLayout());
+        p1HandPanel.setLayout(new GridBagLayout());
+        p2HandPanel.setLayout(new GridBagLayout());
+        p3HandPanel.setLayout(new GridBagLayout());
+        p4HandPanel.setLayout(new GridBagLayout());
         gameBoard.setLayout(new GridBagLayout());
+
+        discardPilePanel.setBorder(BorderFactory.createBevelBorder(1));
+        discardPilePanel.setPreferredSize(new Dimension(300,200));
 
         // create Icons
         createIcons();
@@ -126,26 +129,26 @@ public class Board extends JPanel {
         c.gridx = 1;
         c.gridy = 1;
         gameBoard.add(drawPilePanel, c);
-        gameBoard.setLayer(drawPilePanel, 1);
+        gameBoard.setLayer(drawPilePanel, 0);
         gameBoard.add(discardPilePanel, c);
-        gameBoard.setLayer(discardPilePanel, 0);
+        gameBoard.setLayer(discardPilePanel, 1);
 
         c.ipady = 25;
         c.gridy = 2;
-        gameBoard.add(player1Panel, c);
+        gameBoard.add(p1HandPanel, c);
 
         c.ipady = 75;
         c.gridx = 0;
         c.gridy = 1;
-        gameBoard.add(player2Panel, c);
+        gameBoard.add(p2HandPanel, c);
 
         c.gridx = 1;
         c.gridy = 0;
-        gameBoard.add(player3Panel, c);
+        gameBoard.add(p3HandPanel, c);
 
         c.gridx = 2;
         c.gridy = 1;
-        gameBoard.add(player4Panel, c);
+        gameBoard.add(p4HandPanel, c);
 
         add(gameBoard, BorderLayout.CENTER);
     }
@@ -155,70 +158,58 @@ public class Board extends JPanel {
     private void dealPlayerTiles(){
 
         GridBagConstraints c = new GridBagConstraints();
+        int p1HandSize = game.getPlayerList(0).getHandTile().size();
+        int p2HandSize = game.getPlayerList(1).getHandTile().size();
+        int p3HandSize = game.getPlayerList(2).getHandTile().size();
+        int p4HandSize = game.getPlayerList(3).getHandTile().size();
 
-        for (int i = 0; i < 13; i++){
-            p1Hand.add(drawPile.get(143 - i));
-            drawPile.remove(143 - i);
+
+        for (int i = 0; i < p1HandSize; i++){
+            p1Hand.add(drawPile.get(drawPile.size() - 1));
+            drawPile.remove(drawPile.size() - 1);
 
             p1Hand.get(i).setIcon(updatedImage(game.getPlayerList
-                    (game.getStartingPlayer()).getTileFromHand(i)));
+                    (0).getTileFromHand(i)));
 
             c.gridx = i;
             c.gridy = 0;
             p1Hand.get(i).setPreferredSize(new Dimension(50,50));
-            player1Panel.add(p1Hand.get(i), c);
+            p1HandPanel.add(p1Hand.get(i), c);
         }
 
-        for (int i = 0; i < 13; i++){
-            p2Hand.add(drawPile.get(130 - i));
-            drawPile.remove(130 - i);
+        for (int i = 0; i < p2HandSize; i++){
+            p2Hand.add(drawPile.get(drawPile.size() - 1));
+            drawPile.remove(drawPile.size() - 1);
 
             c.gridx = 0;
             c.gridy = i;
-            player2Panel.add(p2Hand.get(i), c);
+            p2HandPanel.add(p2Hand.get(i), c);
         }
 
-        for (int i = 0; i < 13; i++){
-            p3Hand.add(drawPile.get(117 - i));
-            drawPile.remove(117 - i);
+        for (int i = 0; i < p3HandSize; i++){
+            p3Hand.add(drawPile.get(drawPile.size() - 1));
+            drawPile.remove(drawPile.size() - 1);
 
             c.gridx = i;
             c.gridy = 0;
-            player3Panel.add(p3Hand.get(i), c);
+            p3HandPanel.add(p3Hand.get(i), c);
         }
 
-        for (int i = 0; i < 13; i++){
-            p4Hand.add(drawPile.get(104 - i));
-            drawPile.remove(104 - i);
+        for (int i = 0; i < p4HandSize; i++){
+            p4Hand.add(drawPile.get(drawPile.size() - 1));
+            drawPile.remove(drawPile.size() - 1);
 
             c.gridx = 0;
             c.gridy = i;
-            player4Panel.add(p4Hand.get(i), c);
+            p4HandPanel.add(p4Hand.get(i), c);
         }
+    }
 
-        // give starting Player one more Tile
-        for (int i = 0; i < 4; i++){
-            if (game.getStartingPlayer() == i){
-                switch (i){
-                    case 0:
-                        p1Hand.add(drawPile.get(91));
-                        drawPile.remove(91);
-                        break;
-                    case 1:
-                        p2Hand.add(drawPile.get(91));
-                        drawPile.remove(91);
-                        break;
-                    case 2:
-                        p3Hand.add(drawPile.get(91));
-                        drawPile.remove(91);
-                        break;
-                    case 3:
-                        p4Hand.add(drawPile.get(91));
-                        drawPile.remove(91);
-                        break;
-                }
-            }
-        }
+    // need to figure out how to sync this with GridBagLayout
+    private void drawTile(ArrayList<JButton> hand, JPanel panel){
+        hand.add(drawPile.get(drawPile.size() - 1));
+        panel.add(hand.get(hand.size() - 1));
+        drawPile.remove(drawPile.size() - 1);
     }
 
     private ImageIcon updatedImage(Tile tile){
@@ -466,7 +457,7 @@ public class Board extends JPanel {
     // updates images and JButtons based on ArrayLists in Game
     private void displayBoard() {
 
-
+        repaint();
 
     }
 
@@ -475,20 +466,23 @@ public class Board extends JPanel {
     private class listener implements ActionListener {
         public void actionPerformed(ActionEvent event) {
 
+            int p1HandSize = game.getPlayerList(0).getHandTile().size();
+
             // when Tile is selected for discard
             // currently errors when clicking on non-Suite Tiles
-            for (int i = 0; i < 14; i++) {
+            for (int i = 0; i < p1HandSize; i++) {
                 if (p1Hand.get(i) == event.getSource()) {
                     discardPile.add(p1Hand.get(i));
+                    discardPile.get(discardPile.size() - 1).setPreferredSize(new Dimension(10,10));
                     discardPilePanel.add(discardPile.get(discardPile.size() - 1));
+
                     p1Hand.remove(i);
                     game.getPlayerList(game.getCurrentPlayer()).removeTile(i);
                     break;
-                    //call autosort
                 }
             }
 
-            repaint();
+            displayBoard();
 
         }
 
