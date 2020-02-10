@@ -67,6 +67,7 @@ public class Game {
         shuffle();
         dealTile_13();
         removeKongHand();
+        System.out.println(startingPlayer);
     }
 
     /*******************************************************************
@@ -296,11 +297,18 @@ public class Game {
         boolean temp = true;
         for (int i = 0; i < pl.getHandTile().size() - 4; i++){
             for (int k = 1; k < 4; k++){
-                if(compareSuite((Suite)(hand.get(i)), (Suite)(hand.get(i+k)))){
+                if(!(compareSuite((Suite)(hand.get(i)), (Suite)(hand.get(i+k))))){
 
-                    return i;
+                    temp = false;
                 }
             }
+
+            // Checking if there is actually a kong
+            if (temp) {
+                return i;
+            }
+
+            temp = true;
         }
         return -1;
     }
