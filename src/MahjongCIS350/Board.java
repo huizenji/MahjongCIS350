@@ -110,6 +110,7 @@ public class Board extends JPanel {
         p3SetPanel.setBackground(darkGreen);
         p4SetPanel.setBackground(darkGreen);
         gameBoard.setBackground(darkGreen);
+        gameBoard.setOpaque(true);
 
 
         // set Layouts
