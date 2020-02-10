@@ -90,6 +90,16 @@ public class Player{
         handTile.remove(p);
     }
 
+    public void removeTileSet(int index){
+
+        if(index < 0 || index >= handTile.size()){
+            throw new IllegalArgumentException("Invalid position: " +
+                    index);
+        }
+
+        setPile.add(handTile.remove(index));
+    }
+
     /**
      * get the last tile of the handtile or pile
      * @param handTile

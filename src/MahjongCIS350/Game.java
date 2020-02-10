@@ -66,6 +66,7 @@ public class Game {
         setupPlayer();
         shuffle();
         dealTile_13();
+        removeKongHand();
     }
 
     /*******************************************************************
@@ -255,6 +256,52 @@ public class Game {
 
             autoSort(playerList[index]);
         }
+    }
+
+    private void removeKongHand(){
+
+        int kongIndex;
+
+        for (int i = 0; i < playerList.length; i++){
+
+            while(isKongHand(playerList[i]) != -1) {
+
+                kongIndex = isKongHand(playerList[i]);
+
+                if (kongIndex != -1) {
+
+                    for (int k = 0; k < 4; k++) {
+
+                        playerList[i].removeTileSet(kongIndex);
+                    }
+
+                    draw(playerList[i]);
+                }
+            }
+        }
+    }
+
+    /*******************************************************************
+     * This method determines if the player has a kong in their hand.
+     *
+     * @param pl The player hands that is being checked.
+     * @return It will return -1 if there is no Kong, but it will return
+     *         the starting index of where the Kong starts if there is
+     *         a Kong.
+     ******************************************************************/
+    private int isKongHand(Player pl){
+
+        ArrayList<Tile> hand = pl.getHandTile();
+        boolean temp = true;
+        for (int i = 0; i < pl.getHandTile().size() - 4; i++){
+            for (int k = 1; k < 4; k++){
+                if(compareSuite((Suite)(hand.get(i)), (Suite)(hand.get(i+k)))){
+
+                    return i;
+                }
+            }
+        }
+        return -1;
     }
 
 
@@ -505,7 +552,7 @@ public class Game {
         return false;
     }
 
-    boolean pointTile(Tile tile){
+    private boolean pointTile(Tile tile){
 
         if (tile instanceof Suite)
             return false;
@@ -519,7 +566,7 @@ public class Game {
      *
      * @param pl The current players turn.
      ******************************************************************/
-    void draw(Player pl){
+    public void draw(Player pl){
 
         Tile drawn = tiles.remove(0);
 
@@ -528,6 +575,8 @@ public class Game {
             pl.getSetPile().add(drawn);
             drawn = tiles.remove(0);
         }
+
+        pl.getHandTile().add(drawn);
     }
 
     /*******************************************************************
@@ -537,7 +586,7 @@ public class Game {
      * @param pl The player that is discarding the tile.
      * @param tileIndex The tile index in the selected players hand.
      ******************************************************************/
-    void discard(Player pl, int tileIndex){
+    public void discard(Player pl, int tileIndex){
 
         if (tileIndex >= pl.getHandTile().size() || tileIndex < 0){
 
@@ -553,7 +602,7 @@ public class Game {
      * an AI design to loses and allow the user to feel good.
      * @param pl The player whose action will be determined by an AI.
      ******************************************************************/
-    void dumbAI(Player pl){
+    public void dumbAI(Player pl){
 
         Random rand = new Random();
 
