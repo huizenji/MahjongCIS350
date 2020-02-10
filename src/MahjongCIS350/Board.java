@@ -505,12 +505,8 @@ public class Board extends JPanel {
             }
 
             displayBoard();
-
         }
-
     }
-
-
 }
 
 
