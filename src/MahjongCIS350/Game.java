@@ -505,6 +505,63 @@ public class Game {
         return false;
     }
 
+    boolean pointTile(Tile tile){
+
+        if (tile instanceof Suite)
+            return false;
+        else
+            return true;
+    }
+
+    /*******************************************************************
+     * This method draws a tile from the main wall/tiles. It will then
+     * draw another tile if the original tile draw is a point tile.
+     *
+     * @param pl The current players turn.
+     ******************************************************************/
+    void draw(Player pl){
+
+        Tile drawn = tiles.remove(0);
+
+        while(pointTile(drawn)){
+
+            pl.getSetPile().add(drawn);
+            drawn = tiles.remove(0);
+        }
+    }
+
+    /*******************************************************************
+     * This methods removes a tile from hand based on the player and
+     * the tile index in their hand.
+     *
+     * @param pl The player that is discarding the tile.
+     * @param tileIndex The tile index in the selected players hand.
+     ******************************************************************/
+    void discard(Player pl, int tileIndex){
+
+        if (tileIndex >= pl.getHandTile().size() || tileIndex < 0){
+
+            throw new IndexOutOfBoundsException("tile index is out of" +
+                    "bounds.");
+        }
+
+        discardPile.add(pl.getHandTile().remove(tileIndex));
+    }
+
+    /*******************************************************************
+     * AI design to get rid of a tiles and draw tiles. This is basically
+     * an AI design to loses and allow the user to feel good.
+     * @param pl The player whose action will be determined by an AI.
+     ******************************************************************/
+    void dumbAI(Player pl){
+
+        Random rand = new Random();
+
+        draw(pl);
+        discard(pl,rand.nextInt(pl.getHandTile().size()));
+    }
+
+
 
     public int getCurrentPlayer() {
         return currentPlayer;
