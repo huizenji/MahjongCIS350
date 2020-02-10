@@ -276,6 +276,7 @@ public class Game {
                     }
 
                     draw(playerList[i]);
+                    autoSort(playerList[i]);
                 }
             }
         }
