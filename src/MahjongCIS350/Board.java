@@ -8,9 +8,11 @@ import java.util.*;
 public class Board extends JPanel {
 
     private Game game;
-    private ArrayList<JButton> drawPile, discardPile, p1Hand, p2Hand, p3Hand, p4Hand;
-    // should the setPiles be an ArrayList of arrays?
-    private JPanel drawPilePanel, discardPilePanel, p1HandPanel, p2HandPanel, p3HandPanel, p4HandPanel;
+    private ArrayList<JButton> drawPile, discardPile, p1Hand, p2Hand,
+            p3Hand, p4Hand, p1Sets, p2Sets, p3Sets, p4Sets;
+    private JPanel drawPilePanel, discardPilePanel, p1HandPanel,
+            p2HandPanel, p3HandPanel, p4HandPanel, p1SetPanel,
+            p2SetPanel, p3SetPanel, p4SetPanel;
     private JLayeredPane gameBoard;
 
     private ImageIcon circle1;
@@ -78,6 +80,10 @@ public class Board extends JPanel {
         p2Hand = new ArrayList<>();
         p3Hand = new ArrayList<>();
         p4Hand = new ArrayList<>();
+        p1Sets = new ArrayList<>();
+        p2Sets = new ArrayList<>();
+        p3Sets = new ArrayList<>();
+        p4Sets = new ArrayList<>();
 
         // create Panels
         drawPilePanel = new JPanel();
@@ -86,6 +92,10 @@ public class Board extends JPanel {
         p2HandPanel = new JPanel();
         p3HandPanel = new JPanel();
         p4HandPanel = new JPanel();
+        p1SetPanel = new JPanel();
+        p2SetPanel = new JPanel();
+        p3SetPanel = new JPanel();
+        p4SetPanel = new JPanel();
         gameBoard = new JLayeredPane();
 
         Color darkGreen = new Color(0, 150, 100);
@@ -95,12 +105,17 @@ public class Board extends JPanel {
         p2HandPanel.setBackground(darkGreen);
         p3HandPanel.setBackground(darkGreen);
         p4HandPanel.setBackground(darkGreen);
+        p1SetPanel.setBackground(darkGreen);
+        p2SetPanel.setBackground(darkGreen);
+        p3SetPanel.setBackground(darkGreen);
+        p4SetPanel.setBackground(darkGreen);
         gameBoard.setBackground(darkGreen);
+        gameBoard.setOpaque(true);
 
 
         // set Layouts
         drawPilePanel.setLayout(new GridBagLayout());
-        discardPilePanel.setLayout(new GridLayout(10, 10,1, 1));
+        discardPilePanel.setLayout(new FlowLayout());
         p1HandPanel.setLayout(new GridBagLayout());
         p2HandPanel.setLayout(new GridBagLayout());
         p3HandPanel.setLayout(new GridBagLayout());
@@ -108,7 +123,7 @@ public class Board extends JPanel {
         gameBoard.setLayout(new GridBagLayout());
 
         discardPilePanel.setBorder(BorderFactory.createBevelBorder(1));
-        discardPilePanel.setPreferredSize(new Dimension(300,200));
+        discardPilePanel.setPreferredSize(new Dimension(325,200));
 
         // create Icons
         createIcons();
@@ -123,36 +138,44 @@ public class Board extends JPanel {
         // place Panels
         GridBagConstraints c = new GridBagConstraints();
 
-        c.ipadx = 75;
-        c.ipady = 75;
+        c.ipadx = 50;
+        c.ipady = 50;
 
-        c.gridx = 1;
-        c.gridy = 1;
+        c.gridx = 2;
+        c.gridy = 2;
         gameBoard.add(drawPilePanel, c);
         gameBoard.setLayer(drawPilePanel, 0);
         gameBoard.add(discardPilePanel, c);
         gameBoard.setLayer(discardPilePanel, 1);
 
-        c.ipady = 25;
-        c.gridy = 2;
+        c.ipady = 10;
+        c.gridy = 4;
         gameBoard.add(p1HandPanel, c);
+        c.gridy = 3;
+        gameBoard.add(p1SetPanel, c);
 
-        c.ipady = 75;
+        c.ipady = 10;
         c.gridx = 0;
-        c.gridy = 1;
+        c.gridy = 2;
         gameBoard.add(p2HandPanel, c);
-
         c.gridx = 1;
-        c.gridy = 0;
-        gameBoard.add(p3HandPanel, c);
+        gameBoard.add(p2SetPanel, c);
 
         c.gridx = 2;
+        c.gridy = 0;
+        gameBoard.add(p3HandPanel, c);
         c.gridy = 1;
+        gameBoard.add((p3SetPanel), c);
+
+        c.gridx = 4;
+        c.gridy = 2;
         gameBoard.add(p4HandPanel, c);
+        c.gridx = 3;
+        gameBoard.add(p4SetPanel, c);
+
 
         add(gameBoard, BorderLayout.CENTER);
     }
-
 
 
     private void dealPlayerTiles(){
@@ -473,10 +496,10 @@ public class Board extends JPanel {
             for (int i = 0; i < p1HandSize; i++) {
                 if (p1Hand.get(i) == event.getSource()) {
                     discardPile.add(p1Hand.get(i));
-                    discardPile.get(discardPile.size() - 1).setPreferredSize(new Dimension(10,10));
-                    discardPilePanel.add(discardPile.get(discardPile.size() - 1));
-
                     p1Hand.remove(i);
+                    discardPile.get(discardPile.size() - 1).setSize(20,30);
+                    discardPilePanel.add((discardPile.get(discardPile.size() - 1)));
+
                     game.getPlayerList(game.getCurrentPlayer()).removeTile(i);
                     break;
                 }
