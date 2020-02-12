@@ -6,7 +6,8 @@ import java.util.*;
  * This class contains all pieces and rule functionality for the game
  * Mahjong. It is displayed by the Board and GUI classes.
  *
- * @Authors: Jillian Huizenga, Wayne Chen, Xianghe Zhao(Aaron)
+ * @Authors: Jillian Huizenga, Wayne Chen, Xianghe Zhao(Aaron),
+ * 			 Christopher Paul
  * @Version: 1/27/2020
  *********************************************************************/
 public class Game {
@@ -44,7 +45,35 @@ public class Game {
 
         ArrayList<Integer> a = new ArrayList<>();
         ArrayList<Integer> b = new ArrayList<>();
-
+        
+        //testing Kong and Mahjong
+        Player testPlayer = new Player();
+        testPlayer.addTile(new Suite("Bamboo", 1));
+        testPlayer.addTile(new Suite("Bamboo", 2));
+        testPlayer.addTile(new Dragon("Blue"));
+        testPlayer.addTile(new Suite("Bamboo", 3));
+        testPlayer.addTile(new Dragon("Blue"));
+        testPlayer.addTile(new Suite("Character", 7));
+        testPlayer.addTile(new Suite("Character", 8));
+        testPlayer.addTile(new Dragon("Blue"));
+        testPlayer.addTile(new Suite("Character", 9));
+       
+        
+        testPlayer.getHandTile();
+        Tile test = (new Wind("East"));
+        testPlayer.addTile(new Wind("East"));
+        Game game = new Game();
+        for(Tile t:testPlayer.getHandTile())
+        {
+        	System.out.println(t.getType());
+        }
+        
+        System.out.println(game.isKong(testPlayer.getHandTile(), test));
+        
+        
+        System.out.println(game.isMahjong(testPlayer.getHandTile(), test));
+      //end Kong and Mahjong test test
+        
         a.add(1);
         a.add(2);
         b.add(3);
@@ -377,7 +406,107 @@ public class Game {
             return false;
         }
     }
+    
+    /*******************************************************************
+     * This method compares 2 tiles and determines if they are
+     * the same tile. This method uses compareSuite for checking
+     * two tiles of type Suite
+     *
+     * @param tile1 The first tile that is being compared.
+     * @param tile2 The second tile that is being compared.
+     * @return true if both tiles are the same.
+     ******************************************************************/
+    private boolean compareTile(Tile tile1, Tile tile2) 
+    {
+    	
+    	//If we have null tile throw an exception
+        if (tile1 == null) 
+        {
 
+            throw new NullPointerException("Argument 1 - tile1 has a" +
+                    "null object.\n");
+        }
+        
+        if (tile2 == null) 
+        {
+
+            throw new NullPointerException("Argument 2 - tile1 has a" +
+                    "null object.\n");
+        }
+        
+        //First check to see if the types match (e.g. Two tiles of type "Suite", 
+        //two tiles of type "Dragon", etc...)
+        if (tile1.getType().equals(tile2.getType()))
+        {
+        	//If the tiles are Winds, check direction match
+        	if(tile1.getType() == "Wind")
+        	{
+        		if(((Wind)tile1).getDirection().equals(((Wind)tile2).getDirection()))
+        		{
+        			return true;
+        		}
+        	}
+        	
+        	//If the tiles are Dragons, check color match
+        	if(tile1.getType() == "Dragon")
+        	{
+        		if(((Dragon)tile1).getColor().equals(((Dragon)tile2).getColor()))
+        		{
+        			return true;
+        		}
+        	}
+        	
+        	//If the tiles are a Suite, use compare suite
+        	if(tile1.getType() == "Suite")
+        	{
+        		if(compareSuite((Suite)tile1,(Suite)tile2))
+        		{
+        			return true;
+        		}
+        	}
+        }
+        //If we got here, return false as we have no match
+        return false;
+    }
+    
+    
+    
+    /*******************************************************************
+     * This method checks if there is a Kong in a player's setPile or 
+     * handTile. This method uses compareTile
+     *
+     * @param search The handTile or setPile being searched through
+     *        for a Kong.
+     * @param check The tile checked if it can be made into a Kong.
+     ******************************************************************/
+    private boolean isKong(ArrayList<Tile> search, Tile check) 
+    {
+    	
+    	int numOfMatch = 0;
+    	//Loop through search looking for matching tiles
+    	for (int i = 0; i < search.size(); i++) 
+    	{
+
+            if (compareTile(search.get(i), check)) 
+            {
+
+                numOfMatch++;
+            }
+        }
+    	//If we have found enough to make 4 of the same, then we can make a Kong
+    	 if (numOfMatch >= 3) 
+    	 {
+
+             return true;
+         } 
+    	 else 
+         {
+
+             return false;
+         }
+    }
+
+    /*
     private void isKongDiscard() {
 
     }
@@ -385,9 +514,105 @@ public class Game {
     private void isKongDraw() {
 
     }
-
-    private void isMahjong() {
-
+    */
+    /*******************************************************************
+     * This method checks if a player can Mahjong. We only have to check
+     * what is left of the player hand. If there are only chi's and 
+     * pongs along with 1 tile that matches check, then the player can 
+     * Mahjong.
+     *
+     * @param handTile The player's current hand.
+     * 
+     * @param check The tile checked if it lets the player Mahjong
+     ******************************************************************/
+    private boolean isMahjong(ArrayList<Tile> handTile, Tile check) 
+    {
+    	//Make a copy of what is in the player's hand
+    	ArrayList<Tile> temp = new ArrayList<>();
+    	for(Tile t:handTile)
+    	{
+    		temp.add(t);
+    	}
+    	
+    	//This section tests for any chi's the player has in their hand
+    	
+    	//Loop through the palyer's hand
+    	for(int i = 0; i < temp.size(); i++)
+    	{
+    		//Check to see if the current tile is a suite
+    		if(temp.get(i).getType() == "Suite")
+    		{	
+    			//check to see if another tile in the hand is a suite and matches
+    			//the design of the first tile and subtracting the two gives
+    			//us a difference of 1.
+    			outer: for(int j= i+1; j < temp.size(); j++)
+    			{
+    				if(temp.get(j).getType() == "Suite" &&
+    						((Suite)(temp.get(i))).getDesign().
+    						equals(((Suite)(temp.get(j))).getDesign())
+    						&& Math.abs(((Suite)(temp.get(i))).getValue() - 
+    								((Suite)(temp.get(j))).getValue())== 1)
+    				{
+    					//check to see if a third matches the above criteria and
+    					//subtracting the first from the third gives us a difference
+    					//of 2
+    					for(int h= i+2; h < temp.size(); h++)
+    					{
+    						if(temp.get(h).getType() == "Suite"&& 
+    								((Suite)(temp.get(i))).getDesign().
+    								equals(((Suite)(temp.get(h))).getDesign())
+    	    						&& Math.abs(((Suite)(temp.get(i))).getValue() - 
+    	    								((Suite)(temp.get(h))).getValue())== 2)
+    						{
+    							//remove the chi from the player's hand and break
+    							//out of the third and second loops
+    							temp.remove(h);
+    							temp.remove(j);
+    							temp.remove(i);
+    							//counteract the increment as we need to start at the 
+    							//beginning of the ArrayList
+    							i--;
+    							break outer;
+    						}
+    					}
+    				}
+    			}
+    		}
+    	}
+    	
+    	//This section checks for any pongs in the player's hand
+    	for(int i = 0; i < temp.size(); i++)
+    	{
+    		outer: for(int j = i+1; j < temp.size(); j++)
+    		{
+    			//check to see if the following tile is the same as the current tile
+    			if(compareTile(temp.get(i),temp.get(j)))
+    			{
+    				//check to see if the tile two away is the same as the current tile
+    				for(int k = j+1;k < temp.size();k++)
+    				{
+    					//If so, remove the pong from temp
+    					if(compareTile(temp.get(i),temp.get(k)))
+    					{
+    						temp.remove(k);
+    						temp.remove(j);
+    						temp.remove(i);
+    						//counteract the increment as we need to start at the beginning
+    						//of the ArrayList
+    						i--;
+    						break outer;
+    					}
+    				}
+    			}
+    		}
+    	}
+    	//If we only have 1 tile remaining and that tile is of the checked tile,
+    	//then we have 1 pair and only chi's and pongs in our hand. The player can mahjong
+    	if(temp.size() == 1 && compareTile(check, temp.get(0)))
+    	{
+    		return true;
+    	}
+    	return false;
     }
 
     private void takePong(Player pl, Suite tile) {
