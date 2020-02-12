@@ -231,7 +231,7 @@ public class Game {
             playerList[index].addTile(tiles.remove(0));
         }
         // Giving starting player 1 extra tile
-         playerList[startingPlayer].addTile(tiles.remove(0));
+        playerList[startingPlayer].addTile(tiles.remove(0));
 
         replacePointTile();
     }
@@ -259,13 +259,13 @@ public class Game {
         }
     }
 
-    private void removeKongHand(){
+    private void removeKongHand() {
 
         int kongIndex;
 
-        for (int i = 0; i < playerList.length; i++){
+        for (int i = 0; i < playerList.length; i++) {
 
-            while(isKongHand(playerList[i]) != -1) {
+            while (isKongHand(playerList[i]) != -1) {
 
                 kongIndex = isKongHand(playerList[i]);
 
@@ -291,13 +291,13 @@ public class Game {
      *         the starting index of where the Kong starts if there is
      *         a Kong.
      ******************************************************************/
-    private int isKongHand(Player pl){
+    private int isKongHand(Player pl) {
 
         ArrayList<Tile> hand = pl.getHandTile();
         boolean temp = true;
-        for (int i = 0; i < pl.getHandTile().size() - 4; i++){
-            for (int k = 1; k < 4; k++){
-                if(!(compareSuite((Suite)(hand.get(i)), (Suite)(hand.get(i+k))))){
+        for (int i = 0; i < pl.getHandTile().size() - 4; i++) {
+            for (int k = 1; k < 4; k++) {
+                if (!(compareSuite((Suite) (hand.get(i)), (Suite) (hand.get(i + k))))) {
 
                     temp = false;
                 }
@@ -378,6 +378,134 @@ public class Game {
         }
     }
 
+    /*******************************************************************
+     * This method compares 2 tiles and determines if they are
+     * the same tile. This method uses compareSuite for checking
+     * two tiles of type Suite
+     *
+     * @param tile1 The first tile that is being compared.
+
+     * @param tile2 The second tile that is being compared.
+
+     * @return true if both tiles are the same.
+     ******************************************************************/
+
+    private boolean compareTile(Tile tile1, Tile tile2) {
+
+
+        //If we have null tile throw an exception
+
+        if (tile1 == null) {
+
+
+            throw new NullPointerException("Argument 1 - tile1 has a" +
+
+                    "null object.\n");
+
+        }
+
+
+        if (tile2 == null) {
+
+
+            throw new NullPointerException("Argument 2 - tile1 has a" +
+
+                    "null object.\n");
+
+        }
+
+
+        //First check to see if the types match (e.g. Two tiles of type "Suite",
+
+        //two tiles of type "Dragon", etc...)
+
+        if (tile1.getType().equals(tile2.getType())) {
+
+            //If the tiles are Winds, check direction match
+
+            if (tile1.getType() == "Wind") {
+
+                if (((Wind) tile1).getDirection().equals(((Wind) tile2).
+                        getDirection())) {
+
+                    return true;
+
+                }
+            }
+
+
+            //If the tiles are Dragons, check color match
+            if (tile1.getType() == "Dragon") {
+
+                if (((Dragon) tile1).getColor().equals(((Dragon) tile2).
+                        getColor())) {
+
+                    return true;
+                }
+            }
+
+            //If the tiles are a Suite, use compare suite
+            if (tile1.getType() == "Suite") {
+
+                if (compareSuite((Suite) tile1, (Suite) tile2)) {
+
+                    return true;
+                }
+            }
+        }
+
+        //If we got here, return false as we have no match
+        return false;
+
+    }
+
+
+    /*******************************************************************
+     * This method checks if there is a Kong in a player's setPile or
+     * handTile. This method uses compareTile
+     *
+     * @param search The handTile or setPile being searched through
+
+     *        for a Kong.
+
+     * @param check The tile checked if it can be made into a Kong.
+     ******************************************************************/
+
+    private boolean isKong(ArrayList<Tile> search, Tile check) {
+
+
+        int numOfMatch = 0;
+
+        //Loop through search looking for matching tiles
+
+        for (int i = 0; i < search.size(); i++) {
+
+
+            if (compareTile(search.get(i), check)) {
+
+
+                numOfMatch++;
+
+            }
+
+        }
+
+        //If we have found enough to make 4 of the same, then we can make a Kong
+
+        if (numOfMatch >= 3) {
+
+
+            return true;
+
+        } else {
+
+
+            return false;
+
+        }
+
+    }
+
     private void isKongDiscard() {
 
     }
@@ -386,7 +514,165 @@ public class Game {
 
     }
 
-    private void isMahjong() {
+    /*******************************************************************
+     * This method checks if a player can Mahjong. We only have to check
+     * what is left of the player hand. If there are only chi's and
+     * pongs along with 1 tile that matches check, then the player can
+     * Mahjong.
+     *
+     * @param handTile The player's current hand.
+
+     *
+
+     * @param check The tile checked if it lets the player Mahjong
+     ******************************************************************/
+
+    private boolean isMahjong(ArrayList<Tile> handTile, Tile check) {
+
+        //Make a copy of what is in the player's hand
+
+        ArrayList<Tile> temp = new ArrayList<>();
+
+        for (Tile t : handTile) {
+
+            temp.add(t);
+
+        }
+
+
+        //This section tests for any chi's the player has in their hand
+
+
+        //Loop through the palyer's hand
+
+        for (int i = 0; i < temp.size(); i++) {
+
+            //Check to see if the current tile is a suite
+
+            if (temp.get(i).getType() == "Suite") {
+
+                //check to see if another tile in the hand is a suite and matches
+
+                //the design of the first tile and subtracting the two gives
+
+                //us a difference of 1.
+
+                outer:
+                for (int j = i + 1; j < temp.size(); j++) {
+
+                    if (temp.get(j).getType() == "Suite" &&
+
+                            ((Suite) (temp.get(i))).getDesign().
+
+                                    equals(((Suite) (temp.get(j))).getDesign())
+
+                            && Math.abs(((Suite) (temp.get(i))).getValue() -
+
+                            ((Suite) (temp.get(j))).getValue()) == 1) {
+
+                        //check to see if a third matches the above criteria and
+
+                        //subtracting the first from the third gives us a difference
+
+                        //of 2
+
+                        for (int h = i + 2; h < temp.size(); h++) {
+
+                            if (temp.get(h).getType() == "Suite" &&
+
+                                    ((Suite) (temp.get(i))).getDesign().
+
+                                            equals(((Suite) (temp.get(h))).getDesign())
+
+                                    && Math.abs(((Suite) (temp.get(i))).getValue() -
+
+                                    ((Suite) (temp.get(h))).getValue()) == 2) {
+
+                                //remove the chi from the player's hand and break
+
+                                //out of the third and second loops
+
+                                temp.remove(h);
+
+                                temp.remove(j);
+
+                                temp.remove(i);
+
+                                //counteract the increment as we need to start at the
+
+                                //beginning of the ArrayList
+
+                                i--;
+
+                                break outer;
+
+                            }
+
+                        }
+
+                    }
+
+                }
+
+            }
+
+        }
+
+
+        //This section checks for any pongs in the player's hand
+
+        for (int i = 0; i < temp.size(); i++) {
+
+            outer:
+            for (int j = i + 1; j < temp.size(); j++) {
+
+                //check to see if the following tile is the same as the current tile
+
+                if (compareTile(temp.get(i), temp.get(j))) {
+
+                    //check to see if the tile two away is the same as the current tile
+
+                    for (int k = j + 1; k < temp.size(); k++) {
+
+                        //If so, remove the pong from temp
+
+                        if (compareTile(temp.get(i), temp.get(k))) {
+
+                            temp.remove(k);
+
+                            temp.remove(j);
+
+                            temp.remove(i);
+
+                            //counteract the increment as we need to start at the beginning
+
+                            //of the ArrayList
+
+                            i--;
+
+                            break outer;
+
+                        }
+
+                    }
+
+                }
+
+            }
+
+        }
+
+        //If we only have 1 tile remaining and that tile is of the checked tile,
+
+        //then we have 1 pair and only chi's and pongs in our hand. The player can mahjong
+
+        if (temp.size() == 1 && compareTile(check, temp.get(0))) {
+
+            return true;
+
+        }
+
+        return false;
 
     }
 
@@ -561,7 +847,7 @@ public class Game {
         return false;
     }
 
-    private boolean pointTile(Tile tile){
+    private boolean pointTile(Tile tile) {
 
         if (tile instanceof Suite)
             return false;
@@ -575,11 +861,11 @@ public class Game {
      *
      * @param pl The current players turn.
      ******************************************************************/
-    public void draw(Player pl){
+    public void draw(Player pl) {
 
         Tile drawn = tiles.remove(0);
 
-        while(pointTile(drawn)){
+        while (pointTile(drawn)) {
 
             pl.getSetPile().add(drawn);
             drawn = tiles.remove(0);
@@ -595,9 +881,9 @@ public class Game {
      * @param pl The player that is discarding the tile.
      * @param tileIndex The tile index in the selected players hand.
      ******************************************************************/
-    public void discard(Player pl, int tileIndex){
+    public void discard(Player pl, int tileIndex) {
 
-        if (tileIndex >= pl.getHandTile().size() || tileIndex < 0){
+        if (tileIndex >= pl.getHandTile().size() || tileIndex < 0) {
 
             throw new IndexOutOfBoundsException("tile index is out of" +
                     "bounds.");
@@ -611,14 +897,263 @@ public class Game {
      * an AI design to loses and allow the user to feel good.
      * @param pl The player whose action will be determined by an AI.
      ******************************************************************/
-    public void dumbAI(Player pl){
+    public void dumbAI(Player pl) {
 
         Random rand = new Random();
 
         draw(pl);
-        discard(pl,rand.nextInt(pl.getHandTile().size()));
+        discard(pl, rand.nextInt(pl.getHandTile().size()));
     }
 
+    public String ruleBook() {
+
+
+        String rules = starting() + setRule() + claimChiRule() +
+
+
+                claimPongRule() + claimKongRule() + declareMahjong()
+
+
+                + scoring();
+
+
+        return rules;
+
+
+    }
+
+
+    private String starting() {
+
+
+        String msg = "Players start with 13 tiles each. Each player " +
+
+
+                "is assigned a wind (East-South-West-North). " +
+
+
+                "East starts the game by picking a tile from the " +
+
+
+                "wall and discarding a tile. Players then take" +
+
+
+                " clockwise turns picking a tile from " +
+
+
+                "the wall and then discarding one tile from the hand. " +
+
+
+                "It is also possible to claim a tile discarded by " +
+
+
+                "another player under certain circumstances. " +
+
+
+                "In such cases, the player to the left of the " +
+
+
+                "claiming player becomes next in turn. So some " +
+
+
+                "players may lose their turn in a go-around.\n\n";
+
+
+        return msg;
+
+
+    }
+
+
+    private String setRule() {
+
+
+        String msg = "A set of tiles consist of 3 tiles. This 3 tiles" +
+
+
+                "may all be the same, thus forming a 3 of a kind or " +
+
+
+                "they all form a 3 tile straight of the same " +
+
+
+                "suit.\n\nAll sets that are formed in the hand by " +
+
+
+                "drawing do not have to be revealed to the opposing " +
+
+
+                "players. However, any set or kong that are claimed" +
+
+
+                "must be revealed to all opposing players.\n\n" +
+
+
+                "It is important to know that a kong is not consider " +
+
+
+                "a set but it can be claimed.\n\n Once a player " +
+
+
+                "declares that they can from a set, they move the" +
+
+
+                "tiles that they used to from a set along with the " +
+
+
+                "recently discarded tile to the set pile.";
+
+
+        return msg;
+
+
+    }
+
+
+    private String claimChiRule() {
+
+
+        String msg = "A chi can only be claimed when the opposing " +
+
+
+                "player directly to right discards a " +
+
+
+                "tile. In addition, the discarded the tile must be " +
+
+
+                " able to use to form a 3 tile straight in the " +
+
+
+                "players hand using the same suit. Also, the straight" +
+
+
+                "can not extend from 9 to 1 or vise versa.\n\n";
+
+
+        return msg;
+
+
+    }
+
+
+    private String claimPongRule() {
+
+
+        String msg = "A pong can be claimed when any opposing player" +
+
+
+                " discards a tile and you have a 2 tiles in your hand" +
+
+
+                " that can be used to form a 3 of a kind with the " +
+
+
+                "discarded tile.\n\n";
+
+
+        return msg;
+
+
+    }
+
+
+    private String claimKongRule() {
+
+
+        String msg = "A kong can be claimed when any opposing player" +
+
+
+                " discards a tile and you have a 3 tiles in your hand" +
+
+
+                " that can be used to form a 4 of a kind with the " +
+
+
+                "discarded tile. In addition, the player must draw a " +
+
+
+                "new tile from the main deck/wall before discarding a" +
+
+
+                " tile.\n\nAny kong that is formed by drawing a tile " +
+
+
+                "is does not have to be revealed to the opposing" +
+
+
+                " players. This is optional. However, it is to " +
+
+
+                "your advantage to not reveal the tiles because it " +
+
+
+                "could possibly hinder your opponents game. In " +
+
+
+                "addition, a kong can not remain in the hand, instead" +
+
+
+                "the kong that forms by drawing must be moved to the" +
+
+
+                "set pile or discard a tile to break up the kong.";
+
+
+        return msg;
+
+
+    }
+
+
+    private String declareMahjong() {
+
+
+        String msg = "A mahjong can be claimed when a player has " +
+
+
+                "all sets(chi,pong,kong), any point tiles and a " +
+
+
+                "single pair in their hand or set pile combined." +
+
+
+                "In addition, there can not be a kong that " +
+
+
+                "in the declared players hand. At this point, the " +
+
+
+                "player that declares Mahjong wins and their score" +
+
+
+                "will be calculated based on the scoring rules.\n\n";
+
+
+        return msg;
+
+
+    }
+
+
+    private String scoring() {
+
+
+        String msg = "Once a player has declared mahjong, they win. " +
+
+
+                "The winning player will receive of a score of 1 " +
+
+
+                "point and 1 additional point for every dragon, wind" +
+
+
+                "and flower tile that is in the set pile.";
+
+        return msg;
+
+
+    }
 
 
     public int getCurrentPlayer() {
