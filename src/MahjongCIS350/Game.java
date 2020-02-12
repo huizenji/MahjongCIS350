@@ -2,13 +2,13 @@ package MahjongCIS350;
 
 import java.util.*;
 
-/**********************************************************************
+/***********************************************************************
  * This class contains all pieces and rule functionality for the game
  * Mahjong. It is displayed by the Board and GUI classes.
  *
  * @Authors: Jillian Huizenga, Wayne Chen, Xianghe Zhao(Aaron)
  * @Version: 1/27/2020
- *********************************************************************/
+ **********************************************************************/
 public class Game {
 
     /**
@@ -42,16 +42,8 @@ public class Game {
 
     public static void main(String[] args) {
 
-        ArrayList<Integer> a = new ArrayList<>();
-        ArrayList<Integer> b = new ArrayList<>();
-
-        a.add(1);
-        a.add(2);
-        b.add(3);
-
-        System.out.println(a);
-        a = b;
-        System.out.println(a);
+        Game a = new Game();
+        System.out.println(a.ruleBook());
     }
 
     /******************************************************************
@@ -67,7 +59,6 @@ public class Game {
         shuffle();
         dealTile_13();
         removeKongHand();
-        System.out.println(startingPlayer);
     }
 
     /*******************************************************************
@@ -506,13 +497,13 @@ public class Game {
 
         if (tile1 == null) {
 
-            throw new NullPointerException("Argument 1 - tile1 has a" +
+            throw new NullPointerException("Argument 1 - tile 1 has a" +
                     "null object.\n");
         }
 
         if (tile2 == null) {
 
-            throw new NullPointerException("Argument 2 - tile1 has a" +
+            throw new NullPointerException("Argument 2 - tile 2 has a" +
                     "null object.\n");
         }
 
@@ -619,7 +610,113 @@ public class Game {
         discard(pl,rand.nextInt(pl.getHandTile().size()));
     }
 
+    public String ruleBook(){
 
+        String rules = starting() + setRule() + claimChiRule() +
+                claimPongRule() + claimKongRule() + declareMahjong()
+                + scoring();
+
+        return rules;
+    }
+
+    private String starting(){
+
+        String msg = "Players start with 13 tiles each. Each player " +
+                "is assigned a wind (East-South-West-North). " +
+                "East starts the game by picking a tile from the " +
+                "wall and discarding a tile. Players then take" +
+                " clockwise turns picking a tile from " +
+                "the wall and then discarding one tile from the hand. " +
+                "It is also possible to claim a tile discarded by " +
+                "another player under certain circumstances. " +
+                "In such cases, the player to the left of the " +
+                "claiming player becomes next in turn. So some " +
+                "players may lose their turn in a go-around.\n\n";
+
+        return msg;
+    }
+
+    private String setRule(){
+
+        String msg = "A set of tiles consist of 3 tiles. This 3 tiles" +
+                "may all be the same, thus forming a 3 of a kind or " +
+                "they all form a 3 tile straight of the same " +
+                "suit.\n\nAll sets that are formed in the hand by " +
+                "drawing do not have to be revealed to the opposing " +
+                "players. However, any set or kong that are claimed" +
+                "must be revealed to all opposing players.\n\n" +
+                "It is important to know that a kong is not consider " +
+                "a set but it can be claimed.\n\n Once a player " +
+                "declares that they can from a set, they move the" +
+                "tiles that they used to from a set along with the " +
+                "recently discarded tile to the set pile.";
+
+        return msg;
+    }
+
+    private String claimChiRule(){
+
+        String msg = "A chi can only be claimed when the opposing " +
+                "player directly to right discards a " +
+                "tile. In addition, the discarded the tile must be " +
+                " able to use to form a 3 tile straight in the " +
+                "players hand using the same suit. Also, the straight" +
+                "can not extend from 9 to 1 or vise versa.\n\n";
+
+        return msg;
+    }
+
+    private String claimPongRule(){
+
+        String msg = "A pong can be claimed when any opposing player" +
+                " discards a tile and you have a 2 tiles in your hand" +
+                " that can be used to form a 3 of a kind with the " +
+                "discarded tile.\n\n";
+
+        return msg;
+    }
+
+    private String claimKongRule(){
+
+        String msg = "A kong can be claimed when any opposing player" +
+                " discards a tile and you have a 3 tiles in your hand" +
+                " that can be used to form a 4 of a kind with the " +
+                "discarded tile. In addition, the player must draw a " +
+                "new tile from the main deck/wall before discarding a" +
+                " tile.\n\nAny kong that is formed by drawing a tile " +
+                "is does not have to be revealed to the opposing" +
+                " players. This is optional. However, it is to " +
+                "your advantage to not reveal the tiles because it " +
+                "could possibly hinder your opponents game. In " +
+                "addition, a kong can not remain in the hand, instead" +
+                "the kong that forms by drawing must be moved to the" +
+                "set pile or discard a tile to break up the kong.";
+
+        return msg;
+    }
+
+    private String declareMahjong(){
+
+        String msg = "A mahjong can be claimed when a player has " +
+                "all sets(chi,pong,kong), any point tiles and a " +
+                "single pair in their hand or set pile combined." +
+                "In addition, there can not be a kong that " +
+                "in the declared players hand. At this point, the " +
+                "player that declares Mahjong wins and their score" +
+                "will be calculated based on the scoring rules.\n\n";
+
+        return msg;
+    }
+
+    private String scoring(){
+
+        String msg = "Once a player has declared mahjong, they win. " +
+                "The winning player will receive of a score of 1 " +
+                "point and 1 additional point for every dragon, wind" +
+                "and flower tile that is in the set pile.";
+
+        return msg;
+    }
 
     public int getCurrentPlayer() {
         return currentPlayer;
