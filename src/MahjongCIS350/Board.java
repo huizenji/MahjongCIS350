@@ -186,11 +186,10 @@ public class Board extends JPanel {
             public void actionPerformed(ActionEvent e) {
                 if (game.getCurrentPlayer() != 0){
 
-                    game.dumbAI(game.getCurrentPlayer());
+                    game.dumbAI(game.getCuurentPlayer());
                     game.setNextCurrentPlayer();
 
                     if (game.getCurrentPlayer() == 0){
-
                         setJButton(true);
                     }
                 }
@@ -566,6 +565,16 @@ public class Board extends JPanel {
             displayBoard();
         }
     }
+
+
+    private void setJButton(boolean condition){
+
+        for (int i = 0; i < p1Hand.size(); i++){
+
+            p1Hand.get(i).setEnabled(condition);
+        }
+    }
 }
+
 
 
