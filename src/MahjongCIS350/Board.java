@@ -480,9 +480,19 @@ public class Board extends JPanel {
     // updates images and JButtons based on ArrayLists in Game
     private void displayBoard() {
 
+        int p1HandSize = game.getPlayerList(0).getHandTile().size();
+
+        // give newly drawn Tile a border
         if (game.getPlayerList(0).getHandTile().size() == 14){
             p1Hand.get(13).setBorder(BorderFactory.createLineBorder(Color.BLUE, 10));
         }
+
+        // update hand Tiles
+        for (int i = 0; i < p1HandSize; i++){
+            p1Hand.get(i).setIcon(updatedImage(game.getPlayerList(0).getTileFromHand(i)));
+        }
+
+
         repaint();
 
     }
@@ -506,15 +516,17 @@ public class Board extends JPanel {
                         int discard = JOptionPane.showConfirmDialog(null,
                                 "Discard Tile?", "Discard", JOptionPane.YES_NO_OPTION);
                         if (discard == JOptionPane.YES_OPTION) {
+                            game.discard(game.getPlayerList(0), i);
+
                             JButton temp = new JButton(null, p1Hand.get(i).getIcon());
-                            temp.addActionListener(listener);
                             temp.setPreferredSize(new Dimension(25,25));
-                            p1HandPanel.remove(i);
-                            p1Hand.remove(i);
+                            temp.addActionListener(listener);
+                            p1HandPanel.remove(p1Hand.size() - 1);
+                            p1Hand.remove(p1Hand.size() - 1);
                             discardPile.add(temp);
                             discardPilePanel.add(discardPile.get(discardPile.size() - 1));
 
-                            //         game.getPlayerList(game.getCurrentPlayer()).removeTile(i);
+                            game.discard(game.getPlayerList(0), i);
                             break;
                         }else {
                             // do nothing
@@ -524,11 +536,7 @@ public class Board extends JPanel {
 
 
                 // claim Tile
-                if (discardPile.get(discardPile.size() - 1) == event.getSource()){
-                    p1Hand.add(discardPile.get(discardPile.size() - 1));
-                    discardPile.remove(discardPile.size() - 1);
-
-                }
+                    // will need the isSet boolean functions to be public
 
            // }
 
