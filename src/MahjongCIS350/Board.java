@@ -3,6 +3,8 @@ package MahjongCIS350;
 import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
+import javax.swing.Timer;
+import java.util.concurrent.TimeUnit;
 import java.util.*;
 
 public class Board extends JPanel {
@@ -66,6 +68,8 @@ public class Board extends JPanel {
     private ImageIcon tileBack;
 
     private listener listener;
+
+    private Timer timer;
 
 
     public Board() {
@@ -175,6 +179,25 @@ public class Board extends JPanel {
 
 
         add(gameBoard, BorderLayout.CENTER);
+
+
+        timer = new Timer(1000, new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if (game.getCurrentPlayer() != 0){
+
+                    game.dumbAI(game.getCurrentPlayer());
+                    game.setNextCurrentPlayer();
+
+                    if (game.getCurrentPlayer() == 0){
+
+                        setJButton(true);
+                    }
+                }
+            }
+        });
+
+        timer.start();
     }
 
 
@@ -519,7 +542,7 @@ public class Board extends JPanel {
                             game.discard(game.getPlayerList(0), i);
 
                             JButton temp = new JButton(null, p1Hand.get(i).getIcon());
-                            temp.setPreferredSize(new Dimension(25,25));
+                            temp.setPreferredSize(new Dimension(25,30));
                             temp.addActionListener(listener);
                             p1HandPanel.remove(p1Hand.size() - 1);
                             p1Hand.remove(p1Hand.size() - 1);
@@ -536,7 +559,7 @@ public class Board extends JPanel {
 
 
                 // claim Tile
-                    // will need the isSet boolean functions to be public
+                    // will need the isSet boolean functions in game to be public
 
            // }
 
