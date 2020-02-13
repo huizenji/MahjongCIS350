@@ -40,6 +40,8 @@ public class Game {
      **/
     private int TOTAL_PLAYER = 4;
 
+    private int turnCount = 0;
+
     public static void main(String[] args) {
 
         ArrayList<Integer> a = new ArrayList<>();
@@ -67,7 +69,6 @@ public class Game {
         shuffle();
         dealTile_13();
         removeKongHand();
-        System.out.println(startingPlayer);
     }
 
     /*******************************************************************
@@ -387,7 +388,6 @@ public class Game {
      * @param tile2 The second tile that is being compared.
      * @return true if both tiles are the same.
      ******************************************************************/
-
     private boolean compareTile(Tile tile1, Tile tile2) {
 
         //If we have null tile throw an exception
@@ -450,45 +450,29 @@ public class Game {
      * handTile. This method uses compareTile
      *
      * @param search The handTile or setPile being searched through
-
      *        for a Kong.
-
      * @param check The tile checked if it can be made into a Kong.
      ******************************************************************/
-
     private boolean isKong(ArrayList<Tile> search, Tile check) {
-
 
         int numOfMatch = 0;
 
         //Loop through search looking for matching tiles
-
         for (int i = 0; i < search.size(); i++) {
 
-
             if (compareTile(search.get(i), check)) {
-
-
                 numOfMatch++;
-
             }
-
         }
 
         //If we have found enough to make 4 of the same, then we can make a Kong
-
         if (numOfMatch >= 3) {
-
-
             return true;
 
         } else {
-
-
             return false;
 
         }
-
     }
 
     private void isKongDiscard() {
@@ -622,11 +606,8 @@ public class Game {
                         //If so, remove the pong from temp
 
                         if (compareTile(temp.get(i), temp.get(k))) {
-
                             temp.remove(k);
-
                             temp.remove(j);
-
                             temp.remove(i);
 
                             //counteract the increment as we need to start at the beginning
@@ -638,17 +619,12 @@ public class Game {
                             break outer;
 
                         }
-
                     }
-
                 }
-
             }
-
         }
 
         //If we only have 1 tile remaining and that tile is of the checked tile,
-
         //then we have 1 pair and only chi's and pongs in our hand. The player can mahjong
 
         if (temp.size() == 1 && compareTile(check, temp.get(0))) {
@@ -658,7 +634,6 @@ public class Game {
         }
 
         return false;
-
     }
 
     private void takePong(Player pl, Suite tile) {
@@ -836,8 +811,11 @@ public class Game {
 
         if (tile instanceof Suite)
             return false;
-        else
+        else if (tile instanceof Dragon || tile instanceof Wind ||
+            tile instanceof Flower)
             return true;
+        else
+            return false;
     }
 
     /*******************************************************************
@@ -877,6 +855,18 @@ public class Game {
         discardPile.add(pl.getHandTile().remove(tileIndex));
     }
 
+    private boolean isStalemate(){
+
+        for (int i = 0; i < tiles.size();i++){
+
+            if (tiles.get(i) instanceof Suite){
+                return false;
+            }
+        }
+
+        return true;
+    }
+
     /*******************************************************************
      * AI design to get rid of a tiles and draw tiles. This is basically
      * an AI design to loses and allow the user to feel good.
@@ -886,9 +876,15 @@ public class Game {
 
         Random rand = new Random();
 
-        draw(pl);
-        discard(pl, rand.nextInt(pl.getHandTile().size()));
+        if (turnCount == 0){
+            discard(pl, rand.nextInt(pl.getHandTile().size()));
+        }
+        else {
+            draw(pl);
+            discard(pl, rand.nextInt(pl.getHandTile().size()));
+        }
     }
+
 
     public String ruleBook() {
 
@@ -935,7 +931,6 @@ public class Game {
         return msg;
     }
 
-
     private String claimChiRule() {
 
         String msg = "A chi can only be claimed when the opposing " +
@@ -979,7 +974,6 @@ public class Game {
 
         return msg;
 
-
     }
 
 
@@ -1013,6 +1007,11 @@ public class Game {
         return currentPlayer;
     }
 
+    public Player getCuurentPlayer(){
+
+        return playerList[currentPlayer];
+    }
+
     public void setCurrentPlayer(int currentPlayer) {
         this.currentPlayer = currentPlayer;
     }
@@ -1030,9 +1029,10 @@ public class Game {
         startingPlayer = (startingPlayer + 1) % 4;
     }
 
-    private void setNextCurrentPlayer() {
+    public void setNextCurrentPlayer() {
 
         currentPlayer = (currentPlayer + 1) % 4;
+        turnCount++;
     }
 
     public Player getPlayerList(int playerNum) {
@@ -1046,4 +1046,13 @@ public class Game {
     public void setDiscardPile(ArrayList<Tile> discardPile) {
         this.discardPile = discardPile;
     }
+
+    public int getTurnCount() {
+        return turnCount;
+    }
+
+    public void setTurnCount(int turnCount) {
+        this.turnCount = turnCount;
+    }
 }
+

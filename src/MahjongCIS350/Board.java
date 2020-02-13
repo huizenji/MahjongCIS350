@@ -3,7 +3,9 @@ package MahjongCIS350;
 import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
+import javax.swing.Timer;
 import java.util.*;
+import java.util.concurrent.TimeUnit;
 
 public class Board extends JPanel {
 
@@ -67,6 +69,7 @@ public class Board extends JPanel {
 
     private listener listener;
 
+    private Timer timer;
 
     public Board() {
 
@@ -173,10 +176,27 @@ public class Board extends JPanel {
         c.gridx = 3;
         gameBoard.add(p4SetPanel, c);
 
-
         add(gameBoard, BorderLayout.CENTER);
-    }
 
+        // Start timer for AI Action
+        timer = new Timer(1000, new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if (game.getCurrentPlayer() != 0){
+
+                    game.dumbAI(game.getCuurentPlayer());
+                    game.setNextCurrentPlayer();
+
+                    if (game.getCurrentPlayer() == 0){
+
+                        setJButton(true);
+                    }
+                }
+            }
+        });
+
+        timer.start();
+    }
 
     private void dealPlayerTiles(){
 
@@ -193,6 +213,10 @@ public class Board extends JPanel {
 
             p1Hand.get(i).setIcon(updatedImage(game.getPlayerList
                     (0).getTileFromHand(i)));
+
+            if (game.getCurrentPlayer() != 0){
+                p1Hand.get(i).setEnabled(false);
+            }
 
             c.gridx = i;
             c.gridy = 0;
@@ -290,7 +314,6 @@ public class Board extends JPanel {
                 }
             }
         }
-
     }
 
     private void createIcons() {
@@ -492,11 +515,8 @@ public class Board extends JPanel {
             p1Hand.get(i).setIcon(updatedImage(game.getPlayerList(0).getTileFromHand(i)));
         }
 
-
         repaint();
-
     }
-
 
     // inner class that represents action listener for buttons
     private class listener implements ActionListener {
@@ -504,9 +524,8 @@ public class Board extends JPanel {
 
             int p1HandSize = game.getPlayerList(0).getHandTile().size();
 
-            // when Tile is selected for discard
             // is it the Player's turn?
-           // if (game.getCurrentPlayer() == 0) {
+            if (game.getCurrentPlayer() == 0) {
                 for (int i = 0; i < p1HandSize; i++) {
 
                     // find out which Tile they selected
@@ -527,6 +546,9 @@ public class Board extends JPanel {
                             discardPilePanel.add(discardPile.get(discardPile.size() - 1));
 
                             game.discard(game.getPlayerList(0), i);
+
+                            game.setNextCurrentPlayer();
+                            setJButton(false);
                             break;
                         }else {
                             // do nothing
@@ -537,10 +559,25 @@ public class Board extends JPanel {
 
                 // claim Tile
                     // will need the isSet boolean functions to be public
+            }
 
-           // }
+           // Do nothing
+            else{
+
+            }
 
             displayBoard();
+        }
+    }
+
+
+
+
+    private void setJButton(boolean condition){
+
+        for (int i = 0; i < p1Hand.size(); i++){
+
+            p1Hand.get(i).setEnabled(condition);
         }
     }
 }
