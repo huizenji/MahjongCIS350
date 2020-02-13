@@ -1,7 +1,6 @@
 package MahjongCIS350;
 
 import java.awt.Dimension;
-import java.awt.Color;
 import javax.swing.JFrame;
 
 public class GUI {

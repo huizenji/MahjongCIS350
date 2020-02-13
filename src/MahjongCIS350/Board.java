@@ -480,6 +480,19 @@ public class Board extends JPanel {
     // updates images and JButtons based on ArrayLists in Game
     private void displayBoard() {
 
+        int p1HandSize = game.getPlayerList(0).getHandTile().size();
+
+        // give newly drawn Tile a border
+        if (game.getPlayerList(0).getHandTile().size() == 14){
+            p1Hand.get(13).setBorder(BorderFactory.createLineBorder(Color.BLUE, 10));
+        }
+
+        // update hand Tiles
+        for (int i = 0; i < p1HandSize; i++){
+            p1Hand.get(i).setIcon(updatedImage(game.getPlayerList(0).getTileFromHand(i)));
+        }
+
+
         repaint();
 
     }
@@ -492,18 +505,40 @@ public class Board extends JPanel {
             int p1HandSize = game.getPlayerList(0).getHandTile().size();
 
             // when Tile is selected for discard
-            // currently errors when clicking on non-Suite Tiles
-            for (int i = 0; i < p1HandSize; i++) {
-                if (p1Hand.get(i) == event.getSource()) {
-                    discardPile.add(p1Hand.get(i));
-                    p1Hand.remove(i);
-                    discardPile.get(discardPile.size() - 1).setSize(20,30);
-                    discardPilePanel.add((discardPile.get(discardPile.size() - 1)));
+            // is it the Player's turn?
+           // if (game.getCurrentPlayer() == 0) {
+                for (int i = 0; i < p1HandSize; i++) {
 
-                    game.getPlayerList(game.getCurrentPlayer()).removeTile(i);
-                    break;
+                    // find out which Tile they selected
+                    if (p1Hand.get(i) == event.getSource()) {
+
+                        // are you sure you want to discard?
+                        int discard = JOptionPane.showConfirmDialog(null,
+                                "Discard Tile?", "Discard", JOptionPane.YES_NO_OPTION);
+                        if (discard == JOptionPane.YES_OPTION) {
+                            game.discard(game.getPlayerList(0), i);
+
+                            JButton temp = new JButton(null, p1Hand.get(i).getIcon());
+                            temp.setPreferredSize(new Dimension(25,25));
+                            temp.addActionListener(listener);
+                            p1HandPanel.remove(p1Hand.size() - 1);
+                            p1Hand.remove(p1Hand.size() - 1);
+                            discardPile.add(temp);
+                            discardPilePanel.add(discardPile.get(discardPile.size() - 1));
+
+                            game.discard(game.getPlayerList(0), i);
+                            break;
+                        }else {
+                            // do nothing
+                        }
+                    }
                 }
-            }
+
+
+                // claim Tile
+                    // will need the isSet boolean functions to be public
+
+           // }
 
             displayBoard();
         }
