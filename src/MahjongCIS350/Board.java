@@ -503,6 +503,9 @@ public class Board extends JPanel {
     private void displayBoard() {
 
         int p1HandSize = game.getPlayerList(0).getHandTile().size();
+        int p2HandSize = game.getPlayerList(1).getHandTile().size();
+        int p3HandSize = game.getPlayerList(2).getHandTile().size();
+        int p4HandSize = game.getPlayerList(3).getHandTile().size();
 
         // give newly drawn Tile a border
         if (game.getPlayerList(0).getHandTile().size() == 14){
@@ -513,7 +516,6 @@ public class Board extends JPanel {
         for (int i = 0; i < p1HandSize; i++){
             p1Hand.get(i).setIcon(updatedImage(game.getPlayerList(0).getTileFromHand(i)));
         }
-
 
         repaint();
 
