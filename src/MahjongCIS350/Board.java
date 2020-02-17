@@ -16,6 +16,7 @@ public class Board extends JPanel {
             p2HandPanel, p3HandPanel, p4HandPanel, p1SetPanel,
             p2SetPanel, p3SetPanel, p4SetPanel;
     private JLayeredPane gameBoard;
+    private JLabel playerTurn, east, south, west, north;
 
     private ImageIcon circle1;
     private ImageIcon circle2;
@@ -102,6 +103,12 @@ public class Board extends JPanel {
         p4SetPanel = new JPanel();
         gameBoard = new JLayeredPane();
 
+        playerTurn = new JLabel(game.getPlayerList(game.getCurrentPlayer()).getDirection() + "'s Turn");
+//        east = new JLabel("East");
+//        south = new JLabel("South");
+//        west = new JLabel("West");
+//        north = new JLabel("North");
+
         Color darkGreen = new Color(0, 150, 100);
         drawPilePanel.setBackground(darkGreen);
         discardPilePanel.setBackground(darkGreen);
@@ -157,6 +164,9 @@ public class Board extends JPanel {
         gameBoard.add(p1HandPanel, c);
         c.gridy = 3;
         gameBoard.add(p1SetPanel, c);
+        c.gridx = 1;
+        c.gridy = 4;
+        gameBoard.add(new JLabel(game.getPlayerList(0).getDirection()), c);
 
         c.ipady = 10;
         c.gridx = 0;
@@ -177,6 +187,9 @@ public class Board extends JPanel {
         c.gridx = 3;
         gameBoard.add(p4SetPanel, c);
 
+        c.gridx = 4;
+        c.gridy = 0;
+        gameBoard.add(playerTurn);
 
         add(gameBoard, BorderLayout.CENTER);
 
@@ -517,6 +530,8 @@ public class Board extends JPanel {
             p1Hand.get(i).setIcon(updatedImage(game.getPlayerList(0).getTileFromHand(i)));
         }
 
+        playerTurn.setText(game.getPlayerList(game.getCurrentPlayer()).getDirection() + "'s Turn");
+
         repaint();
 
     }
@@ -551,6 +566,7 @@ public class Board extends JPanel {
                             discardPilePanel.add(discardPile.get(discardPile.size() - 1));
 
                             game.discard(game.getPlayerList(0), i);
+                            game.setNextCurrentPlayer();
                             break;
                         }else {
                             // do nothing
@@ -560,7 +576,8 @@ public class Board extends JPanel {
 
 
                 // claim Tile
-                    // will need the isSet boolean functions in game to be public
+                    // will need to sync with Game, Player can only add
+                    // Tile to their hand after selecting in the GUI
 
            // }
 
