@@ -193,6 +193,9 @@ public class Board extends JPanel {
 
         add(gameBoard, BorderLayout.CENTER);
 
+        if (game.getCurrentPlayer() != 0) {
+            setJButton(false);
+        }
 
         timer = new Timer(1000, new ActionListener() {
             @Override
@@ -206,6 +209,8 @@ public class Board extends JPanel {
 
                     if (game.getCurrentPlayer() == 0) {
                         setJButton(true);
+                    }else{
+                        setJButton(false);
                     }
 
                 }
@@ -545,6 +550,8 @@ public class Board extends JPanel {
             p1Hand.add(temp);
             p1HandPanel.add(p1Hand.get(p1Hand.size() - 1));
         }
+            // update hand size if the step above goes through
+        p1HandSize = game.getPlayerList(0).getHandTile().size();
 
         for (int i = 0; i < p1HandSize; i++) {
             p1Hand.get(i).setIcon(updatedImage(game.getPlayerList(0).getTileFromHand(i)));
@@ -559,7 +566,7 @@ public class Board extends JPanel {
         // update discardPile when AI discards
         if (discardPile.size() != discardPileSize) {
             JButton temp = new JButton();
-            temp.setPreferredSize(new Dimension(25, 30));
+            temp.setPreferredSize(new Dimension(30, 35));
             discardPile.add(temp);
             discardPile.get(discardPile.size() - 1).setIcon
                     (updatedImage(game.getDiscardPile().get(game
@@ -598,13 +605,12 @@ public class Board extends JPanel {
                         game.discard(game.getPlayerList(0), i);
 
                         JButton temp = new JButton(null, p1Hand.get(i).getIcon());
-                        temp.setPreferredSize(new Dimension(25, 30));
+                        temp.setPreferredSize(new Dimension(30, 35));
                         p1HandPanel.remove(p1Hand.size() - 1);
                         p1Hand.remove(p1Hand.size() - 1);
                         discardPile.add(temp);
                         discardPilePanel.add(discardPile.get(discardPile.size() - 1));
 
-                        game.discard(game.getPlayerList(0), i);
                         game.setNextCurrentPlayer();
                         break;
                     } else {
@@ -628,7 +634,6 @@ public class Board extends JPanel {
     private void setJButton(boolean condition) {
 
         for (int i = 0; i < p1Hand.size(); i++) {
-
             p1Hand.get(i).setEnabled(condition);
         }
     }
