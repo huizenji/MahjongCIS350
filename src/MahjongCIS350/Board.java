@@ -202,11 +202,12 @@ public class Board extends JPanel {
                     game.dumbAI(game.getCuurentPlayer());
                     game.setNextCurrentPlayer();
 
+                    displayBoard();
+
                     if (game.getCurrentPlayer() == 0) {
                         setJButton(true);
                     }
 
-                    displayBoard();
                 }
             }
         });
@@ -549,16 +550,15 @@ public class Board extends JPanel {
             p1Hand.get(i).setIcon(updatedImage(game.getPlayerList(0).getTileFromHand(i)));
         }
 
-        // update drawPile when Player or AI draws a Tile
+        // update drawPile when Player or AI draws a Tile (something is wrong with this -->
         if (drawPile.size() != drawPileSize){
             drawPilePanel.remove(drawPile.get(drawPile.size() - 1));
             drawPile.remove(drawPile.get(drawPile.size() - 1));
         }
 
-        // update discardPile when AI discarda
+        // update discardPile when AI discards
         if (discardPile.size() != discardPileSize) {
             JButton temp = new JButton();
-            temp.addActionListener(listener);
             temp.setPreferredSize(new Dimension(25, 30));
             discardPile.add(temp);
             discardPile.get(discardPile.size() - 1).setIcon
@@ -571,7 +571,7 @@ public class Board extends JPanel {
         playerTurn.setText(game.getPlayerList(game.getCurrentPlayer())
                 .getDirection() + "'s Turn");
 
-
+        // display all of the updates
         repaint();
 
     }
@@ -599,7 +599,6 @@ public class Board extends JPanel {
 
                         JButton temp = new JButton(null, p1Hand.get(i).getIcon());
                         temp.setPreferredSize(new Dimension(25, 30));
-                        temp.addActionListener(listener);
                         p1HandPanel.remove(p1Hand.size() - 1);
                         p1Hand.remove(p1Hand.size() - 1);
                         discardPile.add(temp);
@@ -609,7 +608,7 @@ public class Board extends JPanel {
                         game.setNextCurrentPlayer();
                         break;
                     } else {
-                        // do nothing
+                        break;
                     }
                 }
             }
