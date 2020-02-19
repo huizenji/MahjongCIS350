@@ -849,10 +849,11 @@ public class Game {
         if (tileIndex >= pl.getHandTile().size() || tileIndex < 0) {
 
             throw new IndexOutOfBoundsException("tile index is out of" +
-                    "bounds.");
+                    " bounds.");
         }
 
         discardPile.add(pl.getHandTile().remove(tileIndex));
+        autoSort(pl);
     }
 
     private boolean isStalemate(){
