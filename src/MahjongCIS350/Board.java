@@ -73,6 +73,11 @@ public class Board extends JPanel {
     /** AI turn duration **/
     private Timer timer;
 
+    /******************************************************************
+     * This is the Board class constructor. This implements all global
+     * variables, sets up the board display, deals the Tiles, and starts the
+     * AI turn timer.
+     *****************************************************************/
     public Board() {
 
         // create Game
@@ -104,10 +109,6 @@ public class Board extends JPanel {
         gameBoard = new JLayeredPane();
 
         playerTurn = new JLabel(game.getPlayerList(game.getCurrentPlayer()).getDirection() + "'s Turn");
-//        east = new JLabel("East");
-//        south = new JLabel("South");
-//        west = new JLabel("West");
-//        north = new JLabel("North");
 
         Color darkGreen = new Color(0, 150, 100);
         drawPilePanel.setBackground(darkGreen);
@@ -193,10 +194,12 @@ public class Board extends JPanel {
 
         add(gameBoard, BorderLayout.CENTER);
 
+        // disable Player hand unless it's their turn
         if (game.getCurrentPlayer() != 0) {
             setJButton(false);
         }
 
+        // AI turn timer
         timer = new Timer(1000, new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -226,6 +229,47 @@ public class Board extends JPanel {
         timer.start();
     }
 
+    /******************************************************************
+     * Creates 144 JButtons to represent all 144 Tiles in the game.
+     * Places these JButtons into drawPile and displays drawPilePanel
+     * in a 2-layer box format with a hollow center.
+     *****************************************************************/
+    private void placeDrawPile() {
+
+        for (int i = 0; i < 144; i++) {
+            JButton temp = new JButton(null, tileBack);
+            temp.setPreferredSize(new Dimension(25, 25));
+            drawPile.add(temp);
+        }
+
+        // add to drawPilePanel to make visible
+        GridBagConstraints c = new GridBagConstraints();
+        int index = 0;
+        for (int row = 0; row < 22; row++) {
+            for (int col = 0; col < 22; col++) {
+                if (row < 2 || row > 19) {
+                    if (col > 1 && col < 20) {
+                        c.gridx = col;
+                        c.gridy = row;
+                        drawPilePanel.add(drawPile.get((index)), c);
+                        index++;
+                    }
+                } else if (col < 2 || col > 19) {
+                    c.gridx = col;
+                    c.gridy = row;
+                    drawPilePanel.add(drawPile.get((index)), c);
+                    index++;
+                }
+            }
+        }
+
+    }
+
+    /******************************************************************
+     * Fills p1Hand, p2Hand, p3Hand, and p4Hand and places their
+     * contents into p1HandPanel, p2HandPanel, p3HandPanel, and
+     * p4HandPanel.
+     *****************************************************************/
     private void dealPlayerTiles() {
 
         GridBagConstraints c = new GridBagConstraints();
@@ -288,13 +332,14 @@ public class Board extends JPanel {
         }
     }
 
-    // need to figure out how to sync this with GridBagLayout
-    private void drawTile(ArrayList<JButton> hand, JPanel panel) {
-        hand.add(drawPile.get(drawPile.size() - 1));
-        panel.add(hand.get(hand.size() - 1));
-        drawPile.remove(drawPile.size() - 1);
-    }
-
+    /******************************************************************
+     * This method takes a Tile as a parameter and returns the image
+     * type that correctly represents the Tile. This method is used to
+     * update JButtons across the Board to correctly represent the game
+     * as it proceeds.
+     * @param tile a Tile object
+     * @return an image that correctly represents the Tile
+     *****************************************************************/
     private ImageIcon updatedImage(Tile tile) {
 
         if (tile instanceof Suite) {
@@ -321,37 +366,9 @@ public class Board extends JPanel {
         return tileBack;
     }
 
-    private void placeDrawPile() {
-
-        for (int i = 0; i < 144; i++) {
-            JButton temp = new JButton(null, tileBack);
-            temp.setPreferredSize(new Dimension(25, 25));
-            drawPile.add(temp);
-        }
-
-        // add to drawPilePanel to make visible
-        GridBagConstraints c = new GridBagConstraints();
-        int index = 0;
-        for (int row = 0; row < 22; row++) {
-            for (int col = 0; col < 22; col++) {
-                if (row < 2 || row > 19) {
-                    if (col > 1 && col < 20) {
-                        c.gridx = col;
-                        c.gridy = row;
-                        drawPilePanel.add(drawPile.get((index)), c);
-                        index++;
-                    }
-                } else if (col < 2 || col > 19) {
-                    c.gridx = col;
-                    c.gridy = row;
-                    drawPilePanel.add(drawPile.get((index)), c);
-                    index++;
-                }
-            }
-        }
-
-    }
-
+    /******************************************************************
+     * Defines all global ImageIcons.
+     *****************************************************************/
     private void createIcons() {
         // Sets the Image for circle tiles
         circle1 = new ImageIcon("./src/MahjongCIS350/Images/circle1.jpg");
@@ -410,6 +427,13 @@ public class Board extends JPanel {
         tileBack = new ImageIcon("./src/MahjongCIS350/Images/tileBack.jpg");
     }
 
+    /******************************************************************
+     * This method returns an image that represents a Suite Tile with a
+     * Circle design of the indicated value.
+     * @param value the numerical value of a Suite Tile (1-9)
+     * @return an image that correctly matches the indicated value,
+     *         will return tileBack if there is an error
+     *****************************************************************/
     private ImageIcon getCircleImage(int value) {
         switch (value) {
             case 1:
@@ -431,10 +455,16 @@ public class Board extends JPanel {
             case 9:
                 return circle9;
         }
-        System.out.println("Error in circleImage");
         return tileBack;
     }
 
+    /******************************************************************
+     * This method returns an image that represents a Suite Tile with a
+     * Bamboo design of the indicated value.
+     * @param value the numerical value of a Suite Tile (1-9)
+     * @return an image that correctly matches the indicated value,
+     *         will return tileBack if there is an error
+     *****************************************************************/
     private ImageIcon getBambooImage(int value) {
         switch (value) {
             case 1:
@@ -456,10 +486,16 @@ public class Board extends JPanel {
             case 9:
                 return bamboo9;
         }
-        System.out.println("Error in bambooImage");
         return tileBack;
     }
 
+    /******************************************************************
+     * This method returns an image that represents a Suite Tile with a
+     * Character design of the indicated value.
+     * @param value the numerical value of a Suite Tile (1-9)
+     * @return an image that correctly matches the indicated value,
+     *         will return tileBack if there is an error
+     *****************************************************************/
     private ImageIcon getCharacterImage(int value) {
         switch (value) {
             case 1:
@@ -481,10 +517,16 @@ public class Board extends JPanel {
             case 9:
                 return character9;
         }
-        System.out.println("Error in characterImage");
         return tileBack;
     }
 
+    /******************************************************************
+     * This method returns an image that represents a Dragon Tile
+     * of the indicated color.
+     * @param color the color of a Dragon Tile (Red, Green, or White)
+     * @return an image that correctly matches the indicated color,
+     *         will return tileBack if there is an error
+     *****************************************************************/
     private ImageIcon getDragonImage(String color) {
         switch (color) {
             case "Red":
@@ -494,10 +536,17 @@ public class Board extends JPanel {
             case "White":
                 return whiteDragon;
         }
-        System.out.println("Error in dragonImage");
         return tileBack;
     }
 
+    /******************************************************************
+     * This method returns an image that represents a Wind Tile with a
+     * of the indicated direction.
+     * @param direction the cardinal direction of a Wind Tile (east,
+     *                  south, west, or north)
+     * @return an image that correctly matches the indicated direction,
+     *         will return tileBack if there is an error
+     *****************************************************************/
     private ImageIcon getWindImage(String direction) {
         switch (direction) {
             case "East":
@@ -509,10 +558,16 @@ public class Board extends JPanel {
             case "North":
                 return northWind;
         }
-        System.out.println("Error in windImage");
         return tileBack;
     }
 
+    /******************************************************************
+     * This method returns an image that represents a Flower Tile with
+     * the indicated number.
+     * @param number the number of a Flower Tile (1-8)
+     * @return an image that correctly matches the indicated number,
+     *         will return tileBack if there is an error
+     *****************************************************************/
     private ImageIcon getFlowerImage(int number) {
         switch (number) {
             case 1:
@@ -532,11 +587,24 @@ public class Board extends JPanel {
             case 8:
                 return flower8;
         }
-        System.out.println("Error in flowerImage");
         return tileBack;
     }
 
-    // updates images and JButtons based on ArrayLists in Game
+    /******************************************************************
+     * This method sets p1Hand JButtons to be enabled or disabled
+     * depending on whether it is p1's turn or not.
+     * @param condition true if it is p1's turn, otherwise false
+     *****************************************************************/
+    private void setJButton(boolean condition) {
+
+        for (int i = 0; i < p1Hand.size(); i++) {
+            p1Hand.get(i).setEnabled(condition);
+        }
+    }
+
+    /******************************************************************
+     * Updates the Board to match the current state of the game.
+     *****************************************************************/
     private void displayBoard() {
 
         int p1HandSize = game.getPlayerList(0).getHandTile().size();
@@ -584,19 +652,17 @@ public class Board extends JPanel {
 
         // display all of the updates
         repaint();
-
     }
 
-
-    // inner class that represents action listener for buttons
+    /******************************************************************
+     * A class within Board that handles action listeners
+     *****************************************************************/
     private class listener implements ActionListener {
         public void actionPerformed(ActionEvent event) {
 
             int p1HandSize = game.getPlayerList(0).getHandTile().size();
 
-            // when Tile is selected for discard
-            // is it the Player's turn?
-            // if (game.getCurrentPlayer() == 0) {
+            // when Tile is selected for discard, only p1 can do this
             for (int i = 0; i < p1HandSize; i++) {
 
                 // find out which Tile they selected
@@ -623,7 +689,6 @@ public class Board extends JPanel {
                 }
             }
 
-
             // claim Tile
             // will need to sync with Game, Player can only add
             // Tile to their hand after selecting in the GUI
@@ -635,12 +700,6 @@ public class Board extends JPanel {
     }
 
 
-    private void setJButton(boolean condition) {
-
-        for (int i = 0; i < p1Hand.size(); i++) {
-            p1Hand.get(i).setEnabled(condition);
-        }
-    }
 }
 
 
