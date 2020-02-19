@@ -213,6 +213,14 @@ public class Board extends JPanel {
                         setJButton(false);
                     }
 
+                    if (game.getCurrentPlayer() == 0 && game
+                            .getPlayerList(0).getHandTile().size()
+                            != 14){
+                        game.draw(game.getPlayerList(0));
+                    }
+
+                    displayBoard();
+
                 }
             }
         });
@@ -537,21 +545,15 @@ public class Board extends JPanel {
         int discardPileSize = game.getDiscardPile().size();
         int drawPileSize = 144 - discardPileSize;
 
-        // give newly drawn Tile a border
-        if (game.getPlayerList(0).getHandTile().size() == 14) {
-            p1Hand.get(13).setBorder(BorderFactory.createLineBorder(Color.BLUE, 10));
-        }
-
         // update Player1 hand Tiles
-        if (game.getPlayerList(0).getHandTile().size() != p1HandSize){
+        if (p1Hand.size() != p1HandSize){
             JButton temp = new JButton();
             temp.setPreferredSize(new Dimension(50, 50));
             temp.addActionListener(listener);
             p1Hand.add(temp);
             p1HandPanel.add(p1Hand.get(p1Hand.size() - 1));
+            p1Hand.get(p1Hand.size() - 1).setBorder(BorderFactory.createLineBorder(Color.BLUE, 5));
         }
-            // update hand size if the step above goes through
-        p1HandSize = game.getPlayerList(0).getHandTile().size();
 
         for (int i = 0; i < p1HandSize; i++) {
             p1Hand.get(i).setIcon(updatedImage(game.getPlayerList(0).getTileFromHand(i)));
