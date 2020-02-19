@@ -546,20 +546,24 @@ public class Board extends JPanel {
         int drawPileSize = 144 - discardPileSize;
 
         // update Player1 hand Tiles
-        if (p1Hand.size() != p1HandSize){
+        if (p1Hand.size() < p1HandSize){
             JButton temp = new JButton();
             temp.setPreferredSize(new Dimension(50, 50));
             temp.addActionListener(listener);
             p1Hand.add(temp);
             p1HandPanel.add(p1Hand.get(p1Hand.size() - 1));
             p1Hand.get(p1Hand.size() - 1).setBorder(BorderFactory.createLineBorder(Color.BLUE, 5));
+        }else if(p1Hand.size() > p1HandSize){
+            while (p1Hand.size() > p1HandSize){
+                p1Hand.remove(p1Hand.size() - 1);
+            }
         }
 
         for (int i = 0; i < p1HandSize; i++) {
             p1Hand.get(i).setIcon(updatedImage(game.getPlayerList(0).getTileFromHand(i)));
         }
 
-        // update drawPile when Player or AI draws a Tile (something is wrong with this -->
+        // update drawPile when Player or AI draws a Tile (is something still wrong with this?)
         if (drawPile.size() != drawPileSize){
             drawPilePanel.remove(drawPile.get(drawPile.size() - 1));
             drawPile.remove(drawPile.get(drawPile.size() - 1));
