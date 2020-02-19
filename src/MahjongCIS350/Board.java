@@ -9,69 +9,69 @@ import java.util.*;
 
 public class Board extends JPanel {
 
+    /** Holds and gives access to all game information **/
     private Game game;
-    private ArrayList<JButton> drawPile, discardPile, p1Hand, p2Hand,
-            p3Hand, p4Hand, p1Sets, p2Sets, p3Sets, p4Sets;
-    private JPanel drawPilePanel, discardPilePanel, p1HandPanel,
-            p2HandPanel, p3HandPanel, p4HandPanel, p1SetPanel,
-            p2SetPanel, p3SetPanel, p4SetPanel;
+
+    /** Represents all Tiles that are not in play **/
+    private ArrayList<JButton> drawPile;
+
+    /** Represents all Tiles that have been discarded **/
+    private ArrayList<JButton> discardPile;
+
+    /** Represents all Tiles in the Player's hand **/
+    private ArrayList<JButton> p1Hand, p2Hand, p3Hand, p4Hand;
+
+    /** Represents all Tiles in the Player's set pile **/
+    private ArrayList<JButton> p1Sets, p2Sets, p3Sets, p4Sets;
+
+    /** Displays all JButtons in drawPile **/
+    private JPanel drawPilePanel;
+
+    /** Displays all JButtons in discardPile **/
+    private JPanel discardPilePanel;
+
+    /** Displays all JButtons in the Player's hand **/
+    private JPanel p1HandPanel, p2HandPanel, p3HandPanel, p4HandPanel;
+
+    /** Displays all JButtons in the Player's set pile **/
+    private JPanel p1SetPanel, p2SetPanel, p3SetPanel, p4SetPanel;
+
+    /** Displays all JPanels **/
     private JLayeredPane gameBoard;
-    private JLabel playerTurn, east, south, west, north;
 
-    private ImageIcon circle1;
-    private ImageIcon circle2;
-    private ImageIcon circle3;
-    private ImageIcon circle4;
-    private ImageIcon circle5;
-    private ImageIcon circle6;
-    private ImageIcon circle7;
-    private ImageIcon circle8;
-    private ImageIcon circle9;
+    /** Displays which Player is currently taking their turn **/
+    private JLabel playerTurn;
 
-    private ImageIcon bamboo1;
-    private ImageIcon bamboo2;
-    private ImageIcon bamboo3;
-    private ImageIcon bamboo4;
-    private ImageIcon bamboo5;
-    private ImageIcon bamboo6;
-    private ImageIcon bamboo7;
-    private ImageIcon bamboo8;
-    private ImageIcon bamboo9;
+    /** Tile image of type Suite with Circle design **/
+    private ImageIcon circle1, circle2, circle3, circle4, circle5,
+            circle6, circle7, circle8, circle9;
 
-    private ImageIcon character1;
-    private ImageIcon character2;
-    private ImageIcon character3;
-    private ImageIcon character4;
-    private ImageIcon character5;
-    private ImageIcon character6;
-    private ImageIcon character7;
-    private ImageIcon character8;
-    private ImageIcon character9;
+    /** Tile image of type Suite with Bamboo design **/
+    private ImageIcon bamboo1, bamboo2, bamboo3, bamboo4, bamboo5,
+            bamboo6, bamboo7, bamboo8, bamboo9;
 
-    private ImageIcon flower1;
-    private ImageIcon flower2;
-    private ImageIcon flower3;
-    private ImageIcon flower4;
-    private ImageIcon flower5;
-    private ImageIcon flower6;
-    private ImageIcon flower7;
-    private ImageIcon flower8;
+    /** Tile image of type Suite with Character design **/
+    private ImageIcon character1, character2, character3, character4,
+            character5, character6, character7, character8, character9;
 
-    private ImageIcon redDragon;
-    private ImageIcon greenDragon;
-    private ImageIcon whiteDragon;
+    /** Tile image of type Flower **/
+    private ImageIcon flower1, flower2, flower3, flower4, flower5,
+            flower6, flower7, flower8;
 
-    private ImageIcon eastWind;
-    private ImageIcon southWind;
-    private ImageIcon westWind;
-    private ImageIcon northWind;
+    /** Tile image of type Dragon **/
+    private ImageIcon redDragon, greenDragon, whiteDragon;
 
+    /** Tile image of type Wind **/
+    private ImageIcon eastWind, southWind, westWind, northWind;
+
+    /** Tile image for face-down Tiles **/
     private ImageIcon tileBack;
 
+    /** Action Listener **/
     private listener listener;
 
+    /** AI turn duration **/
     private Timer timer;
-
 
     public Board() {
 
@@ -204,8 +204,6 @@ public class Board extends JPanel {
 
                     game.dumbAI(game.getCuurentPlayer());
                     game.setNextCurrentPlayer();
-
-                    displayBoard();
 
                     if (game.getCurrentPlayer() == 0) {
                         setJButton(true);

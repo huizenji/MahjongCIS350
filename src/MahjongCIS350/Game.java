@@ -870,7 +870,7 @@ public class Game {
 
     /*******************************************************************
      * AI design to get rid of a tiles and draw tiles. This is basically
-     * an AI design to loses and allow the user to feel good.
+     * an AI design to lose and allow the user to feel good.
      * @param pl The player whose action will be determined by an AI.
      ******************************************************************/
     public void dumbAI(Player pl) {
