@@ -26,5 +26,6 @@ public class GUI {
         frame.setPreferredSize(new Dimension(1000, 1000));
         frame.pack();
         frame.setVisible(true);
+
     }
 }

@@ -132,4 +132,5 @@ public class Player{
     public ArrayList<Tile> getSetPile(){return setPile;}
 
     public void setSetPile(ArrayList<Tile> setPile){this.setPile = setPile;};
+
 }

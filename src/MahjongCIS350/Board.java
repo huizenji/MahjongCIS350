@@ -149,6 +149,18 @@ public class Board extends JPanel {
         // place Panels
         GridBagConstraints c = new GridBagConstraints();
 
+        JButton b1 = new JButton("Game Reset");//button for the game reset
+        b1.setBounds(40,0,30,20);
+        gameBoard.add(b1);
+        b1.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if(e.getSource()==b1){
+                    game.reset();
+                }
+                displayBoard();
+            }
+        });
         c.ipadx = 50;
         c.ipady = 50;
 
@@ -226,6 +238,7 @@ public class Board extends JPanel {
         });
 
         timer.start();
+
     }
 
     private void dealPlayerTiles() {

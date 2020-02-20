@@ -130,6 +130,22 @@ public class Game {
         }
     }
 
+    /**
+     * whenever player draw a pile, if it's a point_tile then score increase by 1
+     * if there's a point_tile in hand, also increase the score by 1
+     * @param  p
+     * @return score
+     */
+    public int pile_score(Player p){
+        int s = 0;
+
+        for(int i = 0; i <= p.getHandTile().size(); ++i){
+            if(isPointTile(p.getTileFromHand(i))){
+                s++;
+            }
+        }
+        return s;
+    }
     /******************************************************************
      * A getter function for individual tiles
      *
@@ -212,6 +228,17 @@ public class Game {
         }
     }
 
+    public void reset(){
+        Game game = new Game();
+        Player p = new Player();
+        p.clear();
+        game.createTile();
+        game.setupPlayer();
+        game.shuffle();
+        game.dealTile_13();
+        game.removeKongHand();
+
+    }
     /*******************************************************************
      * This method deals out 13 suite tiles to three players, and 14
      * tiles to the East player
