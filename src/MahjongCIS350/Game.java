@@ -229,14 +229,18 @@ public class Game {
     }
 
     public void reset(){
-        Game game = new Game();
-        Player p = new Player();
-        p.clear();
-        game.createTile();
-        game.setupPlayer();
-        game.shuffle();
-        game.dealTile_13();
-        game.removeKongHand();
+
+        for(int i =0; i < tiles.size(); i++){
+            tiles.remove(i);
+        }
+        tiles = new ArrayList<>();
+        discardPile = new ArrayList<>();
+        maxTile = 144;
+        createTile();
+        setupPlayer();
+        shuffle();
+        dealTile_13();
+        removeKongHand();
 
     }
     /*******************************************************************
