@@ -150,18 +150,18 @@ public class Board extends JPanel {
         // place Panels
         GridBagConstraints c = new GridBagConstraints();
 
-        JButton b1 = new JButton("Game Reset");//button for the game reset
-        b1.setBounds(40,0,30,20);
-        gameBoard.add(b1);
-        b1.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                if(e.getSource()==b1){
-                    game.reset();
-                }
-                displayBoard();
-            }
-        });
+//        JButton b1 = new JButton("Game Reset");//button for the game reset
+//        b1.setBounds(40,0,30,20);
+//        gameBoard.add(b1);
+//        b1.addActionListener(new ActionListener() {
+//            @Override
+//            public void actionPerformed(ActionEvent e) {
+//                if(e.getSource()==b1){
+//                    game.reset();
+//                }
+//                displayBoard();
+//            }
+//        });
         c.ipadx = 50;
         c.ipady = 50;
 
@@ -622,7 +622,7 @@ public class Board extends JPanel {
 
         int p1HandSize = game.getPlayerList(0).getHandTile().size();
         int discardPileSize = game.getDiscardPile().size();
-        int drawPileSize = 144 - discardPileSize;
+        int drawPileSize = 91 - discardPileSize;
 
         // update Player1 hand Tiles
         if (p1Hand.size() < p1HandSize){
@@ -643,13 +643,13 @@ public class Board extends JPanel {
         }
 
         // update drawPile when Player or AI draws a Tile (is something still wrong with this?)
-        if (drawPile.size() != drawPileSize){
+        while (drawPile.size() > drawPileSize){
             drawPilePanel.remove(drawPile.get(drawPile.size() - 1));
             drawPile.remove(drawPile.get(drawPile.size() - 1));
         }
 
         // update discardPile when AI discards
-        if (discardPile.size() != discardPileSize) {
+        if (discardPile.size() < discardPileSize) {
             JButton temp = new JButton();
             temp.setPreferredSize(new Dimension(30, 35));
             discardPile.add(temp);
