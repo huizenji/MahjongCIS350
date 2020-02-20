@@ -876,10 +876,11 @@ public class Game {
         if (tileIndex >= pl.getHandTile().size() || tileIndex < 0) {
 
             throw new IndexOutOfBoundsException("tile index is out of" +
-                    "bounds.");
+                    " bounds.");
         }
 
         discardPile.add(pl.getHandTile().remove(tileIndex));
+        autoSort(pl);
     }
 
     private boolean isStalemate(){
@@ -896,7 +897,7 @@ public class Game {
 
     /*******************************************************************
      * AI design to get rid of a tiles and draw tiles. This is basically
-     * an AI design to loses and allow the user to feel good.
+     * an AI design to lose and allow the user to feel good.
      * @param pl The player whose action will be determined by an AI.
      ******************************************************************/
     public void dumbAI(Player pl) {
