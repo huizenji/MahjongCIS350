@@ -228,10 +228,12 @@ public class Game {
         }
     }
 
+    /**
+     * remove all the tiles from all hands and regenerate the game
+     */
     public void reset(){
-
-        for(int i =0; i < tiles.size(); i++){
-            tiles.remove(i);
+        for(int i =0; i <4; i++) {
+            playerList[i].clear();
         }
         tiles = new ArrayList<>();
         discardPile = new ArrayList<>();
