@@ -1081,6 +1081,10 @@ public class Game {
         this.discardPile = discardPile;
     }
 
+    public Tile getRecentDiscard(){
+        return discardPile.get(discardPile.size() - 1);
+    }
+
     public int getTurnCount() {
         return turnCount;
     }

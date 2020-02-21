@@ -132,6 +132,10 @@ public class Board extends JPanel {
         p2HandPanel.setLayout(new GridBagLayout());
         p3HandPanel.setLayout(new GridBagLayout());
         p4HandPanel.setLayout(new GridBagLayout());
+        p1SetPanel.setLayout(new GridBagLayout());
+        p2SetPanel.setLayout(new GridBagLayout());
+        p3SetPanel.setLayout(new GridBagLayout());
+        p4SetPanel.setLayout(new GridBagLayout());
         gameBoard.setLayout(new GridBagLayout());
 
         discardPilePanel.setBorder(BorderFactory.createBevelBorder(1));
@@ -143,13 +147,51 @@ public class Board extends JPanel {
         // set listeners for JButtons
         listener = new listener();
 
-        // create and place JButton tiles into drawPile and then deal
         placeDrawPile();
         dealPlayerTiles();
+        placePanels();
 
-        // place Panels
+        // disable Player hand unless it's their turn
+        if (game.getCurrentPlayer() != 0) {
+            setJButton(false);
+        }
+
+        // AI turn timer and general turn actions
+        timer = new Timer(1000, new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if (game.getCurrentPlayer() != 0) {
+
+                    game.dumbAI(game.getCuurentPlayer());
+                    displayBoard();
+
+
+                    game.setNextCurrentPlayer();
+
+                    if (game.getCurrentPlayer() == 0) {
+                        setJButton(true);
+                    }else{
+                        setJButton(false);
+                    }
+
+                    if (game.getCurrentPlayer() == 0 && game
+                            .getPlayerList(0).getHandTile().size()
+                            != 14){
+                        game.draw(game.getPlayerList(0));
+                    }
+
+                    displayBoard();
+
+                }
+            }
+        });
+
+        timer.start();
+
+    }
+
+    private void placePanels() {
         GridBagConstraints c = new GridBagConstraints();
-
 
         c.ipadx = 50;
         c.ipady = 50;
@@ -194,41 +236,6 @@ public class Board extends JPanel {
         gameBoard.add(playerTurn);
 
         add(gameBoard, BorderLayout.CENTER);
-
-        // disable Player hand unless it's their turn
-        if (game.getCurrentPlayer() != 0) {
-            setJButton(false);
-        }
-
-        // AI turn timer
-        timer = new Timer(1000, new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                if (game.getCurrentPlayer() != 0) {
-
-                    game.dumbAI(game.getCuurentPlayer());
-                    game.setNextCurrentPlayer();
-
-                    if (game.getCurrentPlayer() == 0) {
-                        setJButton(true);
-                    }else{
-                        setJButton(false);
-                    }
-
-                    if (game.getCurrentPlayer() == 0 && game
-                            .getPlayerList(0).getHandTile().size()
-                            != 14){
-                        game.draw(game.getPlayerList(0));
-                    }
-
-                    displayBoard();
-
-                }
-            }
-        });
-
-        timer.start();
-
     }
 
     /******************************************************************
@@ -611,42 +618,26 @@ public class Board extends JPanel {
 
         int p1HandSize = game.getPlayerList(0).getHandTile().size();
         int discardPileSize = game.getDiscardPile().size();
-        int drawPileSize = 144 - discardPileSize;
+        int drawPileSize = 91 - discardPileSize;
 
-        // update Player1 hand Tiles
-        if (p1Hand.size() < p1HandSize){
-            JButton temp = new JButton();
-            temp.setPreferredSize(new Dimension(50, 50));
-            temp.addActionListener(listener);
-            p1Hand.add(temp);
-            p1HandPanel.add(p1Hand.get(p1Hand.size() - 1));
-            p1Hand.get(p1Hand.size() - 1).setBorder(BorderFactory.createLineBorder(Color.BLUE, 5));
-        }else if(p1Hand.size() > p1HandSize){
-            while (p1Hand.size() > p1HandSize){
-                p1Hand.remove(p1Hand.size() - 1);
-            }
-        }
+        int p1SetSize = game.getPlayerList(0).getSetPile().size();
+        int p2SetSize = game.getPlayerList(1).getSetPile().size();
+        int p3SetSize = game.getPlayerList(2).getSetPile().size();
+        int p4SetSize = game.getPlayerList(3).getSetPile().size();
 
-        for (int i = 0; i < p1HandSize; i++) {
-            p1Hand.get(i).setIcon(updatedImage(game.getPlayerList(0).getTileFromHand(i)));
-        }
+        updateP1Hand(p1HandSize);
 
-        // update drawPile when Player or AI draws a Tile (is something still wrong with this?)
-        if (drawPile.size() != drawPileSize){
-            drawPilePanel.remove(drawPile.get(drawPile.size() - 1));
-            drawPile.remove(drawPile.get(drawPile.size() - 1));
-        }
+        updateP1SetPile(p1SetSize);
 
-        // update discardPile when AI discards
-        if (discardPile.size() != discardPileSize) {
-            JButton temp = new JButton();
-            temp.setPreferredSize(new Dimension(30, 35));
-            discardPile.add(temp);
-            discardPile.get(discardPile.size() - 1).setIcon
-                    (updatedImage(game.getDiscardPile().get(game
-                            .getDiscardPile().size() - 1)));
-            discardPilePanel.add(temp);
-        }
+        updateP2SetPile(p2SetSize);
+
+        updateP3SetPile(p3SetSize);
+
+        updateP4SetPile(p4SetSize);
+
+        updateDrawPile(drawPileSize);
+
+        updateDiscardPile(discardPileSize);
 
         // update label for Player turn
         playerTurn.setText(game.getPlayerList(game.getCurrentPlayer())
@@ -654,6 +645,130 @@ public class Board extends JPanel {
 
         // display all of the updates
         repaint();
+    }
+
+    private void updateDiscardPile(int discardPileSize) {
+        if (discardPile.size() < discardPileSize) {
+            JButton temp = new JButton();
+            temp.setPreferredSize(new Dimension(30, 35));
+            discardPile.add(temp);
+            discardPile.get(discardPile.size() - 1).setIcon
+                    (updatedImage(game.getDiscardPile().get(game
+                            .getDiscardPile().size() - 1)));
+            discardPilePanel.add(temp);
+        }else if (discardPile.size() > discardPileSize){
+            while (discardPile.size() > discardPileSize){
+                discardPile.remove(discardPile.size() - 1);
+            }
+        }
+    }
+
+    private void updateDrawPile(int drawPileSize) {
+        if (drawPile.size() > drawPileSize){
+            drawPilePanel.remove(drawPile.get(drawPile.size() - 1));
+            drawPile.remove(drawPile.get(drawPile.size() - 1));
+        }else if (drawPile.size() < drawPileSize){
+            while(drawPile.size() < drawPileSize){
+                JButton temp = new JButton(tileBack);
+                drawPile.add(temp);
+                drawPilePanel.add(temp);
+            }
+        }
+    }
+
+    private void updateP4SetPile(int p4SetSize) {
+        while (p4Sets.size() < p4SetSize) {
+            JButton temp = new JButton();
+            temp.setPreferredSize(new Dimension(25, 25));
+            p4Sets.add(temp);
+
+            GridBagConstraints c = new GridBagConstraints();
+            c.gridx = 0;
+            c.gridy = p4Sets.size() - 1;
+            p4SetPanel.add(p4Sets.get(p4Sets.size() - 1), c);
+        }
+
+        while (p4Sets.size() > p4SetSize){
+            p4Sets.remove(p4Sets.size() - 1);
+        }
+
+        for (int i = 0; i < p4SetSize; i++) {
+            p4Sets.get(i).setIcon(updatedImage(game.getPlayerList(3).getSetTile(i)));
+        }
+    }
+
+    private void updateP3SetPile(int p3SetSize) {
+        while (p3Sets.size() < p3SetSize) {
+            JButton temp = new JButton();
+            temp.setPreferredSize(new Dimension(25, 25));
+            p3Sets.add(temp);
+            p3SetPanel.add(p3Sets.get(p3Sets.size() - 1));
+        }
+
+        while (p3Sets.size() > p3SetSize){
+            p3Sets.remove(p3Sets.size() - 1);
+        }
+
+        for (int i = 0; i < p3SetSize; i++) {
+            p3Sets.get(i).setIcon(updatedImage(game.getPlayerList(2).getSetTile(i)));
+        }
+    }
+
+    private void updateP2SetPile(int p2SetSize) {
+        while (p2Sets.size() < p2SetSize) {
+            JButton temp = new JButton();
+            temp.setPreferredSize(new Dimension(25, 25));
+            p2Sets.add(temp);
+
+            GridBagConstraints c = new GridBagConstraints();
+            c.gridx = 0;
+            c.gridy = p2Sets.size() - 1;
+            p2SetPanel.add(p2Sets.get(p2Sets.size() - 1), c);
+        }
+
+        while (p2Sets.size() > p2SetSize){
+            p2Sets.remove(p2Sets.size() - 1);
+        }
+
+        for (int i = 0; i < p2SetSize; i++) {
+            p2Sets.get(i).setIcon(updatedImage(game.getPlayerList(1).getSetTile(i)));
+        }
+    }
+
+    private void updateP1SetPile(int p1SetSize) {
+        while (p1Sets.size() < p1SetSize) {
+            JButton temp = new JButton();
+            temp.setPreferredSize(new Dimension(25, 25));
+            p1Sets.add(temp);
+            p1SetPanel.add(p1Sets.get(p1Sets.size() - 1));
+        }
+
+        while (p1Sets.size() > p1SetSize){
+            p1Sets.remove(p1Sets.size() - 1);
+        }
+
+        for (int i = 0; i < p1SetSize; i++) {
+            p1Sets.get(i).setIcon(updatedImage(game.getPlayerList(0).getSetTile(i)));
+        }
+    }
+
+    private void updateP1Hand(int p1HandSize) {
+        while (p1Hand.size() < p1HandSize){
+            JButton temp = new JButton();
+            temp.setPreferredSize(new Dimension(50, 50));
+            temp.addActionListener(listener);
+            p1Hand.add(temp);
+            p1HandPanel.add(p1Hand.get(p1Hand.size() - 1));
+            p1Hand.get(p1Hand.size() - 1).setBorder(BorderFactory.createLineBorder(Color.BLUE, 5));
+        }
+
+        while(p1Hand.size() > p1HandSize){
+            p1Hand.remove(p1Hand.size() - 1);
+        }
+
+        for (int i = 0; i < p1HandSize; i++) {
+            p1Hand.get(i).setIcon(updatedImage(game.getPlayerList(0).getTileFromHand(i)));
+        }
     }
 
     /******************************************************************
@@ -691,11 +806,6 @@ public class Board extends JPanel {
                 }
             }
 
-            // claim Tile
-            // will need to sync with Game, Player can only add
-            // Tile to their hand after selecting in the GUI
-
-            // }
 
             displayBoard();
         }
