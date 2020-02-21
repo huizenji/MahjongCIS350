@@ -23,7 +23,7 @@ public class GUI {
         frame.getContentPane().add(tabbedPane);
 
         frame.setResizable(true);
-        frame.setPreferredSize(new Dimension(1000, 1000));
+        frame.setPreferredSize(new Dimension(1100, 1000));
         frame.pack();
         frame.setVisible(true);
 

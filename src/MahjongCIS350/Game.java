@@ -355,7 +355,7 @@ public class Game {
      * @param check    the checked_Suite should belongs to the last player of the current player
      * @return
      */
-    private boolean isChi(ArrayList<Suite> handTile, Suite check) {
+    public boolean isChi(ArrayList<Suite> handTile, Suite check) {
         //set up lastPlayer of the currentPlayer
         int lastPlayer = currentPlayer - 1;
 
@@ -387,7 +387,7 @@ public class Game {
      *                 for a pong.
      * @param check The tile checked if it can be made into a pong
      ******************************************************************/
-    private boolean isPong(ArrayList<Suite> handTile, Suite check) {
+    public boolean isPong(ArrayList<Suite> handTile, Suite check) {
 
         // Number of Tiles in player hand that can used for a pong
         int matchTile = 0;
@@ -486,7 +486,7 @@ public class Game {
      *        for a Kong.
      * @param check The tile checked if it can be made into a Kong.
      ******************************************************************/
-    private boolean isKong(ArrayList<Tile> search, Tile check) {
+    public boolean isKong(ArrayList<Tile> search, Tile check) {
 
         int numOfMatch = 0;
 
@@ -529,7 +529,7 @@ public class Game {
      * @param check The tile checked if it lets the player Mahjong
      ******************************************************************/
 
-    private boolean isMahjong(ArrayList<Tile> handTile, Tile check) {
+    public boolean isMahjong(ArrayList<Tile> handTile, Tile check) {
 
         //Make a copy of what is in the player's hand
 
@@ -669,7 +669,7 @@ public class Game {
         return false;
     }
 
-    private void takePong(Player pl, Suite tile) {
+    public void takePong(Player pl, Suite tile) {
 
         ArrayList<Tile> desired = new ArrayList<>();
         desired.add(tile);
@@ -889,7 +889,7 @@ public class Game {
         autoSort(pl);
     }
 
-    private boolean isStalemate(){
+    public boolean isStalemate(){
 
         for (int i = 0; i < tiles.size();i++){
 
