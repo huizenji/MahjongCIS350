@@ -24,6 +24,8 @@ public class Board extends JPanel {
     /** Represents all Tiles in the Player's set pile **/
     private ArrayList<JButton> p1Sets, p2Sets, p3Sets, p4Sets;
 
+    private JButton resetBtn;
+
     /** Displays all JButtons in drawPile **/
     private JPanel drawPilePanel;
 
@@ -75,8 +77,8 @@ public class Board extends JPanel {
 
     /******************************************************************
      * This is the Board class constructor. This implements all global
-     * variables, sets up the board display, deals the Tiles, and starts the
-     * AI turn timer.
+     * variables, sets up the board display, deals the Tiles, and
+     * starts the AI turn timer.
      *****************************************************************/
     public Board() {
 
@@ -124,7 +126,6 @@ public class Board extends JPanel {
         gameBoard.setBackground(darkGreen);
         gameBoard.setOpaque(true);
 
-
         // set Layouts
         drawPilePanel.setLayout(new GridBagLayout());
         discardPilePanel.setLayout(new FlowLayout());
@@ -141,11 +142,15 @@ public class Board extends JPanel {
         discardPilePanel.setBorder(BorderFactory.createBevelBorder(1));
         discardPilePanel.setPreferredSize(new Dimension(325, 200));
 
-        // create Icons
         createIcons();
 
         // set listeners for JButtons
         listener = new listener();
+
+        // create reset button
+        resetBtn = new JButton("Reset Game");
+        resetBtn.addActionListener(listener);
+        gameBoard.add(resetBtn);
 
         placeDrawPile();
         dealPlayerTiles();
@@ -159,6 +164,13 @@ public class Board extends JPanel {
         displayBoard();
 
         // AI turn timer and general turn actions
+        letsPlay();
+
+        timer.start();
+
+    }
+
+    private void letsPlay() {
         timer = new Timer(1000, new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -187,9 +199,6 @@ public class Board extends JPanel {
                 }
             }
         });
-
-        timer.start();
-
     }
 
     private void placePanels() {
@@ -650,7 +659,7 @@ public class Board extends JPanel {
     }
 
     private void updateDiscardPile(int discardPileSize) {
-        if (discardPile.size() < discardPileSize) {
+        while (discardPile.size() < discardPileSize) {
             JButton temp = new JButton();
             temp.setPreferredSize(new Dimension(30, 35));
             discardPile.add(temp);
@@ -658,10 +667,11 @@ public class Board extends JPanel {
                     (updatedImage(game.getDiscardPile().get(game
                             .getDiscardPile().size() - 1)));
             discardPilePanel.add(temp);
-        }else if (discardPile.size() > discardPileSize){
-            while (discardPile.size() > discardPileSize){
-                discardPile.remove(discardPile.size() - 1);
-            }
+        }
+
+        while (discardPile.size() > discardPileSize){
+            discardPilePanel.remove(discardPile.size() - 1);
+            discardPile.remove(discardPile.size() - 1);
         }
     }
 
@@ -691,6 +701,7 @@ public class Board extends JPanel {
         }
 
         while (p4Sets.size() > p4SetSize){
+            p4SetPanel.remove(p4Sets.size() - 1);
             p4Sets.remove(p4Sets.size() - 1);
         }
 
@@ -708,6 +719,7 @@ public class Board extends JPanel {
         }
 
         while (p3Sets.size() > p3SetSize){
+            p3SetPanel.remove(p3Sets.size() - 1);
             p3Sets.remove(p3Sets.size() - 1);
         }
 
@@ -729,6 +741,7 @@ public class Board extends JPanel {
         }
 
         while (p2Sets.size() > p2SetSize){
+            p2SetPanel.remove(p2Sets.size() - 1);
             p2Sets.remove(p2Sets.size() - 1);
         }
 
@@ -746,6 +759,7 @@ public class Board extends JPanel {
         }
 
         while (p1Sets.size() > p1SetSize){
+            p1SetPanel.remove(p1Sets.size() - 1);
             p1Sets.remove(p1Sets.size() - 1);
         }
 
@@ -765,6 +779,7 @@ public class Board extends JPanel {
         }
 
         while(p1Hand.size() > p1HandSize){
+            p1HandPanel.remove(p1Hand.size() - 1);
             p1Hand.remove(p1Hand.size() - 1);
         }
 
@@ -808,6 +823,9 @@ public class Board extends JPanel {
                 }
             }
 
+            if (event.getSource() == resetBtn){
+                game.reset();
+            }
 
             displayBoard();
         }
