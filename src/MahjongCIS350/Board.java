@@ -44,6 +44,8 @@ public class Board extends JPanel {
     /** Displays which Player is currently taking their turn **/
     private JLabel playerTurn;
 
+    private JLabel p1Direction;
+
     /** Tile image of type Suite with Circle design **/
     private ImageIcon circle1, circle2, circle3, circle4, circle5,
             circle6, circle7, circle8, circle9;
@@ -110,8 +112,10 @@ public class Board extends JPanel {
         p4SetPanel = new JPanel();
         gameBoard = new JLayeredPane();
 
-        playerTurn = new JLabel(game.getPlayerList(game.getCurrentPlayer()).getDirection() + "'s Turn");
+        playerTurn = new JLabel(game.getCuurentPlayer().getDirection() + "'s Turn");
+        p1Direction = new JLabel(game.getPlayerList(0).getDirection());
 
+        // set background
         Color darkGreen = new Color(0, 150, 100);
         drawPilePanel.setBackground(darkGreen);
         discardPilePanel.setBackground(darkGreen);
@@ -221,7 +225,7 @@ public class Board extends JPanel {
         gameBoard.add(p1SetPanel, c);
         c.gridx = 1;
         c.gridy = 4;
-        gameBoard.add(new JLabel(game.getPlayerList(0).getDirection()), c);
+        gameBoard.add(p1Direction, c);
 
         c.ipady = 10;
         c.gridx = 0;
@@ -650,9 +654,10 @@ public class Board extends JPanel {
 
         updateDiscardPile(discardPileSize);
 
-        // update label for Player turn
-        playerTurn.setText(game.getPlayerList(game.getCurrentPlayer())
+        // update label for Player turn or game reset
+        playerTurn.setText(game.getCuurentPlayer()
                 .getDirection() + "'s Turn");
+        p1Direction.setText(game.getPlayerList(0).getDirection());
 
         // display all of the updates
         repaint();
