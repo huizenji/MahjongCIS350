@@ -1085,6 +1085,10 @@ public class Game {
         return discardPile.get(discardPile.size() - 1);
     }
 
+    public ArrayList<Tile> getDrawPile(){
+        return tiles;
+    }
+
     public int getTurnCount() {
         return turnCount;
     }

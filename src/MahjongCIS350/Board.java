@@ -156,6 +156,8 @@ public class Board extends JPanel {
             setJButton(false);
         }
 
+        displayBoard();
+
         // AI turn timer and general turn actions
         timer = new Timer(1000, new ActionListener() {
             @Override
@@ -164,7 +166,7 @@ public class Board extends JPanel {
 
                     game.dumbAI(game.getCuurentPlayer());
                     displayBoard();
-
+                    // set claims go here
 
                     game.setNextCurrentPlayer();
 
@@ -618,7 +620,7 @@ public class Board extends JPanel {
 
         int p1HandSize = game.getPlayerList(0).getHandTile().size();
         int discardPileSize = game.getDiscardPile().size();
-        int drawPileSize = 91 - discardPileSize;
+        int drawPileSize = game.getDrawPile().size();
 
         int p1SetSize = game.getPlayerList(0).getSetPile().size();
         int p2SetSize = game.getPlayerList(1).getSetPile().size();
