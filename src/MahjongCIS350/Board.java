@@ -471,9 +471,9 @@ public class Board extends JPanel {
 
         // Sets the Image for the wind tiles
         eastWind = new ImageIcon("./src/MahjongCIS350/Images/eastWind.jpg");
-        southWind = new ImageIcon("./src/MahjongCIS350/Images/eastWind.jpg");
-        westWind = new ImageIcon("./src/MahjongCIS350/Images/eastWind.jpg");
-        northWind = new ImageIcon("./src/MahjongCIS350/Images/eastWind.jpg");
+        southWind = new ImageIcon("./src/MahjongCIS350/Images/southWind.jpg");
+        westWind = new ImageIcon("./src/MahjongCIS350/Images/westWind.jpg");
+        northWind = new ImageIcon("./src/MahjongCIS350/Images/northWind.jpg");
 
         tileBack = new ImageIcon("./src/MahjongCIS350/Images/tileBack.jpg");
     }
