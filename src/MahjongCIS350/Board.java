@@ -178,13 +178,41 @@ public class Board extends JPanel {
         timer = new Timer(1000, new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+
+                //if (game.isStalemate())
+
                 if (game.getCurrentPlayer() != 0) {
 
                     game.dumbAI(game.getCuurentPlayer());
                     displayBoard();
                     // set claims go here
 
-                    game.setNextCurrentPlayer();
+                    // test code
+                    Suite disTile = (Suite)(game.getRecentDiscard());
+
+                    if (game.isPong(game.getPlayerHand(0),
+                            disTile)){
+
+                        String message = "Claim pong of tile " +
+                                disTile.getValue() + " " +
+                                disTile.getDesign() + "?";
+
+                        int takePong = JOptionPane.showConfirmDialog(null,
+                                message, "Claim Message", JOptionPane.YES_NO_OPTION);
+
+                        if (takePong == JOptionPane.YES_OPTION){
+
+                            game.takePong(game.getPlayerList(0),game.getRecentDiscard());
+                            displayBoard();
+                        }
+
+                        game.setNextCurrentPlayer(1);
+                    }
+
+                    else {
+                        //
+                        game.setNextCurrentPlayer();
+                    }
 
                     if (game.getCurrentPlayer() == 0) {
                         setJButton(true);
@@ -199,7 +227,6 @@ public class Board extends JPanel {
                     }
 
                     displayBoard();
-
                 }
             }
         });

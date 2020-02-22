@@ -61,6 +61,15 @@ public class Player{
         handTile.add(t);
     }
 
+    public void addTileSet(Tile t){
+
+        if (t == null){
+
+            throw new NullPointerException("No such type of tile, can't be added");
+        }
+        setPile.add(t);
+    }
+
     public void removeTileSet(int index){
 
         if(index < 0 || index >= handTile.size()){

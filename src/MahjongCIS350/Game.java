@@ -415,7 +415,7 @@ public class Game {
      *                 for a pong.
      * @param check The tile checked if it can be made into a pong
      ******************************************************************/
-    public boolean isPong(ArrayList<Tile> handTile, Suite check) {
+    public boolean isPong(ArrayList<Tile> handTile, Tile check) {
 
         // Number of Tiles in player hand that can used for a pong
         int matchTile = 0;
@@ -649,7 +649,7 @@ public class Game {
         return false;
     }
 
-    public void takePong(Player pl, Suite tile) {
+    public void takePong(Player pl, Tile tile) {
 
         ArrayList<Tile> desired = new ArrayList<>();
         desired.add(tile);
@@ -662,7 +662,7 @@ public class Game {
             pl.removeTileSet(loc.get(i));
         }
 
-        pl.addTile(discardPile.get(discardPile.size() - 1));
+        pl.addTileSet(discardPile.remove(discardPile.size() - 1));
     }
 
     public void takeKongDiscard(Player pl, Suite tile){
@@ -1072,8 +1072,24 @@ public class Game {
         turnCount++;
     }
 
+    public void setNextCurrentPlayer(int pl){
+
+        currentPlayer = pl;
+    }
+
     public Player getPlayerList(int playerNum) {
         return playerList[playerNum];
+    }
+
+    public ArrayList<Tile> getPlayerHand(int playerNum){
+
+        if (playerNum < 0 || playerNum > 4){
+
+            throw new IndexOutOfBoundsException("Index is out of " +
+                    "bounds. Must be from 0 - 3");
+        }
+
+        return playerList[playerNum].getHandTile();
     }
 
     public ArrayList<Tile> getDiscardPile() {
@@ -1090,14 +1106,6 @@ public class Game {
 
     public ArrayList<Tile> getDrawPile(){
         return tiles;
-    }
-
-    public int getTurnCount() {
-        return turnCount;
-    }
-
-    public void setTurnCount(int turnCount) {
-        this.turnCount = turnCount;
     }
 }
 
