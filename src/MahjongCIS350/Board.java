@@ -76,6 +76,8 @@ public class Board extends JPanel {
     /** AI turn duration **/
     private Timer timer;
 
+    private boolean drawFlag = true;
+
     /******************************************************************
      * This is the Board class constructor. This implements all global
      * variables, sets up the board display, deals the Tiles, and
@@ -203,9 +205,10 @@ public class Board extends JPanel {
 
                             game.takePong(game.getPlayerList(0),game.getRecentDiscard());
                             displayBoard();
+                            drawFlag = false;
                         }
 
-                        game.setNextCurrentPlayer(1);
+                        game.setNextCurrentPlayer(0);
                     }
 
                     else {
@@ -219,11 +222,13 @@ public class Board extends JPanel {
                         setJButton(false);
                     }
 
+                    // Player draws and then discards
                     if (game.getCurrentPlayer() == 0 && game
                             .getPlayerList(0).getHandTile().size()
-                            != 14){
+                            != 14 && drawFlag){
                         game.draw(game.getPlayerList(0));
                     }
+
 
                     displayBoard();
                 }
@@ -847,6 +852,7 @@ public class Board extends JPanel {
                         discardPilePanel.add(discardPile.get(discardPile.size() - 1));
 
                         game.setNextCurrentPlayer();
+                        drawFlag = true;
                         break;
                     } else {
                         break;
