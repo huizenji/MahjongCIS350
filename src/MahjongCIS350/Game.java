@@ -48,11 +48,11 @@ public class Game {
         ArrayList<Tile> hand = new ArrayList<>();
         ArrayList<Tile> desired = new ArrayList<>();
 
-        Suite tile1 = new Suite();
+        Suit tile1 = new Suit();
         tile1.setValue(1);
         tile1.setDesign("1");
 
-        Suite tile2 = new Suite();
+        Suit tile2 = new Suit();
         tile2.setValue(2);
         tile2.setDesign("2");
 
@@ -94,14 +94,14 @@ public class Game {
      ******************************************************************/
     private void createTile() {
 
-        createSuiteTile();
+        createSuitTile();
         createPointTile();
     }
 
     /*******************************************************************
-     * This method creates all the suites tiles in Mahjong.
+     * This method creates all the Suits tiles in Mahjong.
      ******************************************************************/
-    private void createSuiteTile() {
+    private void createSuitTile() {
 
         String[] design = {"Circle", "Bamboo", "Character"};
 
@@ -109,7 +109,7 @@ public class Game {
             for (int numtile = 1; numtile <= 9; numtile++) {
                 for (int i = 0; i < 4; i++) {
 
-                    tiles.add(new Suite(design[index], numtile));
+                    tiles.add(new Suit(design[index], numtile));
 
                 }
             }
@@ -267,7 +267,7 @@ public class Game {
     }
 
     /*******************************************************************
-     * This method deals out 13 suite tiles to three players, and 14
+     * This method deals out 13 Suit tiles to three players, and 14
      * tiles to the East player
      ******************************************************************/
     private void dealTile_13() {
@@ -302,7 +302,7 @@ public class Game {
 
                 // Check tile if it is a point tile
                 if (!(playerList[index].getHandTile().get(i)
-                        instanceof Suite)) {
+                        instanceof Suit)) {
 
                     playerList[index].getSetPile().add(playerList[index].getHandTile().remove(i));
                     playerList[index].getHandTile().add(tiles.remove(0));
@@ -352,7 +352,7 @@ public class Game {
         boolean temp = true;
         for (int i = 0; i < pl.getHandTile().size() - 4; i++) {
             for (int k = 1; k < 4; k++) {
-                if (!(compareSuite((Suite) (hand.get(i)), (Suite) (hand.get(i + k))))) {
+                if (!(compareSuit((Suit) (hand.get(i)), (Suit) (hand.get(i + k))))) {
 
                     temp = false;
                 }
@@ -373,10 +373,10 @@ public class Game {
      * To check if there is chi for a specific player
      *
      * @param handTile
-     * @param check    the checked_Suite should belongs to the last player of the current player
+     * @param check    the checked_Suit should belongs to the last player of the current player
      * @return
      */
-    public boolean isChi(ArrayList<Tile> handTile, Suite check) {
+    public boolean isChi(ArrayList<Tile> handTile, Suit check) {
 
         //set up lastPlayer of the currentPlayer
         int lastPlayer = currentPlayer - 1;
@@ -385,9 +385,9 @@ public class Game {
             lastPlayer = 4;
 
         int matchdesign = 0;
-        //check if there are 3 same design of suite including the check_Suite
+        //check if there are 3 same design of Suit including the check_Suit
         for (int i = 0; i < handTile.size(); ++i) {
-            Suite hand = (Suite)(handTile.get(i));
+            Suit hand = (Suit)(handTile.get(i));
             if (hand.getDesign().equals(check.getDesign())) {
                 matchdesign++;
             }
@@ -397,8 +397,8 @@ public class Game {
             for (int i = 0; i < handTile.size() - 1; ++i) {
                 for (int j = i + 1; j < handTile.size(); ++j) {
 
-                    Suite hand1 = (Suite)(handTile.get(i));
-                    Suite hand2 = (Suite)(handTile.get(i));
+                    Suit hand1 = (Suit)(handTile.get(i));
+                    Suit hand2 = (Suit)(handTile.get(i));
                     if (compareConsecutive(hand1, hand2, check)) {
                         return true;
                     }
@@ -442,8 +442,8 @@ public class Game {
 
     /*******************************************************************
      * This method compares 2 tiles and determines if they are
-     * the same tile. This method uses compareSuite for checking
-     * two tiles of type Suite
+     * the same tile. This method uses compareSuit for checking
+     * two tiles of type Suit
      *
      * @param tile1 The first tile that is being compared.
      * @param tile2 The second tile that is being compared.
@@ -465,7 +465,7 @@ public class Game {
         }
 
 
-        //First check to see if the types match (e.g. Two tiles of type "Suite",
+        //First check to see if the types match (e.g. Two tiles of type "Suit",
         //two tiles of type "Dragon", etc...)
 
         if (tile1.getType().equals(tile2.getType())) {
@@ -491,10 +491,10 @@ public class Game {
                 }
             }
 
-            //If the tiles are a Suite, use compare suite
-            if (tile1.getType() == "Suite") {
+            //If the tiles are a Suit, use compare Suit
+            if (tile1.getType() == "Suit") {
 
-                if (compareSuite((Suite) tile1, (Suite) tile2)) {
+                if (compareSuit((Suit) tile1, (Suit) tile2)) {
 
                     return true;
                 }
@@ -562,21 +562,21 @@ public class Game {
 
         for (int i = 0; i < temp.size(); i++) {
 
-            //Check to see if the current tile is a suite
-            if (temp.get(i).getType() == "Suite") {
+            //Check to see if the current tile is a Suit
+            if (temp.get(i).getType() == "Suit") {
 
-                //check to see if another tile in the hand is a suite and matches
+                //check to see if another tile in the hand is a Suit and matches
                 //the design of the first tile and subtracting the two gives
                 //us a difference of 1.
 
                 outer:
                 for (int j = i + 1; j < temp.size(); j++) {
 
-                    if (temp.get(j).getType() == "Suite" &&
-                            ((Suite) (temp.get(i))).getDesign().
-                                    equals(((Suite) (temp.get(j))).getDesign())
-                            && Math.abs(((Suite) (temp.get(i))).getValue() -
-                            ((Suite) (temp.get(j))).getValue()) == 1) {
+                    if (temp.get(j).getType() == "Suit" &&
+                            ((Suit) (temp.get(i))).getDesign().
+                                    equals(((Suit) (temp.get(j))).getDesign())
+                            && Math.abs(((Suit) (temp.get(i))).getValue() -
+                            ((Suit) (temp.get(j))).getValue()) == 1) {
 
                         //check to see if a third matches the above criteria and
                         //subtracting the first from the third gives us a difference
@@ -584,11 +584,11 @@ public class Game {
 
                         for (int h = i + 2; h < temp.size(); h++) {
 
-                            if (temp.get(h).getType() == "Suite" &&
-                                    ((Suite) (temp.get(i))).getDesign().
-                                            equals(((Suite) (temp.get(h))).getDesign())
-                                    && Math.abs(((Suite) (temp.get(i))).getValue() -
-                                    ((Suite) (temp.get(h))).getValue()) == 2) {
+                            if (temp.get(h).getType() == "Suit" &&
+                                    ((Suit) (temp.get(i))).getDesign().
+                                            equals(((Suit) (temp.get(h))).getDesign())
+                                    && Math.abs(((Suit) (temp.get(i))).getValue() -
+                                    ((Suit) (temp.get(h))).getValue()) == 2) {
 
                                 //remove the chi from the player's hand and break
                                 //out of the third and second loops
@@ -665,7 +665,7 @@ public class Game {
         pl.addTileSet(discardPile.remove(discardPile.size() - 1));
     }
 
-    public void takeKongDiscard(Player pl, Suite tile){
+    public void takeKongDiscard(Player pl, Suit tile){
 
         ArrayList<Tile> desired = new ArrayList<>();
         desired.add(tile);
@@ -725,8 +725,8 @@ public class Game {
     private void autoSort(Player player) {
 
         ArrayList<Tile> temp = new ArrayList<>();
-        Suite comp = new Suite(); // Suite that will be placed first
-        Suite playerTile; // Tile from player that is being checked
+        Suit comp = new Suit(); // Suit that will be placed first
+        Suit playerTile; // Tile from player that is being checked
 
         // Adding Circle Tiles
         comp.setDesign("Circle");
@@ -736,9 +736,9 @@ public class Game {
 
             for (int i = 0; i < player.getHandTile().size(); i++) {
 
-                playerTile = (Suite) player.getHandTile().get(i);
+                playerTile = (Suit) player.getHandTile().get(i);
                 comp.setValue(value);
-                if (compareSuite(comp, playerTile)) {
+                if (compareSuit(comp, playerTile)) {
                     temp.add(playerTile);
                 }
             }
@@ -750,9 +750,9 @@ public class Game {
         for (int value = 1; value <= 9; value++) {
             for (int i = 0; i < player.getHandTile().size(); i++) {
 
-                playerTile = (Suite) player.getHandTile().get(i);
+                playerTile = (Suit) player.getHandTile().get(i);
                 comp.setValue(value);
-                if (compareSuite(comp, playerTile)) {
+                if (compareSuit(comp, playerTile)) {
 
                     temp.add(playerTile);
                 }
@@ -765,9 +765,9 @@ public class Game {
         for (int value = 1; value <= 9; value++) {
             for (int i = 0; i < player.getHandTile().size(); i++) {
 
-                playerTile = (Suite) player.getHandTile().get(i);
+                playerTile = (Suit) player.getHandTile().get(i);
                 comp.setValue(value);
-                if (compareSuite(comp, playerTile)) {
+                if (compareSuit(comp, playerTile)) {
                     temp.add(playerTile);
                 }
             }
@@ -778,14 +778,14 @@ public class Game {
     }
 
     /*******************************************************************
-     * This method compares 2 suite tiles and determines if they are
-     * the same tile. Only works with Suites
+     * This method compares 2 Suit tiles and determines if they are
+     * the same tile. Only works with Suits
      *
      * @param tile1 The first tile that is being compared.
      * @param tile2 The second tile that is being compared.
      * @return true if both tiles are the same.
      ******************************************************************/
-    private boolean compareSuite(Suite tile1, Suite tile2) {
+    private boolean compareSuit(Suit tile1, Suit tile2) {
 
         if (tile1 == null) {
 
@@ -809,14 +809,14 @@ public class Game {
     }
 
     /**
-     * This method compares 3 suite tiles and determine if they are consecutive and belong to the same design of suite
+     * This method compares 3 Suit tiles and determine if they are consecutive and belong to the same design of Suit
      *
      * @param tile1
      * @param tile2
      * @param tile3
      * @return
      */
-    private boolean compareConsecutive(Suite tile1, Suite tile2, Suite tile3) {
+    private boolean compareConsecutive(Suit tile1, Suit tile2, Suit tile3) {
         //make an array to hold the three values of the three tiles
         int[] array = {tile1.getValue(), tile2.getValue(), tile3.getValue()};
         //find min and max value
@@ -846,7 +846,7 @@ public class Game {
 
     private boolean isPointTile(Tile tile) {
 
-        if (tile instanceof Suite)
+        if (tile instanceof Suit)
             return false;
         else if (tile instanceof Dragon || tile instanceof Wind ||
             tile instanceof Flower)
@@ -897,7 +897,7 @@ public class Game {
 
         for (int i = 0; i < tiles.size();i++){
 
-            if (tiles.get(i) instanceof Suite){
+            if (tiles.get(i) instanceof Suit){
                 return false;
             }
         }
@@ -956,7 +956,7 @@ public class Game {
         String msg = "A set of tiles consist of 3 tiles. This 3 tiles" +
                 "may all be the same, thus forming a 3 of a kind or " +
                 "they all form a 3 tile straight of the same " +
-                "suit.\n\nAll sets that are formed in the hand by " +
+                "Suit.\n\nAll sets that are formed in the hand by " +
                 "drawing do not have to be revealed to the opposing " +
                 "players. However, any set or kong that are claimed" +
                 "must be revealed to all opposing players.\n\n" +
@@ -974,7 +974,7 @@ public class Game {
                 "player directly to right discards a " +
                 "tile. In addition, the discarded the tile must be " +
                 " able to use to form a 3 tile straight in the " +
-                "players hand using the same suit. Also, the straight" +
+                "players hand using the same Suit. Also, the straight" +
                 "can not extend from 9 to 1 or vise versa.\n\n";
 
         return msg;

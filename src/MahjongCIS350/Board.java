@@ -46,15 +46,15 @@ public class Board extends JPanel {
 
     private JLabel p1Direction;
 
-    /** Tile image of type Suite with Circle design **/
+    /** Tile image of type Suit with Circle design **/
     private ImageIcon circle1, circle2, circle3, circle4, circle5,
             circle6, circle7, circle8, circle9;
 
-    /** Tile image of type Suite with Bamboo design **/
+    /** Tile image of type Suit with Bamboo design **/
     private ImageIcon bamboo1, bamboo2, bamboo3, bamboo4, bamboo5,
             bamboo6, bamboo7, bamboo8, bamboo9;
 
-    /** Tile image of type Suite with Character design **/
+    /** Tile image of type Suit with Character design **/
     private ImageIcon character1, character2, character3, character4,
             character5, character6, character7, character8, character9;
 
@@ -190,7 +190,7 @@ public class Board extends JPanel {
                     // set claims go here
 
                     // test code
-                    Suite disTile = (Suite)(game.getRecentDiscard());
+                    Suit disTile = (Suit)(game.getRecentDiscard());
 
                     if (game.isPong(game.getPlayerHand(0),
                             disTile)){
@@ -398,14 +398,14 @@ public class Board extends JPanel {
      *****************************************************************/
     private ImageIcon updatedImage(Tile tile) {
 
-        if (tile instanceof Suite) {
-            switch (((Suite) tile).getDesign()) {
+        if (tile instanceof Suit) {
+            switch (((Suit) tile).getDesign()) {
                 case "Circle":
-                    return getCircleImage(((Suite) tile).getValue());
+                    return getCircleImage(((Suit) tile).getValue());
                 case "Bamboo":
-                    return getBambooImage((((Suite) tile).getValue()));
+                    return getBambooImage((((Suit) tile).getValue()));
                 case "Character":
-                    return getCharacterImage(((Suite) tile).getValue());
+                    return getCharacterImage(((Suit) tile).getValue());
             }
 
         } else {
@@ -484,9 +484,9 @@ public class Board extends JPanel {
     }
 
     /******************************************************************
-     * This method returns an image that represents a Suite Tile with a
+     * This method returns an image that represents a Suit Tile with a
      * Circle design of the indicated value.
-     * @param value the numerical value of a Suite Tile (1-9)
+     * @param value the numerical value of a Suit Tile (1-9)
      * @return an image that correctly matches the indicated value,
      *         will return tileBack if there is an error
      *****************************************************************/
@@ -515,9 +515,9 @@ public class Board extends JPanel {
     }
 
     /******************************************************************
-     * This method returns an image that represents a Suite Tile with a
+     * This method returns an image that represents a Suit Tile with a
      * Bamboo design of the indicated value.
-     * @param value the numerical value of a Suite Tile (1-9)
+     * @param value the numerical value of a Suit Tile (1-9)
      * @return an image that correctly matches the indicated value,
      *         will return tileBack if there is an error
      *****************************************************************/
@@ -546,9 +546,9 @@ public class Board extends JPanel {
     }
 
     /******************************************************************
-     * This method returns an image that represents a Suite Tile with a
+     * This method returns an image that represents a Suit Tile with a
      * Character design of the indicated value.
-     * @param value the numerical value of a Suite Tile (1-9)
+     * @param value the numerical value of a Suit Tile (1-9)
      * @return an image that correctly matches the indicated value,
      *         will return tileBack if there is an error
      *****************************************************************/

@@ -85,7 +85,7 @@ public class Player{
      * @param handTile
      * @return  last Tile
      */
-    public Tile lastTile(ArrayList<Suite> handTile){
+    public Tile lastTile(ArrayList<Suit> handTile){
         return handTile.get(handTile.size() - 1);
     }
 
