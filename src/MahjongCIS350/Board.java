@@ -4,7 +4,6 @@ import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
 import javax.swing.Timer;
-import java.util.concurrent.TimeUnit;
 import java.util.*;
 
 public class Board extends JPanel {
