@@ -44,16 +44,34 @@ public class Game {
 
     public static void main(String[] args) {
 
-        ArrayList<Integer> a = new ArrayList<>();
-        ArrayList<Integer> b = new ArrayList<>();
+        Game test = new Game();
+        ArrayList<Tile> hand = new ArrayList<>();
+        ArrayList<Tile> desired = new ArrayList<>();
 
-        a.add(1);
-        a.add(2);
-        b.add(3);
+        Suite tile1 = new Suite();
+        tile1.setValue(1);
+        tile1.setDesign("1");
 
-        System.out.println(a);
-        a = b;
-        System.out.println(a);
+        Suite tile2 = new Suite();
+        tile2.setValue(2);
+        tile2.setDesign("2");
+
+        Dragon tile3 = new Dragon("3");
+        Wind tile4 = new Wind("4");
+
+
+
+        hand.add(tile1);
+        hand.add(tile2);
+        hand.add(tile3);
+        hand.add(tile3);
+        hand.add(tile4);
+
+        //desired.add(tile1);
+        desired.add(tile3);
+        desired.add(tile3);
+
+        System.out.println(test.findTile(hand,desired));
     }
 
     /******************************************************************
@@ -136,7 +154,7 @@ public class Game {
      * @param  p
      * @return score
      */
-    public int pile_score(Player p){
+    public void pile_score(Player p){
         int s = 0;
 
         for(int i = 0; i <= p.getHandTile().size(); ++i){
@@ -144,7 +162,8 @@ public class Game {
                 s++;
             }
         }
-        return s;
+
+        p.setPoint(p.getPoint() + s);
     }
     /******************************************************************
      * A getter function for individual tiles
@@ -232,14 +251,14 @@ public class Game {
      * remove all the tiles from all hands and regenerate the game
      */
     public void reset(){
+
         for(int i =0; i <4; i++) {
-            playerList[i].getHandTile().clear();
-            playerList[i].getSetPile().clear();
+            playerList[i].clearHandPile();
+            playerList[i].clearSetPile();
         }
 
         tiles = new ArrayList<>();
         discardPile = new ArrayList<>();
-        maxTile = 144;
         createTile();
         setupPlayer();
         shuffle();
@@ -642,6 +661,25 @@ public class Game {
 
             pl.removeTileSet(loc.get(i));
         }
+
+        pl.addTile(discardPile.get(discardPile.size() - 1));
+    }
+
+    public void takeKongDiscard(Player pl, Suite tile){
+
+        ArrayList<Tile> desired = new ArrayList<>();
+        desired.add(tile);
+        desired.add(tile);
+        desired.add(tile);
+
+        ArrayList<Integer> loc = findTile(pl.getHandTile(), desired);
+
+        for (int i = loc.size() - 1; i >= 0; i--) {
+
+            pl.removeTileSet(loc.get(i));
+        }
+
+        pl.addTile(discardPile.get(discardPile.size() - 1));
     }
 
     /*******************************************************************
@@ -652,19 +690,24 @@ public class Game {
      * @param desired
      * @return
      */
-    private ArrayList<Integer> findTile(ArrayList<Tile> playerHand,
+    public ArrayList<Integer> findTile(ArrayList<Tile> playerHand,
                                         ArrayList<Tile> desired) {
 
-        ArrayList index_loc = new ArrayList();
+        ArrayList<Integer> index_loc = new ArrayList();
         for (int i = 0; i < desired.size(); i++) {
 
+            search:
             for (int hand_index = 0; hand_index < playerHand.size();
                  hand_index++) {
 
 
-                if (compareSuite((Suite) desired.get(i),
-                        (Suite) playerHand.get(hand_index))) {
+                if (compareTile(desired.get(i),
+                        playerHand.get(hand_index))) {
+                    if (!index_loc.contains(hand_index)){
 
+                        index_loc.add(hand_index);
+                        break search;
+                    }
                 }
             }
         }
@@ -907,7 +950,6 @@ public class Game {
 
         return msg;
     }
-
 
     private String setRule() {
 

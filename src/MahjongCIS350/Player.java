@@ -111,4 +111,8 @@ public class Player{
     public void setPoint(int point) {
         this.point = point;
     }
+
+    public int getPoint() {
+        return point;
+    }
 }
