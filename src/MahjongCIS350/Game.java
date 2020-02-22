@@ -233,8 +233,10 @@ public class Game {
      */
     public void reset(){
         for(int i =0; i <4; i++) {
-            playerList[i].clear();
+            playerList[i].getHandTile().clear();
+            playerList[i].getSetPile().clear();
         }
+
         tiles = new ArrayList<>();
         discardPile = new ArrayList<>();
         maxTile = 144;
@@ -243,8 +245,8 @@ public class Game {
         shuffle();
         dealTile_13();
         removeKongHand();
-
     }
+
     /*******************************************************************
      * This method deals out 13 suite tiles to three players, and 14
      * tiles to the East player
@@ -355,15 +357,19 @@ public class Game {
      * @param check    the checked_Suite should belongs to the last player of the current player
      * @return
      */
-    public boolean isChi(ArrayList<Suite> handTile, Suite check) {
+    public boolean isChi(ArrayList<Tile> handTile, Suite check) {
+
         //set up lastPlayer of the currentPlayer
         int lastPlayer = currentPlayer - 1;
 
+        if (lastPlayer < 0)
+            lastPlayer = 4;
 
         int matchdesign = 0;
         //check if there are 3 same design of suite including the check_Suite
         for (int i = 0; i < handTile.size(); ++i) {
-            if (handTile.get(i).getDesign().equals(check.getDesign())) {
+            Suite hand = (Suite)(handTile.get(i));
+            if (hand.getDesign().equals(check.getDesign())) {
                 matchdesign++;
             }
         }
@@ -371,7 +377,10 @@ public class Game {
         if (matchdesign >= 2) {
             for (int i = 0; i < handTile.size() - 1; ++i) {
                 for (int j = i + 1; j < handTile.size(); ++j) {
-                    if (compareConsecutive(handTile.get(i), handTile.get(j), check)) {
+
+                    Suite hand1 = (Suite)(handTile.get(i));
+                    Suite hand2 = (Suite)(handTile.get(i));
+                    if (compareConsecutive(hand1, hand2, check)) {
                         return true;
                     }
                 }
@@ -387,7 +396,7 @@ public class Game {
      *                 for a pong.
      * @param check The tile checked if it can be made into a pong
      ******************************************************************/
-    public boolean isPong(ArrayList<Suite> handTile, Suite check) {
+    public boolean isPong(ArrayList<Tile> handTile, Suite check) {
 
         // Number of Tiles in player hand that can used for a pong
         int matchTile = 0;
@@ -396,7 +405,7 @@ public class Game {
         // tile
         for (int i = 0; i < handTile.size(); i++) {
 
-            if (compareSuite(handTile.get(i), check)) {
+            if (compareTile(handTile.get(i), check)) {
 
                 matchTile++;
             }
@@ -508,14 +517,6 @@ public class Game {
         }
     }
 
-    private void isKongDiscard() {
-
-    }
-
-    private void isKongDraw() {
-
-    }
-
     /*******************************************************************
      * This method checks if a player can Mahjong. We only have to check
      * what is left of the player hand. If there are only chi's and
@@ -523,12 +524,9 @@ public class Game {
      * Mahjong.
      *
      * @param handTile The player's current hand.
-
      *
-
      * @param check The tile checked if it lets the player Mahjong
      ******************************************************************/
-
     public boolean isMahjong(ArrayList<Tile> handTile, Tile check) {
 
         //Make a copy of what is in the player's hand
@@ -536,93 +534,62 @@ public class Game {
         ArrayList<Tile> temp = new ArrayList<>();
 
         for (Tile t : handTile) {
-
             temp.add(t);
-
         }
 
 
         //This section tests for any chi's the player has in their hand
-
-
         //Loop through the palyer's hand
 
         for (int i = 0; i < temp.size(); i++) {
 
             //Check to see if the current tile is a suite
-
             if (temp.get(i).getType() == "Suite") {
 
                 //check to see if another tile in the hand is a suite and matches
-
                 //the design of the first tile and subtracting the two gives
-
                 //us a difference of 1.
 
                 outer:
                 for (int j = i + 1; j < temp.size(); j++) {
 
                     if (temp.get(j).getType() == "Suite" &&
-
                             ((Suite) (temp.get(i))).getDesign().
-
                                     equals(((Suite) (temp.get(j))).getDesign())
-
                             && Math.abs(((Suite) (temp.get(i))).getValue() -
-
                             ((Suite) (temp.get(j))).getValue()) == 1) {
 
                         //check to see if a third matches the above criteria and
-
                         //subtracting the first from the third gives us a difference
-
                         //of 2
 
                         for (int h = i + 2; h < temp.size(); h++) {
 
                             if (temp.get(h).getType() == "Suite" &&
-
                                     ((Suite) (temp.get(i))).getDesign().
-
                                             equals(((Suite) (temp.get(h))).getDesign())
-
                                     && Math.abs(((Suite) (temp.get(i))).getValue() -
-
                                     ((Suite) (temp.get(h))).getValue()) == 2) {
 
                                 //remove the chi from the player's hand and break
-
                                 //out of the third and second loops
-
                                 temp.remove(h);
-
                                 temp.remove(j);
-
                                 temp.remove(i);
 
                                 //counteract the increment as we need to start at the
-
                                 //beginning of the ArrayList
-
                                 i--;
 
                                 break outer;
-
                             }
-
                         }
-
                     }
-
                 }
-
             }
-
         }
 
-
         //This section checks for any pongs in the player's hand
-
         for (int i = 0; i < temp.size(); i++) {
 
             outer:
@@ -633,24 +600,18 @@ public class Game {
                 if (compareTile(temp.get(i), temp.get(j))) {
 
                     //check to see if the tile two away is the same as the current tile
-
                     for (int k = j + 1; k < temp.size(); k++) {
 
                         //If so, remove the pong from temp
-
                         if (compareTile(temp.get(i), temp.get(k))) {
                             temp.remove(k);
                             temp.remove(j);
                             temp.remove(i);
 
                             //counteract the increment as we need to start at the beginning
-
                             //of the ArrayList
-
                             i--;
-
                             break outer;
-
                         }
                     }
                 }
@@ -679,7 +640,7 @@ public class Game {
 
         for (int i = loc.size() - 1; i >= 0; i--) {
 
-            pl.removeTile(loc.get(i));
+            pl.removeTileSet(loc.get(i));
         }
     }
 

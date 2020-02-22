@@ -21,7 +21,7 @@ public class Player{
     /**
      * create an empty hand
      */
-    private int point;// add point if draw a flower
+    private int point;
 
     public Player(){
 
@@ -41,8 +41,12 @@ public class Player{
     /**
      * clear the hand
      */
-    public void clear(){
+    public void clearHandPile(){
         handTile.clear();
+    }
+
+    public void clearSetPile(){
+        setPile.clear();
     }
 
     /**
@@ -50,44 +54,11 @@ public class Player{
      * @param t
      */
     public void addTile(Tile t){
+
         if(t == null){
             throw new NullPointerException("No such type of tile, can't be added");
         }
         handTile.add(t);
-    }
-
-    /**
-     * remove the Tile t
-     * @param t
-     */
-    public void removeTile(Tile t){
-
-        Suite s = (Suite)t;
-        if(t == null){
-            throw new NullPointerException("No such type of tile, can't be added");
-        }
-        handTile.remove(t);
-        setPile.add(t);
-        if(s.getType().equals("Flower")){
-            point+=s.getValue();
-        }
-    }
-
-    /**
-     * remove a tile from a specific position
-     * @param p
-     */
-    public void removeTile(int p){
-
-        if(p<0 || p>= handTile.size()){
-            throw new IllegalArgumentException("Invalid position: " + p);
-        }
-        setPile.add(handTile.get(p));// add removed_tile to the pile
-        Suite s = (Suite)handTile.get(p);
-        if(s.getType().equals("Flower")){
-            point+=s.getValue();
-        }
-        handTile.remove(p);
     }
 
     public void removeTileSet(int index){
@@ -137,4 +108,7 @@ public class Player{
 
     public void setSetPile(ArrayList<Tile> setPile){this.setPile = setPile;};
 
+    public void setPoint(int point) {
+        this.point = point;
+    }
 }
