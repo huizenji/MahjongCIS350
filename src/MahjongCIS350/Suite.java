@@ -22,6 +22,8 @@ public class Suite extends Tile {
         this.value = 0;
     }
 
+
+
     /*******************************************************************
      * Constructor for a suite tile.
      *
