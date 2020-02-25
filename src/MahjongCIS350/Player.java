@@ -85,7 +85,7 @@ public class Player{
      * @param handTile
      * @return  last Tile
      */
-    public Tile lastTile(ArrayList<Suite> handTile){
+    public Tile lastTile(ArrayList<Suit> handTile){
         return handTile.get(handTile.size() - 1);
     }
 
@@ -101,6 +101,10 @@ public class Player{
         this.handTile = handTile;
     }
 
+    public void setSetPile(ArrayList<Tile> setPile) {
+        this.setPile = setPile;
+    }
+
     public String getDirection() {
         return direction;
     }
@@ -114,8 +118,6 @@ public class Player{
     public Tile getSetTile(int index){
         return setPile.get(index);
     }
-
-    public void setSetPile(ArrayList<Tile> setPile){this.setPile = setPile;};
 
     public void setPoint(int point) {
         this.point = point;

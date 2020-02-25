@@ -4,7 +4,6 @@ import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
 import javax.swing.Timer;
-import java.util.concurrent.TimeUnit;
 import java.util.*;
 
 public class Board extends JPanel {
@@ -46,15 +45,15 @@ public class Board extends JPanel {
 
     private JLabel p1Direction;
 
-    /** Tile image of type Suite with Circle design **/
+    /** Tile image of type Suit with Circle design **/
     private ImageIcon circle1, circle2, circle3, circle4, circle5,
             circle6, circle7, circle8, circle9;
 
-    /** Tile image of type Suite with Bamboo design **/
+    /** Tile image of type Suit with Bamboo design **/
     private ImageIcon bamboo1, bamboo2, bamboo3, bamboo4, bamboo5,
             bamboo6, bamboo7, bamboo8, bamboo9;
 
-    /** Tile image of type Suite with Character design **/
+    /** Tile image of type Suit with Character design **/
     private ImageIcon character1, character2, character3, character4,
             character5, character6, character7, character8, character9;
 
@@ -78,6 +77,9 @@ public class Board extends JPanel {
     private Timer timer;
 
     private boolean drawFlag = true;
+
+    /** Flag to go to the next Player, this will be false when
+    private boolean nextPlflag = true;*/
 
     /******************************************************************
      * This is the Board class constructor. This implements all global
@@ -181,55 +183,59 @@ public class Board extends JPanel {
             @Override
             public void actionPerformed(ActionEvent e) {
 
-                //if (game.isStalemate())
+                // Check for Stalemates
+                if (game.isStalemate()){
+
+                    stalemateSeq();
+                }
 
                 if (game.getCurrentPlayer() != 0) {
 
-                    game.dumbAI(game.getCuurentPlayer());
+                    game.dumbAIDraw(game.getCuurentPlayer());
+                    // Check for if AI or player mahjong off of discard
+                    if (game.isMahjong(game.getPlayerHand(game.getCurrentPlayer()),null)){
+
+                        String message = "An oppoenent has declared Mahjong. Sorry, You Lose.";
+                        JOptionPane.showMessageDialog(null, message);
+                        setJButton(false);
+                        timer.stop();
+                    }
+                    game.dumbAIDiscard(game.getCuurentPlayer());
                     displayBoard();
-                    // set claims go here
-
-                    // test code
-                    Suite disTile = (Suite)(game.getRecentDiscard());
-
-                    if (game.isPong(game.getPlayerHand(0),
-                            disTile)){
-
-                        String message = "Claim pong of tile " +
-                                disTile.getValue() + " " +
-                                disTile.getDesign() + "?";
-
-                        int takePong = JOptionPane.showConfirmDialog(null,
-                                message, "Claim Message", JOptionPane.YES_NO_OPTION);
-
-                        if (takePong == JOptionPane.YES_OPTION){
-
-                            game.takePong(game.getPlayerList(0),game.getRecentDiscard());
-                            displayBoard();
-                            drawFlag = false;
-                        }
-
-                        game.setNextCurrentPlayer(0);
-                    }
-
-                    else {
-                        //
-                        game.setNextCurrentPlayer();
-                    }
+                    checkSeq();
 
                     if (game.getCurrentPlayer() == 0) {
                         setJButton(true);
+
                     }else{
                         setJButton(false);
                     }
 
-                    // Player draws and then discards
+                    // Player draws and then discards and see if they win
                     if (game.getCurrentPlayer() == 0 && game
                             .getPlayerList(0).getHandTile().size()
                             != 14 && drawFlag){
                         game.draw(game.getPlayerList(0));
-                    }
 
+
+                        if (game.isMahjong(game.getPlayerHand(game.getCurrentPlayer()),null)){
+
+                            // Player winning off of Mahjong
+                            String message = "Do you wish to declare " +
+                                    "Mahjong and win?";
+
+                            String message2 = "Congratulations, you won";
+                            int mahjong = JOptionPane.showConfirmDialog(null,
+                                    message, "Claim Message", JOptionPane.YES_NO_OPTION);
+
+                            if (mahjong == JOptionPane.YES_OPTION){
+
+                                JOptionPane.showMessageDialog(null, message2);
+                                setJButton(false);
+                                timer.stop();
+                            }
+                        }
+                    }
 
                     displayBoard();
                 }
@@ -398,14 +404,14 @@ public class Board extends JPanel {
      *****************************************************************/
     private ImageIcon updatedImage(Tile tile) {
 
-        if (tile instanceof Suite) {
-            switch (((Suite) tile).getDesign()) {
+        if (tile instanceof Suit) {
+            switch (((Suit) tile).getDesign()) {
                 case "Circle":
-                    return getCircleImage(((Suite) tile).getValue());
+                    return getCircleImage(((Suit) tile).getValue());
                 case "Bamboo":
-                    return getBambooImage((((Suite) tile).getValue()));
+                    return getBambooImage((((Suit) tile).getValue()));
                 case "Character":
-                    return getCharacterImage(((Suite) tile).getValue());
+                    return getCharacterImage(((Suit) tile).getValue());
             }
 
         } else {
@@ -484,9 +490,9 @@ public class Board extends JPanel {
     }
 
     /******************************************************************
-     * This method returns an image that represents a Suite Tile with a
+     * This method returns an image that represents a Suit Tile with a
      * Circle design of the indicated value.
-     * @param value the numerical value of a Suite Tile (1-9)
+     * @param value the numerical value of a Suit Tile (1-9)
      * @return an image that correctly matches the indicated value,
      *         will return tileBack if there is an error
      *****************************************************************/
@@ -515,9 +521,9 @@ public class Board extends JPanel {
     }
 
     /******************************************************************
-     * This method returns an image that represents a Suite Tile with a
+     * This method returns an image that represents a Suit Tile with a
      * Bamboo design of the indicated value.
-     * @param value the numerical value of a Suite Tile (1-9)
+     * @param value the numerical value of a Suit Tile (1-9)
      * @return an image that correctly matches the indicated value,
      *         will return tileBack if there is an error
      *****************************************************************/
@@ -546,9 +552,9 @@ public class Board extends JPanel {
     }
 
     /******************************************************************
-     * This method returns an image that represents a Suite Tile with a
+     * This method returns an image that represents a Suit Tile with a
      * Character design of the indicated value.
-     * @param value the numerical value of a Suite Tile (1-9)
+     * @param value the numerical value of a Suit Tile (1-9)
      * @return an image that correctly matches the indicated value,
      *         will return tileBack if there is an error
      *****************************************************************/
@@ -825,6 +831,150 @@ public class Board extends JPanel {
         }
     }
 
+    // This method checks all the players and returns the index if a
+    // player has a mahjong, else it returns a -1 for when a tile
+    // is discarded
+    private int isMahjongPlayerDiscard(){
+
+        if (game.getDiscardPile().size() == 0){
+
+            return -1;
+        }
+
+        for (int i = 0; i < 4; i++){
+
+            if (game.isMahjong(game.getPlayerHand((i)), game.getRecentDiscard())){
+
+                return i;
+            }
+        }
+
+        return -1;
+    }
+
+    private void stalemateSeq(){
+
+        setJButton(false);
+        timer.stop();
+        JOptionPane.showMessageDialog(null,
+                "There are not possible ways to " +
+                        "win, therefore the game is a " +
+                        "stalemate.");
+        drawFlag = false;
+    }
+
+    private void chiSeq(Suit disTile){
+
+        String message = "Claim chi of tile " +
+                disTile.getValue() + " " +
+                disTile.getDesign() + "?";
+
+        int takeChi = JOptionPane.showConfirmDialog(null,
+                message, "Claim Message", JOptionPane.YES_NO_OPTION);
+
+        if (takeChi == JOptionPane.YES_OPTION){
+
+            game.takeChi(game.getPlayerList(0),game.getRecentDiscard());
+            displayBoard();
+            game.setNextCurrentPlayer(0);
+            drawFlag = false;
+        }
+    }
+    private void pongSeq(Suit disTile){
+        String message = "Claim pong of tile " +
+                disTile.getValue() + " " +
+                disTile.getDesign() + "?";
+
+        int takePong = JOptionPane.showConfirmDialog(null,
+                message, "Claim Message", JOptionPane.YES_NO_OPTION);
+
+        if (takePong == JOptionPane.YES_OPTION){
+
+            game.takePong(game.getPlayerList(0),game.getRecentDiscard());
+            displayBoard();
+            game.setNextCurrentPlayer(0);
+            drawFlag = false;
+        }
+    }
+    private void kongSeq(Suit disTile){
+        String message = "Claim Kong of tile " +
+                disTile.getValue() + " " +
+                disTile.getDesign() + "?";
+
+        int takeKong = JOptionPane.showConfirmDialog(null,
+                message, "Claim Message", JOptionPane.YES_NO_OPTION);
+
+        if (takeKong == JOptionPane.YES_OPTION){
+
+            game.takeKong(game.getPlayerList(0), game.getRecentDiscard());
+            displayBoard();
+            game.setNextCurrentPlayer(0);
+            drawFlag = false;
+        }
+    }
+
+    private void mahjongSeq(){
+
+        // Player can claim Mahjong
+        if (isMahjongPlayerDiscard() == 0){
+
+            String message = "Do you wish to declare " +
+                    "Mahjong and win?";
+
+            String message2 = "Congratulations, you won";
+            int mahjong = JOptionPane.showConfirmDialog(null,
+                    message, "Claim Message", JOptionPane.YES_NO_OPTION);
+
+            if (mahjong == JOptionPane.YES_OPTION){
+
+                JOptionPane.showMessageDialog(null, message2);
+                setJButton(false);
+                timer.stop();
+            }
+        }
+
+        else{
+            String message = "An oppoenent has declared Mahjong. Sorry, You Lose.";
+            JOptionPane.showMessageDialog(null, message);
+            setJButton(false);
+            timer.stop();
+        }
+    }
+
+    private void checkSeq(){
+
+        // Check for if AI or player mahjong off of discard
+        if (isMahjongPlayerDiscard() != -1){
+
+            mahjongSeq();
+        }
+
+        if (game.isKong(game.getPlayerHand(0), game.getRecentDiscard())){
+
+            kongSeq((Suit)game.getRecentDiscard());
+        }
+        // Check for pongs that can be claimed
+        if (game.isPong(game.getPlayerHand(0), game.getRecentDiscard())){
+
+            pongSeq((Suit)game.getRecentDiscard());
+        }
+
+        // Check for any chi that can be claimed
+        // drawFlag used to determine if user has already claimed pong
+        if (game.isChi(game.getPlayerList(0),
+                (Suit)game.getRecentDiscard()) && drawFlag){
+
+            chiSeq((Suit)game.getRecentDiscard());
+        }
+
+        if (drawFlag){
+
+            game.setNextCurrentPlayer();
+        }
+
+        displayBoard();
+    }
+
     /******************************************************************
      * A class within Board that handles action listeners
      *****************************************************************/
@@ -854,6 +1004,7 @@ public class Board extends JPanel {
 
                         game.setNextCurrentPlayer();
                         drawFlag = true;
+                        displayBoard();
                         break;
                     } else {
                         break;
@@ -864,12 +1015,8 @@ public class Board extends JPanel {
             if (event.getSource() == resetBtn){
                 game.reset();
             }
-
-            displayBoard();
         }
     }
-
-
 }
 
 

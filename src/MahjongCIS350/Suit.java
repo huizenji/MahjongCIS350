@@ -7,7 +7,7 @@ package MahjongCIS350;
  * @Authors: Jillian Huizenga, Wayne Chen, Aron Zhao
  * @Version: 1/21/2020
  **********************************************************************/
-public class Suite extends Tile {
+public class Suit extends Tile {
 
     /** Type of suite tile design it is **/
     private String design;
@@ -15,9 +15,9 @@ public class Suite extends Tile {
     /** Numerical value of the tile **/
     private int value;
 
-    public Suite() {
+    public Suit() {
 
-        super("Suite");
+        super("Suit");
         this.design = null;
         this.value = 0;
     }
@@ -31,9 +31,9 @@ public class Suite extends Tile {
      *               Char.
      * @param value What is the value of the Tile.
      ******************************************************************/
-    public Suite(String design, int value) {
+    public Suit(String design, int value) {
 
-        super("Suite");
+        super("Suit");
         this.design = design;
         this.value = value;
     }
