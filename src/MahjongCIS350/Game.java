@@ -257,14 +257,13 @@ public class Game {
             playerList[i].clearSetPile();
         }
 
-        tiles = new ArrayList<>();
-        discardPile = new ArrayList<>();
+        tiles.clear();
+        discardPile.clear();
         createTile();
         setupPlayer();
         shuffle();
         dealTile_13();
         removeKongHand();
-        sortSet();
     }
 
     /*******************************************************************
