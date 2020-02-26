@@ -148,7 +148,7 @@ public class Board extends JPanel {
         gameBoard.setLayout(new GridBagLayout());
 
         discardPilePanel.setBorder(BorderFactory.createBevelBorder(1));
-        discardPilePanel.setPreferredSize(new Dimension(325, 200));
+        discardPilePanel.setPreferredSize(new Dimension(325, 175));
 
         createIcons();
 
@@ -156,9 +156,9 @@ public class Board extends JPanel {
         listener = new listener();
 
         // create reset button
-        resetBtn = new JButton("Reset Game");
-        resetBtn.addActionListener(listener);
-        gameBoard.add(resetBtn);
+//        resetBtn = new JButton("Reset Game");
+//        resetBtn.addActionListener(listener);
+//        gameBoard.add(resetBtn);
 
         placeDrawPile();
         dealPlayerTiles();
@@ -1022,9 +1022,9 @@ public class Board extends JPanel {
                 }
             }
 
-            if (event.getSource() == resetBtn){
-                game.reset();
-            }
+//            if (event.getSource() == resetBtn){
+//                game.reset();
+//            }
         }
     }
 }
