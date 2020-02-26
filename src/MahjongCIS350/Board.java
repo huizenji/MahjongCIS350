@@ -211,12 +211,18 @@ public class Board extends JPanel {
                         setJButton(false);
                     }
 
+                    // Check for Stalemates
+                    if (game.isStalemate()){
+
+                        stalemateSeq();
+                    }
+
                     // Player draws and then discards and see if they win
                     if (game.getCurrentPlayer() == 0 && game
                             .getPlayerList(0).getHandTile().size()
                             != 14 && drawFlag){
                         game.draw(game.getPlayerList(0));
-
+                        displayBoard();
 
                         if (game.isMahjong(game.getPlayerHand(game.getCurrentPlayer()),null)){
 
@@ -930,6 +936,7 @@ public class Board extends JPanel {
                 JOptionPane.showMessageDialog(null, message2);
                 setJButton(false);
                 timer.stop();
+                drawFlag = false;
             }
         }
 
@@ -938,10 +945,13 @@ public class Board extends JPanel {
             JOptionPane.showMessageDialog(null, message);
             setJButton(false);
             timer.stop();
+            drawFlag = false;
         }
     }
 
     private void checkSeq(){
+
+        displayBoard();
 
         // Check for if AI or player mahjong off of discard
         if (isMahjongPlayerDiscard() != -1){
@@ -949,12 +959,12 @@ public class Board extends JPanel {
             mahjongSeq();
         }
 
-        if (game.isKong(game.getPlayerHand(0), game.getRecentDiscard())){
+        if (game.isKong(game.getPlayerHand(0), game.getRecentDiscard()) && drawFlag){
 
             kongSeq((Suit)game.getRecentDiscard());
         }
         // Check for pongs that can be claimed
-        if (game.isPong(game.getPlayerHand(0), game.getRecentDiscard())){
+        if (game.isPong(game.getPlayerHand(0), game.getRecentDiscard()) && drawFlag){
 
             pongSeq((Suit)game.getRecentDiscard());
         }

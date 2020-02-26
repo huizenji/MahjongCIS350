@@ -567,7 +567,7 @@ public class Game {
 
 //        //This section tests for any chi's the player has in their hand
 //        //Loop through the player's hand
-//        for (int i = 0; i < temp.size() - 2; i++) {
+//        for (int i = 0; i < temp.size(); i++) {
 //
 //            //Check to see if the current tile is a suite
 //            if (temp.get(i).getType() == "Suit") {
@@ -613,28 +613,8 @@ public class Game {
 //                    }
 //                }
 //            }
-        //}
+//        }
 
-        for (int i = 0; i < temp.size(); i++){
-
-            outer:
-            for (int j = i + 1; j < temp.size(); j++){
-                for (int k = j + 1; k < temp.size(); k++){
-
-                    Suit a = (Suit)temp.get(i);
-                    Suit b = (Suit)temp.get(j);
-                    Suit c = (Suit)temp.get(k);
-
-                    if (compareConsecutive(a, b, c)){
-
-                        temp.remove(k);
-                        temp.remove(j);
-                        temp.remove(i);
-                        break outer;
-                    }
-                }
-            }
-        }
 
         //This section checks for any pongs in the player's hand
         for (int i = 0; i < temp.size(); i++) {
@@ -660,6 +640,27 @@ public class Game {
                             i--;
                             break outer;
                         }
+                    }
+                }
+            }
+        }
+        for (int i = 0; i < temp.size(); i++){
+
+            outer:
+            for (int j = i + 1; j < temp.size(); j++){
+                for (int k = j + 1; k < temp.size(); k++){
+
+                    Suit a = (Suit)temp.get(i);
+                    Suit b = (Suit)temp.get(j);
+                    Suit c = (Suit)temp.get(k);
+
+                    if (compareConsecutive(a, b, c)){
+
+                        temp.remove(k);
+                        temp.remove(j);
+                        temp.remove(i);
+                        i--;
+                        break outer;
                     }
                 }
             }
