@@ -731,19 +731,9 @@ public class Game {
 
     public void takeKong(Player pl, Tile tile){
 
-        ArrayList<Tile> desired = new ArrayList<>();
-        desired.add(tile);
-        desired.add(tile);
-        desired.add(tile);
-
-        ArrayList<Integer> loc = findTile(pl.getHandTile(), desired);
-
-        for (int i = loc.size() - 1; i >= 0; i--) {
-
-            pl.removeTileSet(loc.get(i));
-        }
-
-        pl.addTile(discardPile.get(discardPile.size() - 1));
+        // Add Tile and Remove Kong
+        pl.getHandTile().add(tile);
+        removeKongHand();
 
         // draw Tile and remove any Kong
         draw(pl);
