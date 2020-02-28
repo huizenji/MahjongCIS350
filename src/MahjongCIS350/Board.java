@@ -23,7 +23,7 @@ public class Board extends JPanel {
     /** Represents all Tiles in the Player's set pile **/
     private ArrayList<JButton> p1Sets, p2Sets, p3Sets, p4Sets;
 
-    private JButton resetBtn;
+    //private JButton resetBtn;
 
     /** Displays all JButtons in drawPile **/
     private JPanel drawPilePanel;
@@ -43,6 +43,7 @@ public class Board extends JPanel {
     /** Displays which Player is currently taking their turn **/
     private JLabel playerTurn;
 
+    /** Displays the direction of the human Player **/
     private JLabel p1Direction;
 
     /** Tile image of type Suit with Circle design **/
@@ -76,6 +77,7 @@ public class Board extends JPanel {
     /** AI turn duration **/
     private Timer timer;
 
+    /** Determines if a Player should draw a Tile from drawPile **/
     private boolean drawFlag = true;
 
     /** Flag to go to the next Player, this will be false when
@@ -116,7 +118,7 @@ public class Board extends JPanel {
         p4SetPanel = new JPanel();
         gameBoard = new JLayeredPane();
 
-        playerTurn = new JLabel(game.getCuurentPlayer().getDirection() + "'s Turn");
+        playerTurn = new JLabel(game.getCurrentPlayer().getDirection() + "'s Turn");
         p1Direction = new JLabel(game.getPlayerList(0).getDirection());
 
         // set background
@@ -148,11 +150,11 @@ public class Board extends JPanel {
         gameBoard.setLayout(new GridBagLayout());
 
         discardPilePanel.setBorder(BorderFactory.createBevelBorder(1));
-        discardPilePanel.setPreferredSize(new Dimension(325, 175));
+        discardPilePanel.setPreferredSize(new Dimension(325, 200));
 
         createIcons();
 
-        // set listeners for JButtons
+        // set listener for JButtons
         listener = new listener();
 
         // create reset button
@@ -164,9 +166,9 @@ public class Board extends JPanel {
         dealPlayerTiles();
         placePanels();
 
-        // disable Player hand unless it's their turn
-        if (game.getCurrentPlayer() != 0) {
-            setJButton(false);
+        // disable human Player hand at start unless it's their turn
+        if (game.getCurrentPlayerIndex() != 0) {
+            enablePlayer1Hand(false);
         }
 
         displayBoard();
@@ -175,7 +177,6 @@ public class Board extends JPanel {
         letsPlay();
 
         timer.start();
-
     }
 
     private void letsPlay() {
@@ -183,48 +184,53 @@ public class Board extends JPanel {
             @Override
             public void actionPerformed(ActionEvent e) {
 
-                // Check for Stalemates
+                // Check for Stalemate
                 if (game.isStalemate()){
-
                     stalemateSeq();
                 }
 
-                if (game.getCurrentPlayer() != 0) {
+                // AI turn
+                if (game.getCurrentPlayerIndex() != 0) {
 
-                    game.dumbAIDraw(game.getCuurentPlayer());
-                    // Check for if AI or player mahjong off of discard
-                    if (game.isMahjong(game.getPlayerHand(game.getCurrentPlayer()),null)){
+                    // AI draws Tile
+                    game.dumbAIDraw(game.getCurrentPlayer());
 
-                        String message = "An oppoenent has declared Mahjong. Sorry, You Lose.";
+                    // Check if AI or Player declare Mahjong off
+                    // of discard
+                    if (game.isMahjong(game.getPlayerHand
+                            (game.getCurrentPlayerIndex()),null)){
+                        String message = "An opponent has declared Mahjong. Sorry, you lose.";
                         JOptionPane.showMessageDialog(null, message);
-                        setJButton(false);
+                        enablePlayer1Hand(false);
                         timer.stop();
                     }
-                    game.dumbAIDiscard(game.getCuurentPlayer());
+
+                    // AI discards Tile
+                    game.dumbAIDiscard(game.getCurrentPlayer());
                     displayBoard();
                     checkSeq();
 
-                    if (game.getCurrentPlayer() == 0) {
-                        setJButton(true);
+                    if (game.getCurrentPlayerIndex() == 0) {
+                        enablePlayer1Hand(true);
 
                     }else{
-                        setJButton(false);
+                        enablePlayer1Hand(false);
                     }
 
-                    // Check for Stalemates
+                    // Check for Stalemate
                     if (game.isStalemate()){
 
                         stalemateSeq();
                     }
 
                     // Player draws and then discards and see if they win
-                    if (game.getCurrentPlayer() == 0 && game
+                    if (game.getCurrentPlayerIndex() == 0 && game
                             .getPlayerList(0).getHandTile().size()
                             != 14 && drawFlag){
                         game.draw(game.getPlayerList(0));
                         displayBoard();
 
-                        if (game.isMahjong(game.getPlayerHand(game.getCurrentPlayer()),null)){
+                        if (game.isMahjong(game.getPlayerHand(game.getCurrentPlayerIndex()),null)){
 
                             // Player winning off of Mahjong
                             String message = "Do you wish to declare " +
@@ -237,7 +243,7 @@ public class Board extends JPanel {
                             if (mahjong == JOptionPane.YES_OPTION){
 
                                 JOptionPane.showMessageDialog(null, message2);
-                                setJButton(false);
+                                enablePlayer1Hand(false);
                                 timer.stop();
                             }
                         }
@@ -663,7 +669,7 @@ public class Board extends JPanel {
      * depending on whether it is p1's turn or not.
      * @param condition true if it is p1's turn, otherwise false
      *****************************************************************/
-    private void setJButton(boolean condition) {
+    private void enablePlayer1Hand(boolean condition) {
 
         for (int i = 0; i < p1Hand.size(); i++) {
             p1Hand.get(i).setEnabled(condition);
@@ -699,7 +705,7 @@ public class Board extends JPanel {
         updateDiscardPile(discardPileSize);
 
         // update label for Player turn or game reset
-        playerTurn.setText(game.getCuurentPlayer()
+        playerTurn.setText(game.getCurrentPlayer()
                 .getDirection() + "'s Turn");
         p1Direction.setText(game.getPlayerList(0).getDirection());
 
@@ -860,7 +866,7 @@ public class Board extends JPanel {
 
     private void stalemateSeq(){
 
-        setJButton(false);
+        enablePlayer1Hand(false);
         timer.stop();
         JOptionPane.showMessageDialog(null,
                 "There are not possible ways to " +
@@ -934,7 +940,7 @@ public class Board extends JPanel {
             if (mahjong == JOptionPane.YES_OPTION){
 
                 JOptionPane.showMessageDialog(null, message2);
-                setJButton(false);
+                enablePlayer1Hand(false);
                 timer.stop();
                 drawFlag = false;
             }
@@ -943,7 +949,7 @@ public class Board extends JPanel {
         else{
             String message = "An oppoenent has declared Mahjong. Sorry, You Lose.";
             JOptionPane.showMessageDialog(null, message);
-            setJButton(false);
+            enablePlayer1Hand(false);
             timer.stop();
             drawFlag = false;
         }
