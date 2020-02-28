@@ -1151,6 +1151,10 @@ public class Game {
         discard(pl, rand.nextInt(pl.getHandTile().size()));
     }
 
+    /******************************************************************
+     *
+     * @return
+     *****************************************************************/
     public String ruleBook() {
 
         String rules = starting() + setRule() + claimChiRule() +
@@ -1160,6 +1164,10 @@ public class Game {
         return rules;
     }
 
+    /******************************************************************
+     *
+     * @return
+     *****************************************************************/
     private String starting() {
 
         String msg = "Players start with 13 tiles each. Each player " +
@@ -1177,6 +1185,10 @@ public class Game {
         return msg;
     }
 
+    /******************************************************************
+     *
+     * @return
+     *****************************************************************/
     private String setRule() {
 
         String msg = "A set of tiles consist of 3 tiles. This 3 tiles" +
@@ -1195,6 +1207,10 @@ public class Game {
         return msg;
     }
 
+    /******************************************************************
+     *
+     * @return
+     *****************************************************************/
     private String claimChiRule() {
 
         String msg = "A chi can only be claimed when the opposing " +
@@ -1207,6 +1223,10 @@ public class Game {
         return msg;
     }
 
+    /******************************************************************
+     *
+     * @return
+     *****************************************************************/
     private String claimPongRule() {
 
         String msg = "A pong can be claimed when any opposing player" +
@@ -1217,6 +1237,10 @@ public class Game {
         return msg;
     }
 
+    /******************************************************************
+     *
+     * @return
+     *****************************************************************/
     private String claimKongRule() {
 
         String msg = "A kong can be claimed when any opposing player" +
@@ -1237,6 +1261,10 @@ public class Game {
 
     }
 
+    /******************************************************************
+     *
+     * @return
+     *****************************************************************/
     private String declareMahjong() {
 
         String msg = "A mahjong can be claimed when a player has " +
@@ -1250,6 +1278,10 @@ public class Game {
         return msg;
     }
 
+    /******************************************************************
+     *
+     * @return
+     *****************************************************************/
     private String scoring() {
 
         String msg = "Once a player has declared mahjong, they win. " +
@@ -1260,52 +1292,94 @@ public class Game {
         return msg;
     }
 
+    /******************************************************************
+     *
+     * @return
+     *****************************************************************/
     public int getCurrentPlayerIndex() {
 
         return currentPlayer;
     }
 
+    /******************************************************************
+     *
+     * @return
+     *****************************************************************/
     public Player getCurrentPlayer(){
 
         return playerList[currentPlayer];
     }
 
+    /******************************************************************
+     *
+     * @param currentPlayer
+     *****************************************************************/
     public void setCurrentPlayer(int currentPlayer) {
 
         this.currentPlayer = currentPlayer;
     }
 
+    /******************************************************************
+     *
+     * @return
+     *****************************************************************/
     public int getStartingPlayer() {
 
         return startingPlayer;
     }
 
+    /******************************************************************
+     *
+     * @param startingPlayer
+     *****************************************************************/
     public void setStartingPlayer(int startingPlayer) {
 
         this.startingPlayer = startingPlayer;
     }
 
+    /******************************************************************
+     *
+     * @return
+     *****************************************************************/
     private void setNextStartingPlayer() {
 
         startingPlayer = (startingPlayer + 1) % 4;
     }
 
+    /******************************************************************
+     *
+     * @return
+     *****************************************************************/
     public void setNextCurrentPlayer() {
 
         currentPlayer = (currentPlayer + 1) % 4;
         turnCount++;
     }
 
+    /******************************************************************
+     *
+     * @param pl
+     *****************************************************************/
     public void setNextCurrentPlayer(int pl){
 
         currentPlayer = pl;
     }
 
+    /******************************************************************
+     *
+     * @param playerNum
+     * @return
+     *****************************************************************/
     public Player getPlayerList(int playerNum) {
 
         return playerList[playerNum];
     }
 
+    /******************************************************************
+     *
+     * @param playerNum
+     * @return
+     *****************************************************************/
     public ArrayList<Tile> getPlayerHand(int playerNum){
 
         if (playerNum < 0 || playerNum > 4){
@@ -1317,21 +1391,37 @@ public class Game {
         return playerList[playerNum].getHandTile();
     }
 
+    /******************************************************************
+     *
+     * @return
+     *****************************************************************/
     public ArrayList<Tile> getDiscardPile() {
 
         return discardPile;
     }
 
+    /******************************************************************
+     *
+     * @param discardPile
+     *****************************************************************/
     public void setDiscardPile(ArrayList<Tile> discardPile) {
 
         this.discardPile = discardPile;
     }
 
+    /******************************************************************
+     *
+     * @return
+     *****************************************************************/
     public Tile getRecentDiscard(){
 
         return discardPile.get(discardPile.size() - 1);
     }
 
+    /******************************************************************
+     *
+     * @return
+     *****************************************************************/
     public ArrayList<Tile> getDrawPile(){
 
         return tiles;
