@@ -80,8 +80,8 @@ public class Board extends JPanel {
     /** Determines if a Player should draw a Tile from drawPile **/
     private boolean drawFlag = true;
 
-    /** Flag to go to the next Player, this will be false when
-    private boolean nextPlflag = true;*/
+    // Flag to go to the next Player, this will be false when
+    //private boolean nextPlflag = true;
 
     /******************************************************************
      * This is the Board class constructor. This implements all global
@@ -168,6 +168,7 @@ public class Board extends JPanel {
 
         // disable human Player hand at start unless it's their turn
         if (game.getCurrentPlayerIndex() != 0) {
+
             enablePlayer1Hand(false);
         }
 
@@ -179,13 +180,19 @@ public class Board extends JPanel {
         timer.start();
     }
 
+    /******************************************************************
+     *
+     *****************************************************************/
     private void letsPlay() {
+
         timer = new Timer(1000, new ActionListener() {
+
             @Override
             public void actionPerformed(ActionEvent e) {
 
                 // Check for Stalemate
                 if (game.isStalemate()){
+
                     stalemateSeq();
                 }
 
@@ -195,11 +202,12 @@ public class Board extends JPanel {
                     // AI draws Tile
                     game.dumbAIDraw(game.getCurrentPlayer());
 
-                    // Check if AI or Player declare Mahjong off
-                    // of discard
+                    // Check if AI can declare Mahjong
                     if (game.isMahjong(game.getPlayerHand
                             (game.getCurrentPlayerIndex()),null)){
-                        String message = "An opponent has declared Mahjong. Sorry, you lose.";
+
+                        String message = "An opponent has declared " +
+                                "Mahjong. Sorry, you lose.";
                         JOptionPane.showMessageDialog(null, message);
                         enablePlayer1Hand(false);
                         timer.stop();
@@ -211,9 +219,11 @@ public class Board extends JPanel {
                     checkSeq();
 
                     if (game.getCurrentPlayerIndex() == 0) {
+
                         enablePlayer1Hand(true);
 
-                    }else{
+                    } else {
+
                         enablePlayer1Hand(false);
                     }
 
@@ -227,22 +237,26 @@ public class Board extends JPanel {
                     if (game.getCurrentPlayerIndex() == 0 && game
                             .getPlayerList(0).getHandTile().size()
                             != 14 && drawFlag){
+
                         game.draw(game.getPlayerList(0));
                         displayBoard();
 
-                        if (game.isMahjong(game.getPlayerHand(game.getCurrentPlayerIndex()),null)){
+                        if (game.isMahjong(game.getPlayerHand
+                                (game.getCurrentPlayerIndex()),null)){
 
                             // Player winning off of Mahjong
                             String message = "Do you wish to declare " +
                                     "Mahjong and win?";
 
                             String message2 = "Congratulations, you won";
-                            int mahjong = JOptionPane.showConfirmDialog(null,
-                                    message, "Claim Message", JOptionPane.YES_NO_OPTION);
+                            int mahjong = JOptionPane.showConfirmDialog
+                                    (null, message, "Claim Message",
+                                            JOptionPane.YES_NO_OPTION);
 
                             if (mahjong == JOptionPane.YES_OPTION){
 
-                                JOptionPane.showMessageDialog(null, message2);
+                                JOptionPane.showMessageDialog(null,
+                                        message2);
                                 enablePlayer1Hand(false);
                                 timer.stop();
                             }
@@ -253,9 +267,14 @@ public class Board extends JPanel {
                 }
             }
         });
+
     }
 
+    /******************************************************************
+     *
+     *****************************************************************/
     private void placePanels() {
+
         GridBagConstraints c = new GridBagConstraints();
 
         c.ipadx = 50;
@@ -311,24 +330,32 @@ public class Board extends JPanel {
     private void placeDrawPile() {
 
         for (int i = 0; i < 144; i++) {
+
             JButton temp = new JButton(null, tileBack);
             temp.setPreferredSize(new Dimension(25, 25));
             drawPile.add(temp);
         }
 
-        // add to drawPilePanel to make visible
+        // add JButton to drawPilePanel to make visible
         GridBagConstraints c = new GridBagConstraints();
         int index = 0;
+
         for (int row = 0; row < 22; row++) {
+
             for (int col = 0; col < 22; col++) {
+
                 if (row < 2 || row > 19) {
+
                     if (col > 1 && col < 20) {
+
                         c.gridx = col;
                         c.gridy = row;
                         drawPilePanel.add(drawPile.get((index)), c);
                         index++;
                     }
+
                 } else if (col < 2 || col > 19) {
+
                     c.gridx = col;
                     c.gridy = row;
                     drawPilePanel.add(drawPile.get((index)), c);
@@ -336,7 +363,6 @@ public class Board extends JPanel {
                 }
             }
         }
-
     }
 
     /******************************************************************
@@ -352,8 +378,8 @@ public class Board extends JPanel {
         int p3HandSize = game.getPlayerList(2).getHandTile().size();
         int p4HandSize = game.getPlayerList(3).getHandTile().size();
 
-
         for (int i = 0; i < p1HandSize; i++) {
+
             JButton temp = new JButton();
             temp.addActionListener(listener);
             p1Hand.add(temp);
@@ -370,6 +396,7 @@ public class Board extends JPanel {
         }
 
         for (int i = 0; i < p2HandSize; i++) {
+
             JButton temp = new JButton(tileBack);
             temp.setPreferredSize(new Dimension(25, 25));
             p2Hand.add(temp);
@@ -382,6 +409,7 @@ public class Board extends JPanel {
         }
 
         for (int i = 0; i < p3HandSize; i++) {
+
             JButton temp = new JButton(tileBack);
             temp.setPreferredSize(new Dimension(25, 25));
             p3Hand.add(temp);
@@ -394,6 +422,7 @@ public class Board extends JPanel {
         }
 
         for (int i = 0; i < p4HandSize; i++) {
+
             JButton temp = new JButton(tileBack);
             temp.setPreferredSize(new Dimension(25, 25));
             p4Hand.add(temp);
@@ -411,8 +440,9 @@ public class Board extends JPanel {
      * type that correctly represents the Tile. This method is used to
      * update JButtons across the Board to correctly represent the game
      * as it proceeds.
-     * @param tile a Tile object
-     * @return an image that correctly represents the Tile
+     *
+     * @param tile a Tile object.
+     * @return an image that correctly represents the Tile.
      *****************************************************************/
     private ImageIcon updatedImage(Tile tile) {
 
@@ -444,72 +474,120 @@ public class Board extends JPanel {
      * Defines all global ImageIcons.
      *****************************************************************/
     private void createIcons() {
-        // Sets the Image for circle tiles
-        circle1 = new ImageIcon("./src/MahjongCIS350/Images/circle1.jpg");
-        circle2 = new ImageIcon("./src/MahjongCIS350/Images/circle2.jpg");
-        circle3 = new ImageIcon("./src/MahjongCIS350/Images/circle3.jpg");
-        circle4 = new ImageIcon("./src/MahjongCIS350/Images/circle4.jpg");
-        circle5 = new ImageIcon("./src/MahjongCIS350/Images/circle5.jpg");
-        circle6 = new ImageIcon("./src/MahjongCIS350/Images/circle6.jpg");
-        circle7 = new ImageIcon("./src/MahjongCIS350/Images/circle7.jpg");
-        circle8 = new ImageIcon("./src/MahjongCIS350/Images/circle8.jpg");
-        circle9 = new ImageIcon("./src/MahjongCIS350/Images/circle9.jpg");
 
-        // Sets the Image for bamboo tiles
-        bamboo1 = new ImageIcon("./src/MahjongCIS350/Images/bamboo1.jpg");
-        bamboo2 = new ImageIcon("./src/MahjongCIS350/Images/bamboo2.jpg");
-        bamboo3 = new ImageIcon("./src/MahjongCIS350/Images/bamboo3.jpg");
-        bamboo4 = new ImageIcon("./src/MahjongCIS350/Images/bamboo4.jpg");
-        bamboo5 = new ImageIcon("./src/MahjongCIS350/Images/bamboo5.jpg");
-        bamboo6 = new ImageIcon("./src/MahjongCIS350/Images/bamboo6.jpg");
-        bamboo7 = new ImageIcon("./src/MahjongCIS350/Images/bamboo7.jpg");
-        bamboo8 = new ImageIcon("./src/MahjongCIS350/Images/bamboo8.jpg");
-        bamboo9 = new ImageIcon("./src/MahjongCIS350/Images/bamboo9.jpg");
+        // Sets the Image for circle Suit Tiles
+        circle1 = new ImageIcon
+                ("./src/MahjongCIS350/Images/circle1.jpg");
+        circle2 = new ImageIcon
+                ("./src/MahjongCIS350/Images/circle2.jpg");
+        circle3 = new ImageIcon
+                ("./src/MahjongCIS350/Images/circle3.jpg");
+        circle4 = new ImageIcon
+                ("./src/MahjongCIS350/Images/circle4.jpg");
+        circle5 = new ImageIcon
+                ("./src/MahjongCIS350/Images/circle5.jpg");
+        circle6 = new ImageIcon
+                ("./src/MahjongCIS350/Images/circle6.jpg");
+        circle7 = new ImageIcon
+                ("./src/MahjongCIS350/Images/circle7.jpg");
+        circle8 = new ImageIcon
+                ("./src/MahjongCIS350/Images/circle8.jpg");
+        circle9 = new ImageIcon
+                ("./src/MahjongCIS350/Images/circle9.jpg");
 
-        // Sets the Image for character tiles
-        character1 = new ImageIcon("./src/MahjongCIS350/Images/character1.jpg");
-        character2 = new ImageIcon("./src/MahjongCIS350/Images/character2.jpg");
-        character3 = new ImageIcon("./src/MahjongCIS350/Images/character3.jpg");
-        character4 = new ImageIcon("./src/MahjongCIS350/Images/character4.jpg");
-        character5 = new ImageIcon("./src/MahjongCIS350/Images/character5.jpg");
-        character6 = new ImageIcon("./src/MahjongCIS350/Images/character6.jpg");
-        character7 = new ImageIcon("./src/MahjongCIS350/Images/character7.jpg");
-        character8 = new ImageIcon("./src/MahjongCIS350/Images/character8.jpg");
-        character9 = new ImageIcon("./src/MahjongCIS350/Images/character9.jpg");
+        // Sets the Image for bamboo Suit Tiles
+        bamboo1 = new ImageIcon
+                ("./src/MahjongCIS350/Images/bamboo1.jpg");
+        bamboo2 = new ImageIcon
+                ("./src/MahjongCIS350/Images/bamboo2.jpg");
+        bamboo3 = new ImageIcon
+                ("./src/MahjongCIS350/Images/bamboo3.jpg");
+        bamboo4 = new ImageIcon
+                ("./src/MahjongCIS350/Images/bamboo4.jpg");
+        bamboo5 = new ImageIcon
+                ("./src/MahjongCIS350/Images/bamboo5.jpg");
+        bamboo6 = new ImageIcon
+                ("./src/MahjongCIS350/Images/bamboo6.jpg");
+        bamboo7 = new ImageIcon
+                ("./src/MahjongCIS350/Images/bamboo7.jpg");
+        bamboo8 = new ImageIcon
+                ("./src/MahjongCIS350/Images/bamboo8.jpg");
+        bamboo9 = new ImageIcon
+                ("./src/MahjongCIS350/Images/bamboo9.jpg");
 
-        // Sets the Image for flower tiles
-        flower1 = new ImageIcon("./src/MahjongCIS350/Images/flower1.jpg");
-        flower2 = new ImageIcon("./src/MahjongCIS350/Images/flower2.jpg");
-        flower3 = new ImageIcon("./src/MahjongCIS350/Images/flower3.jpg");
-        flower4 = new ImageIcon("./src/MahjongCIS350/Images/flower4.jpg");
-        flower5 = new ImageIcon("./src/MahjongCIS350/Images/flower5.jpg");
-        flower6 = new ImageIcon("./src/MahjongCIS350/Images/flower6.jpg");
-        flower7 = new ImageIcon("./src/MahjongCIS350/Images/flower7.jpg");
-        flower8 = new ImageIcon("./src/MahjongCIS350/Images/flower8.jpg");
+        // Sets the Image for character Suit Tiles
+        character1 = new ImageIcon
+                ("./src/MahjongCIS350/Images/character1.jpg");
+        character2 = new ImageIcon
+                ("./src/MahjongCIS350/Images/character2.jpg");
+        character3 = new ImageIcon
+                ("./src/MahjongCIS350/Images/character3.jpg");
+        character4 = new ImageIcon
+                ("./src/MahjongCIS350/Images/character4.jpg");
+        character5 = new ImageIcon
+                ("./src/MahjongCIS350/Images/character5.jpg");
+        character6 = new ImageIcon
+                ("./src/MahjongCIS350/Images/character6.jpg");
+        character7 = new ImageIcon
+                ("./src/MahjongCIS350/Images/character7.jpg");
+        character8 = new ImageIcon
+                ("./src/MahjongCIS350/Images/character8.jpg");
+        character9 = new ImageIcon
+                ("./src/MahjongCIS350/Images/character9.jpg");
 
-        // Sets the Image for dragon tiles
-        redDragon = new ImageIcon("./src/MahjongCIS350/Images/redDragon.jpg");
-        greenDragon = new ImageIcon("./src/MahjongCIS350/Images/greenDragon.jpg");
-        whiteDragon = new ImageIcon("./src/MahjongCIS350/Images/whiteDragon.jpg");
+        // Sets the Image for Flower Tiles
+        flower1 = new ImageIcon
+                ("./src/MahjongCIS350/Images/flower1.jpg");
+        flower2 = new ImageIcon
+                ("./src/MahjongCIS350/Images/flower2.jpg");
+        flower3 = new ImageIcon
+                ("./src/MahjongCIS350/Images/flower3.jpg");
+        flower4 = new ImageIcon
+                ("./src/MahjongCIS350/Images/flower4.jpg");
+        flower5 = new ImageIcon
+                ("./src/MahjongCIS350/Images/flower5.jpg");
+        flower6 = new ImageIcon
+                ("./src/MahjongCIS350/Images/flower6.jpg");
+        flower7 = new ImageIcon
+                ("./src/MahjongCIS350/Images/flower7.jpg");
+        flower8 = new ImageIcon
+                ("./src/MahjongCIS350/Images/flower8.jpg");
 
-        // Sets the Image for the wind tiles
-        eastWind = new ImageIcon("./src/MahjongCIS350/Images/eastWind.jpg");
-        southWind = new ImageIcon("./src/MahjongCIS350/Images/southWind.jpg");
-        westWind = new ImageIcon("./src/MahjongCIS350/Images/westWind.jpg");
-        northWind = new ImageIcon("./src/MahjongCIS350/Images/northWind.jpg");
+        // Sets the Image for Dragon Tiles
+        redDragon = new ImageIcon
+                ("./src/MahjongCIS350/Images/redDragon.jpg");
+        greenDragon = new ImageIcon
+                ("./src/MahjongCIS350/Images/greenDragon.jpg");
+        whiteDragon = new ImageIcon
+                ("./src/MahjongCIS350/Images/whiteDragon.jpg");
 
-        tileBack = new ImageIcon("./src/MahjongCIS350/Images/tileBack.jpg");
+        // Sets the Image for the Wind Tiles
+        eastWind = new ImageIcon
+                ("./src/MahjongCIS350/Images/eastWind.jpg");
+        southWind = new ImageIcon
+                ("./src/MahjongCIS350/Images/southWind.jpg");
+        westWind = new ImageIcon
+                ("./src/MahjongCIS350/Images/westWind.jpg");
+        northWind = new ImageIcon
+                ("./src/MahjongCIS350/Images/northWind.jpg");
+
+        // Sets the Image for the back of a Tile
+        tileBack = new ImageIcon
+                ("./src/MahjongCIS350/Images/tileBack.jpg");
     }
 
     /******************************************************************
      * This method returns an image that represents a Suit Tile with a
      * Circle design of the indicated value.
-     * @param value the numerical value of a Suit Tile (1-9)
-     * @return an image that correctly matches the indicated value,
-     *         will return tileBack if there is an error
+     *
+     * @param value the numerical value of a Suit Tile (1-9).
+     * @return an Image that correctly matches the indicated value,
+     *         will return tileBack if there is an error.
      *****************************************************************/
     private ImageIcon getCircleImage(int value) {
+
         switch (value) {
+
             case 1:
                 return circle1;
             case 2:
@@ -535,12 +613,15 @@ public class Board extends JPanel {
     /******************************************************************
      * This method returns an image that represents a Suit Tile with a
      * Bamboo design of the indicated value.
-     * @param value the numerical value of a Suit Tile (1-9)
-     * @return an image that correctly matches the indicated value,
-     *         will return tileBack if there is an error
+     *
+     * @param value the numerical value of a Suit Tile (1-9).
+     * @return an Image that correctly matches the indicated value,
+     *         will return tileBack if there is an error.
      *****************************************************************/
     private ImageIcon getBambooImage(int value) {
+
         switch (value) {
+
             case 1:
                 return bamboo1;
             case 2:
@@ -560,18 +641,22 @@ public class Board extends JPanel {
             case 9:
                 return bamboo9;
         }
+
         return tileBack;
     }
 
     /******************************************************************
-     * This method returns an image that represents a Suit Tile with a
+     * This method returns an Image that represents a Suit Tile with a
      * Character design of the indicated value.
-     * @param value the numerical value of a Suit Tile (1-9)
-     * @return an image that correctly matches the indicated value,
-     *         will return tileBack if there is an error
+     *
+     * @param value the numerical value of a Suit Tile (1-9).
+     * @return an Image that correctly matches the indicated value,
+     *         will return tileBack if there is an error.
      *****************************************************************/
     private ImageIcon getCharacterImage(int value) {
+
         switch (value) {
+
             case 1:
                 return character1;
             case 2:
@@ -591,18 +676,22 @@ public class Board extends JPanel {
             case 9:
                 return character9;
         }
+
         return tileBack;
     }
 
     /******************************************************************
      * This method returns an image that represents a Dragon Tile
      * of the indicated color.
-     * @param color the color of a Dragon Tile (Red, Green, or White)
-     * @return an image that correctly matches the indicated color,
-     *         will return tileBack if there is an error
+     *
+     * @param color the color of a Dragon Tile (Red, Green, or White).
+     * @return an Image that correctly matches the indicated color,
+     *         will return tileBack if there is an error.
      *****************************************************************/
     private ImageIcon getDragonImage(String color) {
+
         switch (color) {
+
             case "Red":
                 return redDragon;
             case "Green":
@@ -610,19 +699,23 @@ public class Board extends JPanel {
             case "White":
                 return whiteDragon;
         }
+
         return tileBack;
     }
 
     /******************************************************************
-     * This method returns an image that represents a Wind Tile with a
+     * This method returns an Image that represents a Wind Tile
      * of the indicated direction.
+     *
      * @param direction the cardinal direction of a Wind Tile (east,
-     *                  south, west, or north)
-     * @return an image that correctly matches the indicated direction,
-     *         will return tileBack if there is an error
+     *                  south, west, or north).
+     * @return an Image that correctly matches the indicated direction,
+     *         will return tileBack if there is an error.
      *****************************************************************/
     private ImageIcon getWindImage(String direction) {
+
         switch (direction) {
+
             case "East":
                 return eastWind;
             case "South":
@@ -632,18 +725,22 @@ public class Board extends JPanel {
             case "North":
                 return northWind;
         }
+
         return tileBack;
     }
 
     /******************************************************************
-     * This method returns an image that represents a Flower Tile with
+     * This method returns an Image that represents a Flower Tile with
      * the indicated number.
-     * @param number the number of a Flower Tile (1-8)
-     * @return an image that correctly matches the indicated number,
-     *         will return tileBack if there is an error
+     *
+     * @param number the number of a Flower Tile (1-8).
+     * @return an Image that correctly matches the indicated number,
+     *         will return tileBack if there is an error.
      *****************************************************************/
     private ImageIcon getFlowerImage(int number) {
+
         switch (number) {
+
             case 1:
                 return flower1;
             case 2:
@@ -661,17 +758,20 @@ public class Board extends JPanel {
             case 8:
                 return flower8;
         }
+
         return tileBack;
     }
 
     /******************************************************************
      * This method sets p1Hand JButtons to be enabled or disabled
      * depending on whether it is p1's turn or not.
-     * @param condition true if it is p1's turn, otherwise false
+     *
+     * @param condition true if it is p1's turn, otherwise false.
      *****************************************************************/
     private void enablePlayer1Hand(boolean condition) {
 
         for (int i = 0; i < p1Hand.size(); i++) {
+
             p1Hand.get(i).setEnabled(condition);
         }
     }
@@ -704,7 +804,7 @@ public class Board extends JPanel {
 
         updateDiscardPile(discardPileSize);
 
-        // update label for Player turn or game reset
+        // update Label for Player turn or game reset
         playerTurn.setText(game.getCurrentPlayer()
                 .getDirection() + "'s Turn");
         p1Direction.setText(game.getPlayerList(0).getDirection());
@@ -713,8 +813,14 @@ public class Board extends JPanel {
         repaint();
     }
 
+    /******************************************************************
+     *
+     * @param discardPileSize
+     *****************************************************************/
     private void updateDiscardPile(int discardPileSize) {
+
         while (discardPile.size() < discardPileSize) {
+
             JButton temp = new JButton();
             temp.setPreferredSize(new Dimension(30, 35));
             discardPile.add(temp);
@@ -725,17 +831,27 @@ public class Board extends JPanel {
         }
 
         while (discardPile.size() > discardPileSize){
+
             discardPilePanel.remove(discardPile.size() - 1);
             discardPile.remove(discardPile.size() - 1);
         }
     }
 
+    /******************************************************************
+     *
+     * @param drawPileSize
+     *****************************************************************/
     private void updateDrawPile(int drawPileSize) {
+
         if (drawPile.size() > drawPileSize){
+
             drawPilePanel.remove(drawPile.get(drawPile.size() - 1));
             drawPile.remove(drawPile.get(drawPile.size() - 1));
-        }else if (drawPile.size() < drawPileSize){
+
+        } else if (drawPile.size() < drawPileSize){
+
             while(drawPile.size() < drawPileSize){
+
                 JButton temp = new JButton(tileBack);
                 drawPile.add(temp);
                 drawPilePanel.add(temp);
@@ -743,8 +859,14 @@ public class Board extends JPanel {
         }
     }
 
+    /******************************************************************
+     *
+     * @param p4SetSize
+     *****************************************************************/
     private void updateP4SetPile(int p4SetSize) {
+
         while (p4Sets.size() < p4SetSize) {
+
             JButton temp = new JButton();
             temp.setPreferredSize(new Dimension(25, 25));
             p4Sets.add(temp);
@@ -756,17 +878,26 @@ public class Board extends JPanel {
         }
 
         while (p4Sets.size() > p4SetSize){
+
             p4SetPanel.remove(p4Sets.size() - 1);
             p4Sets.remove(p4Sets.size() - 1);
         }
 
         for (int i = 0; i < p4SetSize; i++) {
-            p4Sets.get(i).setIcon(updatedImage(game.getPlayerList(3).getSetTile(i)));
+
+            p4Sets.get(i).setIcon(updatedImage(game.getPlayerList(3)
+                    .getSetTile(i)));
         }
     }
 
+    /******************************************************************
+     *
+     * @param p3SetSize
+     *****************************************************************/
     private void updateP3SetPile(int p3SetSize) {
+
         while (p3Sets.size() < p3SetSize) {
+
             JButton temp = new JButton();
             temp.setPreferredSize(new Dimension(25, 25));
             p3Sets.add(temp);
@@ -774,17 +905,26 @@ public class Board extends JPanel {
         }
 
         while (p3Sets.size() > p3SetSize){
+
             p3SetPanel.remove(p3Sets.size() - 1);
             p3Sets.remove(p3Sets.size() - 1);
         }
 
         for (int i = 0; i < p3SetSize; i++) {
-            p3Sets.get(i).setIcon(updatedImage(game.getPlayerList(2).getSetTile(i)));
+
+            p3Sets.get(i).setIcon(updatedImage(game.getPlayerList(2)
+                    .getSetTile(i)));
         }
     }
 
+    /******************************************************************
+     *
+     * @param p2SetSize
+     *****************************************************************/
     private void updateP2SetPile(int p2SetSize) {
+
         while (p2Sets.size() < p2SetSize) {
+
             JButton temp = new JButton();
             temp.setPreferredSize(new Dimension(25, 25));
             p2Sets.add(temp);
@@ -796,17 +936,26 @@ public class Board extends JPanel {
         }
 
         while (p2Sets.size() > p2SetSize){
+
             p2SetPanel.remove(p2Sets.size() - 1);
             p2Sets.remove(p2Sets.size() - 1);
         }
 
         for (int i = 0; i < p2SetSize; i++) {
-            p2Sets.get(i).setIcon(updatedImage(game.getPlayerList(1).getSetTile(i)));
+
+            p2Sets.get(i).setIcon(updatedImage(game.getPlayerList(1)
+                    .getSetTile(i)));
         }
     }
 
+    /******************************************************************
+     *
+     * @param p1SetSize
+     *****************************************************************/
     private void updateP1SetPile(int p1SetSize) {
+
         while (p1Sets.size() < p1SetSize) {
+
             JButton temp = new JButton();
             temp.setPreferredSize(new Dimension(25, 25));
             p1Sets.add(temp);
@@ -814,38 +963,56 @@ public class Board extends JPanel {
         }
 
         while (p1Sets.size() > p1SetSize){
+
             p1SetPanel.remove(p1Sets.size() - 1);
             p1Sets.remove(p1Sets.size() - 1);
         }
 
         for (int i = 0; i < p1SetSize; i++) {
-            p1Sets.get(i).setIcon(updatedImage(game.getPlayerList(0).getSetTile(i)));
+
+            p1Sets.get(i).setIcon(updatedImage(game.getPlayerList(0)
+                    .getSetTile(i)));
         }
     }
 
+    /******************************************************************
+     *
+     * @param p1HandSize
+     *****************************************************************/
     private void updateP1Hand(int p1HandSize) {
+
         while (p1Hand.size() < p1HandSize){
+
             JButton temp = new JButton();
             temp.setPreferredSize(new Dimension(50, 50));
             temp.addActionListener(listener);
             p1Hand.add(temp);
             p1HandPanel.add(p1Hand.get(p1Hand.size() - 1));
-            p1Hand.get(p1Hand.size() - 1).setBorder(BorderFactory.createLineBorder(Color.BLUE, 5));
+            p1Hand.get(p1Hand.size() - 1).setBorder(BorderFactory
+                    .createLineBorder(Color.BLUE, 5));
         }
 
         while(p1Hand.size() > p1HandSize){
+
             p1HandPanel.remove(p1Hand.size() - 1);
             p1Hand.remove(p1Hand.size() - 1);
         }
 
         for (int i = 0; i < p1HandSize; i++) {
-            p1Hand.get(i).setIcon(updatedImage(game.getPlayerList(0).getTileFromHand(i)));
+
+            p1Hand.get(i).setIcon(updatedImage(game.getPlayerList(0)
+                    .getTileFromHand(i)));
         }
     }
 
-    // This method checks all the players and returns the index if a
-    // player has a mahjong, else it returns a -1 for when a tile
-    // is discarded
+    /******************************************************************
+     * This method checks all the Players and returns a Player who has
+     * Mahjong.
+     *
+     * @return Player's index in Game's playerList if a player has a
+     *         Mahjong, else it returns a -1 for when a Tile is
+     *         discarded.
+     *****************************************************************/
     private int isMahjongPlayerDiscard(){
 
         if (game.getDiscardPile().size() == 0){
@@ -855,7 +1022,8 @@ public class Board extends JPanel {
 
         for (int i = 0; i < 4; i++){
 
-            if (game.isMahjong(game.getPlayerHand((i)), game.getRecentDiscard())){
+            if (game.isMahjong(game.getPlayerHand((i)), game
+                    .getRecentDiscard())){
 
                 return i;
             }
@@ -864,6 +1032,9 @@ public class Board extends JPanel {
         return -1;
     }
 
+    /******************************************************************
+     *
+     *****************************************************************/
     private void stalemateSeq(){
 
         enablePlayer1Hand(false);
@@ -875,6 +1046,10 @@ public class Board extends JPanel {
         drawFlag = false;
     }
 
+    /******************************************************************
+     *
+     * @param disTile
+     *****************************************************************/
     private void chiSeq(Suit disTile){
 
         String message = "Claim chi of tile " +
@@ -892,7 +1067,13 @@ public class Board extends JPanel {
             drawFlag = false;
         }
     }
+
+    /******************************************************************
+     *
+     * @param disTile
+     *****************************************************************/
     private void pongSeq(Suit disTile){
+
         String message = "Claim pong of tile " +
                 disTile.getValue() + " " +
                 disTile.getDesign() + "?";
@@ -902,13 +1083,20 @@ public class Board extends JPanel {
 
         if (takePong == JOptionPane.YES_OPTION){
 
-            game.takePong(game.getPlayerList(0),game.getRecentDiscard());
+            game.takePong(game.getPlayerList(0),game
+                    .getRecentDiscard());
             displayBoard();
             game.setNextCurrentPlayer(0);
             drawFlag = false;
         }
     }
+
+    /******************************************************************
+     *
+     * @param disTile
+     *****************************************************************/
     private void kongSeq(Suit disTile){
+
         String message = "Claim Kong of tile " +
                 disTile.getValue() + " " +
                 disTile.getDesign() + "?";
@@ -918,13 +1106,17 @@ public class Board extends JPanel {
 
         if (takeKong == JOptionPane.YES_OPTION){
 
-            game.takeKong(game.getPlayerList(0), game.getRecentDiscard());
+            game.takeKong(game.getPlayerList(0), game
+                    .getRecentDiscard());
             displayBoard();
             game.setNextCurrentPlayer(0);
             drawFlag = false;
         }
     }
 
+    /******************************************************************
+     *
+     *****************************************************************/
     private void mahjongSeq(){
 
         // Player can claim Mahjong
@@ -933,7 +1125,7 @@ public class Board extends JPanel {
             String message = "Do you wish to declare " +
                     "Mahjong and win?";
 
-            String message2 = "Congratulations, you won";
+            String message2 = "Congratulations, you won!";
             int mahjong = JOptionPane.showConfirmDialog(null,
                     message, "Claim Message", JOptionPane.YES_NO_OPTION);
 
@@ -947,7 +1139,8 @@ public class Board extends JPanel {
         }
 
         else{
-            String message = "An oppoenent has declared Mahjong. Sorry, You Lose.";
+
+            String message = "An opponent has declared Mahjong. Sorry, you lose.";
             JOptionPane.showMessageDialog(null, message);
             enablePlayer1Hand(false);
             timer.stop();
@@ -955,22 +1148,28 @@ public class Board extends JPanel {
         }
     }
 
+    /******************************************************************
+     *
+     *****************************************************************/
     private void checkSeq(){
 
         displayBoard();
 
-        // Check for if AI or player mahjong off of discard
+        // Check for if AI or human Player Mahjong off of discard
         if (isMahjongPlayerDiscard() != -1){
 
             mahjongSeq();
         }
 
-        if (game.isKong(game.getPlayerHand(0), game.getRecentDiscard()) && drawFlag){
+        if (game.isKong(game.getPlayerHand(0), game.getRecentDiscard())
+                && drawFlag){
 
             kongSeq((Suit)game.getRecentDiscard());
         }
+
         // Check for pongs that can be claimed
-        if (game.isPong(game.getPlayerHand(0), game.getRecentDiscard()) && drawFlag){
+        if (game.isPong(game.getPlayerHand(0), game.getRecentDiscard())
+                && drawFlag){
 
             pongSeq((Suit)game.getRecentDiscard());
         }
@@ -995,9 +1194,11 @@ public class Board extends JPanel {
      * A class within Board that handles action listeners
      *****************************************************************/
     private class listener implements ActionListener {
+
         public void actionPerformed(ActionEvent event) {
 
-            int p1HandSize = game.getPlayerList(0).getHandTile().size();
+            int p1HandSize = game.getPlayerList(0).getHandTile()
+                    .size();
 
             // when Tile is selected for discard, only p1 can do this
             for (int i = 0; i < p1HandSize; i++) {
@@ -1007,8 +1208,11 @@ public class Board extends JPanel {
 
                     // are you sure you want to discard?
                     int discard = JOptionPane.showConfirmDialog(null,
-                            "Discard Tile?", "Discard", JOptionPane.YES_NO_OPTION);
+                            "Discard Tile?", "Discard",
+                            JOptionPane.YES_NO_OPTION);
+
                     if (discard == JOptionPane.YES_OPTION) {
+
                         game.discard(game.getPlayerList(0), i);
 
                         JButton temp = new JButton(null, p1Hand.get(i).getIcon());
@@ -1022,7 +1226,9 @@ public class Board extends JPanel {
                         drawFlag = true;
                         displayBoard();
                         break;
+
                     } else {
+
                         break;
                     }
                 }
@@ -1033,6 +1239,7 @@ public class Board extends JPanel {
 //            }
         }
     }
+
 }
 
 
