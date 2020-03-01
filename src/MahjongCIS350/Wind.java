@@ -1,11 +1,11 @@
 package MahjongCIS350;
 
-/**********************************************************************
+/***********************************************************************
  * This is the class for any Wind Tile in the game of Mahjong.
  *
  * @Authors: Wayne Chen, Jillian Huizenga, Chris Paul, Aron Zhao
  * @Version: 2/28/2020
- *********************************************************************/
+ **********************************************************************/
 public class Wind extends Tile{
 
     /** The direction of the Wind Tile **/

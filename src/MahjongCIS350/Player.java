@@ -186,7 +186,7 @@ public class Player{
      * This method gets the number of points the player has.
      *
      * @return The number of points the player has.
-     *******************************************************************/
+     ******************************************************************/
     public int getPoint() {
         return point;
     }
