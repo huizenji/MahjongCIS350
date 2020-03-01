@@ -148,8 +148,7 @@ public class Game {
      * Whenever Player draws a Tile, if it's a point Tile then score
      * increase by 1. If there's a point Tile in hand, also increase
      * the score by 1.
-     * @param p
-     * @return score
+     * @param p The player.
      ******************************************************************/
     public void pile_score(Player p){
 
@@ -169,7 +168,7 @@ public class Game {
     /*******************************************************************
      * A getter function for individual Tiles.
      *
-     * @param index
+     * @param index Index of the tile.
      * @return Tile at indicated index
      ******************************************************************/
     public Tile getTile(int index) {
@@ -396,10 +395,10 @@ public class Game {
     /*******************************************************************
      * To check if there is chi for a specific Player.
      *
-     * @param pl
+     * @param pl The player that is being checked.
      * @param check the checked_Suite should belongs to the last
      *              player of the current player
-     * @return
+     * @return True if the player can claim a chi.
      ******************************************************************/
     public boolean isChi(Player pl, Suit check) {
 
@@ -938,10 +937,11 @@ public class Game {
     /******************************************************************
      * This method compares 3 Suit Tiles and determines if they are
      * consecutive and belong to the same design of Suit.
-     * @param tile1
-     * @param tile2
-     * @param tile3
-     * @return
+     * @param tile1 Tile 1.
+     * @param tile2 Tile 2.
+     * @param tile3 Tile 3.
+     * @return True if the tiles are the same suit and are consecutive
+     *         with respective to each other.
      *****************************************************************/
     private boolean compareConsecutiveSuits(Suit tile1, Suit tile2,
                                             Suit tile3) {
@@ -1296,8 +1296,6 @@ public class Game {
 
     /******************************************************************
      * This method sets the next starting player.
-     *
-     * @return The next starting player.
      *****************************************************************/
     private void setNextStartingPlayer() {
 

@@ -1012,8 +1012,9 @@ public class Board extends JPanel {
     }
 
     /******************************************************************
+     * This method updates the players hand.
      *
-     * @param p1HandSize
+     * @param p1HandSize The hand of the first player.
      *****************************************************************/
     private void updateP1Hand(int p1HandSize) {
 
