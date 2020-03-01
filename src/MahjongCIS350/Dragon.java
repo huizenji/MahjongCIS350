@@ -42,5 +42,4 @@ public class Dragon extends Tile{
 
         this.color = color;
     }
-
 }

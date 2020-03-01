@@ -31,5 +31,4 @@ public class Wind extends Tile{
 
         return direction;
     }
-
 }

@@ -30,5 +30,4 @@ public class Tile {
 
         return type;
     }
-
 }

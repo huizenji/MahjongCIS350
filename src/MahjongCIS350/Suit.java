@@ -78,5 +78,4 @@ public class Suit extends Tile {
 
         this.value = value;
     }
-
 }

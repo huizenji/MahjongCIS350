@@ -22,11 +22,11 @@ public class Flower extends Tile {
 
     /******************************************************************
      * A method that returns the Flower Tile's number.
+     *
      * @return number of Flower Tile.
      *****************************************************************/
     public int getNumber() {
 
         return number;
     }
-
 }

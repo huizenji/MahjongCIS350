@@ -353,18 +353,6 @@ public class Game {
     }
 
     /******************************************************************
-     *
-     *****************************************************************/
-    private void sortSet(){
-
-        for (int i = 0; i < 4; i++){
-
-            playerList[i].setSetPile(autoSort(playerList[i]
-                    .getSetPile()));
-        }
-    }
-
-    /******************************************************************
      * This method determines if the Player has a kong in their hand.
      *
      * @param pl The player hands that is being checked.
