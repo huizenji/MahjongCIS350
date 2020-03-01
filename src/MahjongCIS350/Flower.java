@@ -1,23 +1,32 @@
 package MahjongCIS350;
 
+/**********************************************************************
+ * This class contains the information on the Dragon Tile in Mahjong.
+ *
+ * @Authors: Wayne Chen, Jillian Huizenga, Chris Paul, Xianghe Zhao
+ * @Version: 2/28/2020
+ *********************************************************************/
 public class Flower extends Tile {
 
-    // interact with GUI
+    /** The number of a Flower Tile to determine Image **/
     int number;
-    /*******************************************************************
-     * This is the constructor for the Tile class. Sets the tile to
-     * be face down at the start (false).
-     *******************************************************************/
+
+    /******************************************************************
+     * This is the constructor for the Tile class.
+     *****************************************************************/
     public Flower(int num) {
+
         super("Flower");
         number = num;
     }
 
+    /******************************************************************
+     * A method that returns the Flower Tile's number.
+     * @return number of Flower Tile.
+     *****************************************************************/
     public int getNumber() {
+
         return number;
     }
 
-    public void setNumber(int number) {
-        this.number = number;
-    }
 }

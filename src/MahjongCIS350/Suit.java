@@ -1,20 +1,23 @@
 package MahjongCIS350;
 
-/***********************************************************************
- * This is the class for any suite tiles in mahjong. This class covers
- * all the suite tiles, bamboo, circle, character.
+/**********************************************************************
+ * This is the class for all Suit Tiles in Mahjong (Bamboo, Circle,
+ * Character)
  *
- * @Authors: Jillian Huizenga, Wayne Chen, Aron Zhao
- * @Version: 1/21/2020
- **********************************************************************/
+ * @Authors: Wayne Chen, Jillian Huizenga, Chris Paul, Aron Zhao
+ * @Version: 2/28/2020
+ *********************************************************************/
 public class Suit extends Tile {
 
-    /** Type of suite tile design it is **/
+    /** Type of Suit Tile design **/
     private String design;
 
-    /** Numerical value of the tile **/
+    /** Numerical value of the Suit Tile **/
     private int value;
 
+    /******************************************************************
+     * This is the base constructor of the Suit class.
+     *****************************************************************/
     public Suit() {
 
         super("Suit");
@@ -22,15 +25,13 @@ public class Suit extends Tile {
         this.value = 0;
     }
 
-
-
-    /*******************************************************************
-     * Constructor for a suite tile.
+    /******************************************************************
+     * This is the constructor for a Suit Tile with parameters.
      *
-     * @param design Design of the tile, Circle, Bamboo
-     *               Char.
-     * @param value What is the value of the Tile.
-     ******************************************************************/
+     * @param design design of the tile (Circle, Bamboo
+     *               Character).
+     * @param value the value of the Tile.
+     *****************************************************************/
     public Suit(String design, int value) {
 
         super("Suit");
@@ -38,39 +39,44 @@ public class Suit extends Tile {
         this.value = value;
     }
 
-    /*******************************************************************
-     * Method gets the design of the tile.
+    /******************************************************************
+     * Method to return the design of the Tile.
      *
-     * @return design of the tile, circle, char, or bamboo
-     ******************************************************************/
+     * @return design of the Tile (Circle, Character, or Bamboo)
+     *****************************************************************/
     public String getDesign() {
+
         return design;
     }
 
-    /*******************************************************************
-     * Method sets the design of the tile.
+    /******************************************************************
+     * Method that sets the design of the Tile.
      *
-     * @param design Tupe of design for the tile.
-     ******************************************************************/
+     * @param design Type of design for the Tile.
+     *****************************************************************/
     public void setDesign(String design) {
+
         this.design = design;
     }
 
-    /*******************************************************************
-     * This method gets the value of the suite tile.
+    /******************************************************************
+     * This method gets the value of the Suit Tile.
      *
-     * @return Value of the suite tile.
-     ******************************************************************/
+     * @return Value of the Suit Tile.
+     *****************************************************************/
     public int getValue() {
+
         return value;
     }
 
-    /*******************************************************************
-     * This method sets the value of the suite tile.
+    /******************************************************************
+     * This method sets the value of the Suit Tile.
      *
-     * @param value Value of the suite tiles.
-     ******************************************************************/
+     * @param value Value of the Suit Tile.
+     *****************************************************************/
     public void setValue(int value) {
+
         this.value = value;
     }
+
 }
