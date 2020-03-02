@@ -300,7 +300,9 @@ public class Game {
     }
 
     /*******************************************************************
-     *
+     * If a Player draws a point Tile, then the Tile is moved to their
+     * set pile and they draw a new Tile to replace it. This is done
+     * until all Tiles in a Player's hand are Suits.
      ******************************************************************/
     private void replacePointTile() {
 
