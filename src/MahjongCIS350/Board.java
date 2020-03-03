@@ -30,7 +30,7 @@ public class Board extends JPanel {
     /** Represents all Tiles in the Player's set pile **/
     private ArrayList<JButton> p1Sets, p2Sets, p3Sets, p4Sets;
 
-    /** The Jbutton for the reset button **/
+    /** The JButton for the reset button **/
     //private JButton resetBtn;
 
     /** Displays all JButtons in drawPile **/

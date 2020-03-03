@@ -9,25 +9,25 @@ import java.util.ArrayList;
  * @Authors: Wayne Chen, Jillian Huizenga, Chris Paul, Aron Zhao
  * @Version: 2/28/2020
  **********************************************************************/
-public class Player{
+public class Player {
 
-    /** Player tiles that is in his or her hand **/
+    /** Player tiles that is in his or her hand. **/
     private ArrayList<Tile> handTile;
 
-    /** Player tiles that is in his or her hand **/
+    /** Player tiles that is in his or her hand. **/
     private ArrayList<Tile> setPile;
 
-    /** The direction of the Player **/
+    /** The direction of the Player. **/
     private String direction;
 
-    /** The total number of points for the player **/
+    /** The total number of points for the player. **/
     private int point;
 
     /*******************************************************************
      * This is a constructor that instantiates the hand, setpile , and
      * the direction of the player as well as set the point total to 0.
      ******************************************************************/
-    public Player(){
+    public Player() {
 
         handTile = new ArrayList<Tile>();
         this.setPile = new ArrayList<Tile>();
@@ -52,14 +52,16 @@ public class Player{
     /*******************************************************************
      * This method clears the hand of all tiles.
      ******************************************************************/
-    public void clearHandPile(){
+    public void clearHandPile() {
+
         handTile.clear();
     }
 
     /*******************************************************************
      * This method clears the setpile of all tiles.
      ******************************************************************/
-    public void clearSetPile(){
+    public void clearSetPile() {
+
         setPile.clear();
     }
 
@@ -68,11 +70,11 @@ public class Player{
      *
      * @param t The tile that is being added to the player's hand.
      ******************************************************************/
-    public void addTile(Tile t){
+    public void addTile(Tile t) {
 
-        if(t == null){
-            throw new NullPointerException("No such type of tile, " +
-                    "can't be added");
+        if (t == null) {
+            throw new NullPointerException("No such type of tile, "
+                    + "can't be added");
         }
         handTile.add(t);
     }
@@ -82,9 +84,9 @@ public class Player{
      *
      * @param t The tile that is being added to the player's setPile.
      ******************************************************************/
-    public void addTileSet(Tile t){
+    public void addTileSet(Tile t) {
 
-        if (t == null){
+        if (t == null) {
 
             throw new NullPointerException("No such type of tile," +
                     " can't be added");
@@ -100,7 +102,8 @@ public class Player{
      ******************************************************************/
     public void removeTileSet(int index){
 
-        if(index < 0 || index >= handTile.size()){
+        if (index < 0 || index >= handTile.size()){
+
             throw new IllegalArgumentException("Invalid position: " +
                     index);
         }
@@ -125,6 +128,7 @@ public class Player{
      * @return The tile of located at the specific index.
      ******************************************************************/
     public Tile getTileFromHand(int index){
+
         return handTile.get(index);
     }
 
