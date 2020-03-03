@@ -6,18 +6,18 @@ package MahjongCIS350;
  * @Authors: Wayne Chen, Jillian Huizenga, Chris Paul, Xianghe Zhao
  * @Version: 2/28/2020
  **********************************************************************/
-public class Dragon extends Tile{
+public class Dragon extends Tile {
 
-    /** Color of the Dragon Tile **/
+    /** Color of the Dragon Tile. **/
     private String color;
 
-    /*******************************************************************
+    /*******************************************************************`
      * This ia a constructor that creates for the Dragon class. This
      * only ask for the color of the Dragon.
      *
      * @param color The color of the Dragon tile.
      ******************************************************************/
-    public Dragon(String color) {
+    public Dragon(final String color) {
 
         super("Dragon");
         this.color = color;
@@ -38,7 +38,7 @@ public class Dragon extends Tile{
      *
      * @param color color of the Dragon Tile.
      ******************************************************************/
-    public void setColor(String color) {
+    public void setColor(final String color) {
 
         this.color = color;
     }

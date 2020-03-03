@@ -15,79 +15,78 @@ import java.util.*;
  **********************************************************************/
 public class Board extends JPanel {
 
-    /** Holds and gives access to all game information **/
+    /** Holds and gives access to all game information. **/
     private Game game;
 
-    /** Represents all Tiles that are not in play **/
+    /** Represents all Tiles that are not in play. **/
     private ArrayList<JButton> drawPile;
 
-    /** Represents all Tiles that have been discarded **/
+    /** Represents all Tiles that have been discarded. **/
     private ArrayList<JButton> discardPile;
 
-    /** Represents all Tiles in the Player's hand **/
+    /** Represents all Tiles in the Player's hand. **/
     private ArrayList<JButton> p1Hand, p2Hand, p3Hand, p4Hand;
 
-    /** Represents all Tiles in the Player's set pile **/
+    /** Represents all Tiles in the Player's set pile. **/
     private ArrayList<JButton> p1Sets, p2Sets, p3Sets, p4Sets;
 
-    /** The JButton for the reset button **/
-    //private JButton resetBtn;
+    /** The JButton for the reset button. **/
+    private JButton resetBtn;
 
-    /** Displays all JButtons in drawPile **/
+    /** Displays all JButtons in drawPile. **/
     private JPanel drawPilePanel;
 
-    /** Displays all JButtons in discardPile **/
+    /** Displays all JButtons in discardPile. **/
     private JPanel discardPilePanel;
 
-    /** Displays all JButtons in the Player's hand **/
+    /** Displays all JButtons in the Player's hand. **/
     private JPanel p1HandPanel, p2HandPanel, p3HandPanel, p4HandPanel;
 
-    /** Displays all JButtons in the Player's set pile **/
+    /** Displays all JButtons in the Player's set pile. **/
     private JPanel p1SetPanel, p2SetPanel, p3SetPanel, p4SetPanel;
 
-    /** Displays all JPanels **/
+    /** Displays all JPanels. **/
     private JLayeredPane gameBoard;
 
-    /** Displays which Player is currently taking their turn **/
+    /** Displays which Player is currently taking their turn. **/
     private JLabel playerTurn;
 
-    /** Displays the direction of the human Player **/
+    /** Displays the direction of the human Player. **/
     private JLabel p1Direction;
 
-    /** Tile image of type Suit with Circle design **/
+    /** Tile image of type Suit with Circle design. **/
     private ImageIcon circle1, circle2, circle3, circle4, circle5,
             circle6, circle7, circle8, circle9;
 
-    /** Tile image of type Suit with Bamboo design **/
+    /** Tile image of type Suit with Bamboo design. **/
     private ImageIcon bamboo1, bamboo2, bamboo3, bamboo4, bamboo5,
             bamboo6, bamboo7, bamboo8, bamboo9;
 
-    /** Tile image of type Suit with Character design **/
+    /** Tile image of type Suit with Character design. **/
     private ImageIcon character1, character2, character3, character4,
             character5, character6, character7, character8, character9;
 
-    /** Tile image of type Flower **/
+    /** Tile image of type Flower. **/
     private ImageIcon flower1, flower2, flower3, flower4, flower5,
             flower6, flower7, flower8;
 
-    /** Tile image of type Dragon **/
+    /** Tile image of type Dragon. **/
     private ImageIcon redDragon, greenDragon, whiteDragon;
 
-    /** Tile image of type Wind **/
+    /** Tile image of type Wind. **/
     private ImageIcon eastWind, southWind, westWind, northWind;
 
-    /** Tile image for face-down Tiles **/
+    /** Tile image for face-down Tiles. **/
     private ImageIcon tileBack;
 
-    /** Action Listener **/
+    /** Action Listener. **/
     private listener listener;
 
-    /** AI turn duration **/
+    /** AI turn duration. **/
     private Timer timer;
 
-    /** Determines if a Player should draw a Tile from drawPile **/
+    /** Determines if a Player should draw a Tile from drawPile. **/
     private boolean drawFlag = true;
-
 
     /*******************************************************************
      * This is the Board class constructor. This implements all global
@@ -168,9 +167,9 @@ public class Board extends JPanel {
         listener = new listener();
 
         // create reset button
-//        resetBtn = new JButton("Reset Game");
-//        resetBtn.addActionListener(listener);
-//        gameBoard.add(resetBtn);
+        resetBtn = new JButton("Reset Game");
+        resetBtn.addActionListener(listener);
+        gameBoard.add(resetBtn);
 
         placeDrawPile();
         dealPlayerTiles();
@@ -198,10 +197,10 @@ public class Board extends JPanel {
         timer = new Timer(1000, new ActionListener() {
 
             @Override
-            public void actionPerformed(ActionEvent e) {
+            public void actionPerformed(final ActionEvent e) {
 
                 // Check for Stalemate
-                if (game.isStalemate()){
+                if (game.isStalemate()) {
 
                     stalemateSeq();
                 }
@@ -213,11 +212,11 @@ public class Board extends JPanel {
                     game.dumbAIDraw(game.getCurrentPlayer());
 
                     // Check if AI can declare Mahjong
-                    if (game.isMahjong(game.getPlayerHand
-                            (game.getCurrentPlayerIndex()),null)){
+                    if (game.isMahjong(game.getPlayerHand(game
+                            .getCurrentPlayerIndex()), null)) {
 
-                        String message = "An opponent has declared " +
-                                "Mahjong. Sorry, you lose.";
+                        String message = "An opponent has declared "
+                                + "Mahjong. Sorry, you lose.";
                         JOptionPane.showMessageDialog(
                                 null, message);
                         enablePlayer1Hand(false);
@@ -239,7 +238,7 @@ public class Board extends JPanel {
                     }
 
                     // Check for Stalemate
-                    if (game.isStalemate()){
+                    if (game.isStalemate()) {
 
                         stalemateSeq();
                     }
@@ -249,27 +248,26 @@ public class Board extends JPanel {
                     if (game.getCurrentPlayerIndex() == 0 && game
                             .getPlayerList(0).
                                     getHandTile().size()
-                            != 14 && drawFlag){
+                            != 14 && drawFlag) {
 
                         game.draw(game.getPlayerList(0));
                         displayBoard();
 
-                        if (game.isMahjong(game.getPlayerHand
-                                (game.getCurrentPlayerIndex()),
-                                null)){
+                        if (game.isMahjong(game.getPlayerHand(game
+                                        .getCurrentPlayerIndex()),
+                                null)) {
 
                             // Player winning off of Mahjong
-                            String message = "Do you wish to declare " +
-                                    "Mahjong and win?";
+                            String message = "Do you wish to declare "
+                                    + "Mahjong and win?";
 
-                            String message2 = "Congratulations, " +
-                                    "you won";
-                            int mahjong = JOptionPane.showConfirmDialog
-                                    (null, message,
-                                            "Claim Message",
+                            String message2 = "Congratulations, "
+                                    + "you won";
+                            int mahjong = JOptionPane.showConfirmDialog(
+                                    null, message, "Claim Message",
                                             JOptionPane.YES_NO_OPTION);
 
-                            if (mahjong == JOptionPane.YES_OPTION){
+                            if (mahjong == JOptionPane.YES_OPTION) {
 
                                 JOptionPane.showMessageDialog(
                                         null, message2);
@@ -287,6 +285,7 @@ public class Board extends JPanel {
 
     /*******************************************************************
      * This method places the individual panels in the overall JPanel
+     * that represents the game board.
      ******************************************************************/
     private void placePanels() {
 
@@ -405,8 +404,8 @@ public class Board extends JPanel {
             drawPilePanel.remove(drawPile.size() - 1);
             drawPile.remove(drawPile.size() - 1);
 
-            p1Hand.get(i).setIcon(updatedImage(game.getPlayerList
-                    (0).getTileFromHand(i)));
+            p1Hand.get(i).setIcon(updatedImage(game.getPlayerList(0)
+                    .getTileFromHand(i)));
 
             c.gridx = i;
             c.gridy = 0;
@@ -464,7 +463,7 @@ public class Board extends JPanel {
      * @param tile a Tile object.
      * @return an image that correctly represents the Tile.
      ******************************************************************/
-    private ImageIcon updatedImage(Tile tile) {
+    private ImageIcon updatedImage(final Tile tile) {
 
         if (tile instanceof Suit) {
             switch (((Suit) tile).getDesign()) {
@@ -496,44 +495,44 @@ public class Board extends JPanel {
     private void createIcons() {
 
         // Sets the Image for circle Suit Tiles
-        circle1 = new ImageIcon
-                ("./src/MahjongCIS350/Images/circle1.jpg");
-        circle2 = new ImageIcon
-                ("./src/MahjongCIS350/Images/circle2.jpg");
-        circle3 = new ImageIcon
-                ("./src/MahjongCIS350/Images/circle3.jpg");
-        circle4 = new ImageIcon
-                ("./src/MahjongCIS350/Images/circle4.jpg");
-        circle5 = new ImageIcon
-                ("./src/MahjongCIS350/Images/circle5.jpg");
-        circle6 = new ImageIcon
-                ("./src/MahjongCIS350/Images/circle6.jpg");
-        circle7 = new ImageIcon
-                ("./src/MahjongCIS350/Images/circle7.jpg");
-        circle8 = new ImageIcon
-                ("./src/MahjongCIS350/Images/circle8.jpg");
-        circle9 = new ImageIcon
-                ("./src/MahjongCIS350/Images/circle9.jpg");
+        circle1 = new ImageIcon("./src/MahjongCIS350/Images/"
+                + "circle1.jpg");
+        circle2 = new ImageIcon("./src/MahjongCIS350/Images/"
+                + "circle2.jpg");
+        circle3 = new ImageIcon("./src/MahjongCIS350/Images/"
+                + "circle3.jpg");
+        circle4 = new ImageIcon("./src/MahjongCIS350/Images/"
+                + "circle4.jpg");
+        circle5 = new ImageIcon("./src/MahjongCIS350/Images/"
+                + "circle5.jpg");
+        circle6 = new ImageIcon("./src/MahjongCIS350/Images/"
+                + "circle6.jpg");
+        circle7 = new ImageIcon("./src/MahjongCIS350/Images/"
+                + "circle7.jpg");
+        circle8 = new ImageIcon("./src/MahjongCIS350/Images/"
+                + "circle8.jpg");
+        circle9 = new ImageIcon("./src/MahjongCIS350/Images/"
+                + "circle9.jpg");
 
         // Sets the Image for bamboo Suit Tiles
-        bamboo1 = new ImageIcon
-                ("./src/MahjongCIS350/Images/bamboo1.jpg");
-        bamboo2 = new ImageIcon
-                ("./src/MahjongCIS350/Images/bamboo2.jpg");
-        bamboo3 = new ImageIcon
-                ("./src/MahjongCIS350/Images/bamboo3.jpg");
-        bamboo4 = new ImageIcon
-                ("./src/MahjongCIS350/Images/bamboo4.jpg");
-        bamboo5 = new ImageIcon
-                ("./src/MahjongCIS350/Images/bamboo5.jpg");
-        bamboo6 = new ImageIcon
-                ("./src/MahjongCIS350/Images/bamboo6.jpg");
-        bamboo7 = new ImageIcon
-                ("./src/MahjongCIS350/Images/bamboo7.jpg");
-        bamboo8 = new ImageIcon
-                ("./src/MahjongCIS350/Images/bamboo8.jpg");
-        bamboo9 = new ImageIcon
-                ("./src/MahjongCIS350/Images/bamboo9.jpg");
+        bamboo1 = new ImageIcon("./src/MahjongCIS350/Images/"
+                + "bamboo1.jpg");
+        bamboo2 = new ImageIcon("./src/MahjongCIS350/Images/"
+                + "bamboo2.jpg");
+        bamboo3 = new ImageIcon("./src/MahjongCIS350/Images/"
+                + "bamboo3.jpg");
+        bamboo4 = new ImageIcon("./src/MahjongCIS350/Images/"
+                + "bamboo4.jpg");
+        bamboo5 = new ImageIcon("./src/MahjongCIS350/Images/"
+                + "bamboo5.jpg");
+        bamboo6 = new ImageIcon("./src/MahjongCIS350/Images/"
+                + "bamboo6.jpg");
+        bamboo7 = new ImageIcon("./src/MahjongCIS350/Images/"
+                + "bamboo7.jpg");
+        bamboo8 = new ImageIcon("./src/MahjongCIS350/Images/"
+                + "bamboo8.jpg");
+        bamboo9 = new ImageIcon("./src/MahjongCIS350/Images/"
+                + "bamboo9.jpg");
 
         // Sets the Image for character Suit Tiles
         character1 = new ImageIcon
@@ -1025,6 +1024,8 @@ public class Board extends JPanel {
             temp.addActionListener(listener);
             p1Hand.add(temp);
             p1HandPanel.add(p1Hand.get(p1Hand.size() - 1));
+
+            // give new Tile a border
             p1Hand.get(p1Hand.size() - 1).setBorder(BorderFactory
                     .createLineBorder(Color.BLUE, 5));
         }
