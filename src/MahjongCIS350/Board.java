@@ -672,7 +672,7 @@ public class Board extends JPanel {
      * @return an Image that correctly matches the indicated value,
      *         will return tileBack if there is an error.
      ******************************************************************/
-    private ImageIcon getCharacterImage(int value) {
+    private ImageIcon getCharacterImage(final int value) {
 
         switch (value) {
 
@@ -707,7 +707,7 @@ public class Board extends JPanel {
      * @return an Image that correctly matches the indicated color,
      *         will return tileBack if there is an error.
      ******************************************************************/
-    private ImageIcon getDragonImage(String color) {
+    private ImageIcon getDragonImage(final String color) {
 
         switch (color) {
 
@@ -731,7 +731,7 @@ public class Board extends JPanel {
      * @return an Image that correctly matches the indicated direction,
      *         will return tileBack if there is an error.
      ******************************************************************/
-    private ImageIcon getWindImage(String direction) {
+    private ImageIcon getWindImage(final String direction) {
 
         switch (direction) {
 
@@ -756,7 +756,7 @@ public class Board extends JPanel {
      * @return an Image that correctly matches the indicated number,
      *         will return tileBack if there is an error.
      ******************************************************************/
-    private ImageIcon getFlowerImage(int number) {
+    private ImageIcon getFlowerImage(final int number) {
 
         switch (number) {
 
@@ -787,7 +787,7 @@ public class Board extends JPanel {
      *
      * @param condition true if it is p1's turn, otherwise false.
      ******************************************************************/
-    private void enablePlayer1Hand(boolean condition) {
+    private void enablePlayer1Hand(final boolean condition) {
 
         for (int i = 0; i < p1Hand.size(); i++) {
 
@@ -843,20 +843,20 @@ public class Board extends JPanel {
      *
      * @param discardPileSize The amount of tiles in the discard pile.
      ******************************************************************/
-    private void updateDiscardPile(int discardPileSize) {
+    private void updateDiscardPile(final int discardPileSize) {
 
         while (discardPile.size() < discardPileSize) {
 
             JButton temp = new JButton();
             temp.setPreferredSize(new Dimension(30, 35));
             discardPile.add(temp);
-            discardPile.get(discardPile.size() - 1).setIcon
-                    (updatedImage(game.getDiscardPile().get(game
+            discardPile.get(discardPile.size() - 1).setIcon(
+                    updatedImage(game.getDiscardPile().get(game
                             .getDiscardPile().size() - 1)));
             discardPilePanel.add(temp);
         }
 
-        while (discardPile.size() > discardPileSize){
+        while (discardPile.size() > discardPileSize) {
 
             discardPilePanel.remove(discardPile.size() - 1);
             discardPile.remove(discardPile.size() - 1);
@@ -868,16 +868,16 @@ public class Board extends JPanel {
      *
      * @param drawPileSize The amount of tiles in the draw pile.
      ******************************************************************/
-    private void updateDrawPile(int drawPileSize) {
+    private void updateDrawPile(final int drawPileSize) {
 
-        if (drawPile.size() > drawPileSize){
+        if (drawPile.size() > drawPileSize) {
 
             drawPilePanel.remove(drawPile.get(drawPile.size() - 1));
             drawPile.remove(drawPile.get(drawPile.size() - 1));
 
-        } else if (drawPile.size() < drawPileSize){
+        } else if (drawPile.size() < drawPileSize) {
 
-            while(drawPile.size() < drawPileSize){
+            while (drawPile.size() < drawPileSize) {
 
                 JButton temp = new JButton(tileBack);
                 drawPile.add(temp);
@@ -891,7 +891,7 @@ public class Board extends JPanel {
      *
      * @param p4SetSize The size of the set pile of player 4.
      ******************************************************************/
-    private void updateP4SetPile(int p4SetSize) {
+    private void updateP4SetPile(final int p4SetSize) {
 
         while (p4Sets.size() < p4SetSize) {
 
@@ -905,7 +905,7 @@ public class Board extends JPanel {
             p4SetPanel.add(p4Sets.get(p4Sets.size() - 1), c);
         }
 
-        while (p4Sets.size() > p4SetSize){
+        while (p4Sets.size() > p4SetSize) {
 
             p4SetPanel.remove(p4Sets.size() - 1);
             p4Sets.remove(p4Sets.size() - 1);
@@ -924,7 +924,7 @@ public class Board extends JPanel {
      *
      * @param p3SetSize The size of the set pile of player 3.
      ******************************************************************/
-    private void updateP3SetPile(int p3SetSize) {
+    private void updateP3SetPile(final int p3SetSize) {
 
         while (p3Sets.size() < p3SetSize) {
 
@@ -934,7 +934,7 @@ public class Board extends JPanel {
             p3SetPanel.add(p3Sets.get(p3Sets.size() - 1));
         }
 
-        while (p3Sets.size() > p3SetSize){
+        while (p3Sets.size() > p3SetSize) {
 
             p3SetPanel.remove(p3Sets.size() - 1);
             p3Sets.remove(p3Sets.size() - 1);
@@ -953,7 +953,7 @@ public class Board extends JPanel {
      *
      * @param p2SetSize The size of the set pile of player 2.
      ******************************************************************/
-    private void updateP2SetPile(int p2SetSize) {
+    private void updateP2SetPile(final int p2SetSize) {
 
         while (p2Sets.size() < p2SetSize) {
 
@@ -967,7 +967,7 @@ public class Board extends JPanel {
             p2SetPanel.add(p2Sets.get(p2Sets.size() - 1), c);
         }
 
-        while (p2Sets.size() > p2SetSize){
+        while (p2Sets.size() > p2SetSize) {
 
             p2SetPanel.remove(p2Sets.size() - 1);
             p2Sets.remove(p2Sets.size() - 1);
@@ -986,7 +986,7 @@ public class Board extends JPanel {
      *
      * @param p1SetSize The size of the set pile of player 1.
      ******************************************************************/
-    private void updateP1SetPile(int p1SetSize) {
+    private void updateP1SetPile(final int p1SetSize) {
 
         while (p1Sets.size() < p1SetSize) {
 
@@ -996,7 +996,7 @@ public class Board extends JPanel {
             p1SetPanel.add(p1Sets.get(p1Sets.size() - 1));
         }
 
-        while (p1Sets.size() > p1SetSize){
+        while (p1Sets.size() > p1SetSize) {
 
             p1SetPanel.remove(p1Sets.size() - 1);
             p1Sets.remove(p1Sets.size() - 1);
@@ -1015,9 +1015,9 @@ public class Board extends JPanel {
      *
      * @param p1HandSize The hand of the first player.
      *****************************************************************/
-    private void updateP1Hand(int p1HandSize) {
+    private void updateP1Hand(final int p1HandSize) {
 
-        while (p1Hand.size() < p1HandSize){
+        while (p1Hand.size() < p1HandSize) {
 
             JButton temp = new JButton();
             temp.setPreferredSize(new Dimension(50, 50));
@@ -1030,7 +1030,7 @@ public class Board extends JPanel {
                     .createLineBorder(Color.BLUE, 5));
         }
 
-        while(p1Hand.size() > p1HandSize){
+        while (p1Hand.size() > p1HandSize) {
 
             p1HandPanel.remove(p1Hand.size() - 1);
             p1Hand.remove(p1Hand.size() - 1);
@@ -1052,17 +1052,17 @@ public class Board extends JPanel {
      *         Mahjong, else it returns a -1 for when a Tile is
      *         discarded.
      ******************************************************************/
-    private int isMahjongPlayerDiscard(){
+    private int isMahjongPlayerDiscard() {
 
-        if (game.getDiscardPile().size() == 0){
+        if (game.getDiscardPile().size() == 0) {
 
             return -1;
         }
 
-        for (int i = 0; i < 4; i++){
+        for (int i = 0; i < 4; i++) {
 
             if (game.isMahjong(game.getPlayerHand((i)), game
-                    .getRecentDiscard())){
+                    .getRecentDiscard())) {
 
                 return i;
             }
@@ -1074,14 +1074,14 @@ public class Board extends JPanel {
     /*******************************************************************
      * This performs the sequence of actions if a stalemate occurs.
      ******************************************************************/
-    private void stalemateSeq(){
+    private void stalemateSeq() {
 
         enablePlayer1Hand(false);
         timer.stop();
         JOptionPane.showMessageDialog(null,
-                "There are not possible ways to " +
-                        "win, therefore the game is a " +
-                        "stalemate.");
+                "There are no possible ways to "
+                        + "win, therefore the game is a "
+                        + "stalemate.");
         drawFlag = false;
     }
 
@@ -1091,17 +1091,17 @@ public class Board extends JPanel {
      *
      * @param disTile The recent discarded tile.
      ******************************************************************/
-    private void chiSeq(Suit disTile){
+    private void chiSeq(final Suit disTile) {
 
-        String message = "Claim chi of tile " +
-                disTile.getValue() + " " +
-                disTile.getDesign() + "?";
+        String message = "Claim chi of tile "
+                + disTile.getValue() + " "
+                + disTile.getDesign() + "?";
 
         int takeChi = JOptionPane.showConfirmDialog(null,
                 message, "Claim Message",
                 JOptionPane.YES_NO_OPTION);
 
-        if (takeChi == JOptionPane.YES_OPTION){
+        if (takeChi == JOptionPane.YES_OPTION) {
 
             game.takeChi(game.getPlayerList(0),
                     game.getRecentDiscard());
@@ -1117,20 +1117,20 @@ public class Board extends JPanel {
      *
      * @param disTile The recent discarded tile.
      *****************************************************************/
-    private void pongSeq(Suit disTile){
+    private void pongSeq(final Suit disTile) {
 
-        String message = "Claim pong of tile " +
-                disTile.getValue() + " " +
-                disTile.getDesign() + "?";
+        String message = "Claim pong of tile "
+                + disTile.getValue() + " "
+                + disTile.getDesign() + "?";
 
         int takePong = JOptionPane.showConfirmDialog(
                 null,
                 message, "Claim Message",
                 JOptionPane.YES_NO_OPTION);
 
-        if (takePong == JOptionPane.YES_OPTION){
+        if (takePong == JOptionPane.YES_OPTION) {
 
-            game.takePong(game.getPlayerList(0),game
+            game.takePong(game.getPlayerList(0), game
                     .getRecentDiscard());
             displayBoard();
             game.setNextCurrentPlayer(0);
@@ -1144,18 +1144,18 @@ public class Board extends JPanel {
      *
      * @param disTile The recent discarded tile.
      *****************************************************************/
-    private void kongSeq(Suit disTile){
+    private void kongSeq(final Suit disTile) {
 
-        String message = "Claim Kong of tile " +
-                disTile.getValue() + " " +
-                disTile.getDesign() + "?";
+        String message = "Claim Kong of tile "
+                + disTile.getValue() + " "
+                + disTile.getDesign() + "?";
 
         int takeKong = JOptionPane.showConfirmDialog(
                 null,
                 message, "Claim Message",
                 JOptionPane.YES_NO_OPTION);
 
-        if (takeKong == JOptionPane.YES_OPTION){
+        if (takeKong == JOptionPane.YES_OPTION) {
 
             game.takeKong(game.getPlayerList(0), game
                     .getRecentDiscard());
@@ -1169,13 +1169,13 @@ public class Board extends JPanel {
      * This methods is the sequence of action when a mahjong can
      * be declared.
      *****************************************************************/
-    private void mahjongSeq(){
+    private void mahjongSeq() {
 
         // Player can claim Mahjong
-        if (isMahjongPlayerDiscard() == 0){
+        if (isMahjongPlayerDiscard() == 0) {
 
-            String message = "Do you wish to declare " +
-                    "Mahjong and win?";
+            String message = "Do you wish to declare "
+                    + "Mahjong and win?";
 
             String message2 = "Congratulations, you won!";
             int mahjong = JOptionPane.showConfirmDialog(
@@ -1183,7 +1183,7 @@ public class Board extends JPanel {
                     message, "Claim Message",
                     JOptionPane.YES_NO_OPTION);
 
-            if (mahjong == JOptionPane.YES_OPTION){
+            if (mahjong == JOptionPane.YES_OPTION) {
 
                 JOptionPane.showMessageDialog(
                         null, message2);
@@ -1191,12 +1191,10 @@ public class Board extends JPanel {
                 timer.stop();
                 drawFlag = false;
             }
-        }
+        } else {
 
-        else{
-
-            String message = "An opponent has declared Mahjong." +
-                    " Sorry, you lose.";
+            String message = "An opponent has declared Mahjong."
+                    + " Sorry, you lose.";
             JOptionPane.showMessageDialog(null, message);
             enablePlayer1Hand(false);
             timer.stop();
@@ -1208,40 +1206,40 @@ public class Board extends JPanel {
      * This method runs through a sequence of checks if a set can be
      * claimed or a mahjong can be declared.
      ******************************************************************/
-    private void checkSeq(){
+    private void checkSeq() {
 
         displayBoard();
 
         // Check for if AI or human Player Mahjong off of discard
-        if (isMahjongPlayerDiscard() != -1){
+        if (isMahjongPlayerDiscard() != -1) {
 
             mahjongSeq();
         }
 
         if (game.isKong(game.getPlayerHand(0),
                 game.getRecentDiscard())
-                && drawFlag){
+                && drawFlag) {
 
-            kongSeq((Suit)game.getRecentDiscard());
+            kongSeq((Suit) game.getRecentDiscard());
         }
 
         // Check for pongs that can be claimed
         if (game.isPong(game.getPlayerHand(0),
                 game.getRecentDiscard())
-                && drawFlag){
+                && drawFlag) {
 
-            pongSeq((Suit)game.getRecentDiscard());
+            pongSeq((Suit) game.getRecentDiscard());
         }
 
         // Check for any chi that can be claimed
         // drawFlag used to determine if user has already claimed pong
         if (game.isChi(game.getPlayerList(0),
-                (Suit)game.getRecentDiscard()) && drawFlag){
+                (Suit) game.getRecentDiscard()) && drawFlag) {
 
-            chiSeq((Suit)game.getRecentDiscard());
+            chiSeq((Suit) game.getRecentDiscard());
         }
 
-        if (drawFlag){
+        if (drawFlag) {
 
             game.setNextCurrentPlayer();
         }
@@ -1254,7 +1252,7 @@ public class Board extends JPanel {
      ******************************************************************/
     private class listener implements ActionListener {
 
-        public void actionPerformed(ActionEvent event) {
+        public void actionPerformed(final ActionEvent event) {
 
             int p1HandSize = game.getPlayerList(0)
                     .getHandTile()
