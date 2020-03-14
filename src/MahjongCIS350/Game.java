@@ -11,7 +11,7 @@ import java.util.*;
  **********************************************************************/
 public class Game {
 
-    /** All Tiles in Mahjong **/
+    /** All Tiles in Mahjong. **/
     private ArrayList<Tile> tiles;
 
     /** All Tiles that have been discard by players**/

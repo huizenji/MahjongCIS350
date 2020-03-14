@@ -79,15 +79,43 @@ public class Board extends JPanel {
     /** Tile image for face-down Tiles. **/
     private ImageIcon tileBack;
 
-    /** Action Listener. **/
-    private listener listener;
+    /** Action Listener for JButton. **/
+    private Listener listener;
+
+    /** Action Listener for options of background. **/
 
     /** AI turn duration. **/
     private Timer timer;
 
+    /** Menu Bar in Jpanel. **/
+    private JMenuBar menuBar;
+
+    /** Menu contain game customization options. **/
+    private JComboBox optionMenu;
+
     /** Determines if a Player should draw a Tile from drawPile. **/
     private boolean drawFlag = true;
 
+    /** Determine if the program should hide tiles. **/
+    private boolean removeImage;
+
+    /** Number of tiles in display. **/
+    private int pileNum;
+
+    /** Background Color Options Dark Green. **/
+    private final Color darkGreen = new Color(0, 150, 100);
+
+    /** Default Background color of Red Shade. **/
+    private final int defaultR = 0;
+
+    /** Default Background color of Red Shade. **/
+    private final int defaultG = 150;
+
+    /** Default Background color of Red Shade. **/
+    private final int defaultB = 100;
+
+    /** Shade of background colors. **/
+    private int bgRed, bgGreen, bgBlue;
     /*******************************************************************
      * This is the Board class constructor. This implements all global
      * variables, sets up the board display, deals the Tiles, and
@@ -97,6 +125,11 @@ public class Board extends JPanel {
 
         // create Game
         game = new Game();
+
+        // Set shade of rgb to default dark green color
+        bgRed = defaultR;
+        bgGreen = defaultG;
+        bgBlue = defaultB;
 
         // create piles and hands
         drawPile = new ArrayList<>();
@@ -128,8 +161,21 @@ public class Board extends JPanel {
         p1Direction = new JLabel(game.getPlayerList(0).
                 getDirection());
 
+        // Listeners
+        OptionListener optionListener = new OptionListener();
+
+        // Creating the option Menu
+        String[] bgOptions = {"Red Shade", "Green Shade", "Blue "
+                + "Shade", "Default Shade"};
+        menuBar = new JMenuBar();
+        optionMenu = new JComboBox(bgOptions);
+        optionMenu.addActionListener(optionListener);
+
+        // Add Menu Bar
+        menuBar.add(optionMenu);
+        add(menuBar);
+
         // set background
-        Color darkGreen = new Color(0, 150, 100);
         drawPilePanel.setBackground(darkGreen);
         discardPilePanel.setBackground(darkGreen);
         p1HandPanel.setBackground(darkGreen);
@@ -164,12 +210,12 @@ public class Board extends JPanel {
         createIcons();
 
         // set listener for JButtons
-        listener = new listener();
+        listener = new Listener();
 
         // create reset button
-        resetBtn = new JButton("Reset Game");
-        resetBtn.addActionListener(listener);
-        gameBoard.add(resetBtn);
+//        resetBtn = new JButton("Reset Game");
+//        resetBtn.addActionListener(listener);
+//        gameBoard.add(resetBtn);
 
         placeDrawPile();
         dealPlayerTiles();
@@ -182,7 +228,8 @@ public class Board extends JPanel {
         }
 
         displayBoard();
-
+        removeImage = true;
+        pileNum = drawPile.size();
         // AI turn timer and general turn actions
         letsPlay();
 
@@ -296,6 +343,7 @@ public class Board extends JPanel {
 
         c.gridx = 2;
         c.gridy = 2;
+
         gameBoard.add(drawPilePanel, c);
         gameBoard.setLayer(drawPilePanel, 0);
         gameBoard.add(discardPilePanel, c);
@@ -535,64 +583,64 @@ public class Board extends JPanel {
                 + "bamboo9.jpg");
 
         // Sets the Image for character Suit Tiles
-        character1 = new ImageIcon
-                ("./src/MahjongCIS350/Images/character1.jpg");
-        character2 = new ImageIcon
-                ("./src/MahjongCIS350/Images/character2.jpg");
-        character3 = new ImageIcon
-                ("./src/MahjongCIS350/Images/character3.jpg");
-        character4 = new ImageIcon
-                ("./src/MahjongCIS350/Images/character4.jpg");
-        character5 = new ImageIcon
-                ("./src/MahjongCIS350/Images/character5.jpg");
-        character6 = new ImageIcon
-                ("./src/MahjongCIS350/Images/character6.jpg");
-        character7 = new ImageIcon
-                ("./src/MahjongCIS350/Images/character7.jpg");
-        character8 = new ImageIcon
-                ("./src/MahjongCIS350/Images/character8.jpg");
-        character9 = new ImageIcon
-                ("./src/MahjongCIS350/Images/character9.jpg");
+        character1 = new ImageIcon(
+                "./src/MahjongCIS350/Images/character1.jpg");
+        character2 = new ImageIcon(
+                "./src/MahjongCIS350/Images/character2.jpg");
+        character3 = new ImageIcon(
+                "./src/MahjongCIS350/Images/character3.jpg");
+        character4 = new ImageIcon(
+                "./src/MahjongCIS350/Images/character4.jpg");
+        character5 = new ImageIcon(
+                "./src/MahjongCIS350/Images/character5.jpg");
+        character6 = new ImageIcon(
+                "./src/MahjongCIS350/Images/character6.jpg");
+        character7 = new ImageIcon(
+                "./src/MahjongCIS350/Images/character7.jpg");
+        character8 = new ImageIcon(
+                "./src/MahjongCIS350/Images/character8.jpg");
+        character9 = new ImageIcon(
+                "./src/MahjongCIS350/Images/character9.jpg");
 
         // Sets the Image for Flower Tiles
-        flower1 = new ImageIcon
-                ("./src/MahjongCIS350/Images/flower1.jpg");
-        flower2 = new ImageIcon
-                ("./src/MahjongCIS350/Images/flower2.jpg");
-        flower3 = new ImageIcon
-                ("./src/MahjongCIS350/Images/flower3.jpg");
-        flower4 = new ImageIcon
-                ("./src/MahjongCIS350/Images/flower4.jpg");
-        flower5 = new ImageIcon
-                ("./src/MahjongCIS350/Images/flower5.jpg");
-        flower6 = new ImageIcon
-                ("./src/MahjongCIS350/Images/flower6.jpg");
-        flower7 = new ImageIcon
-                ("./src/MahjongCIS350/Images/flower7.jpg");
-        flower8 = new ImageIcon
-                ("./src/MahjongCIS350/Images/flower8.jpg");
+        flower1 = new ImageIcon(
+                "./src/MahjongCIS350/Images/flower1.jpg");
+        flower2 = new ImageIcon(
+                "./src/MahjongCIS350/Images/flower2.jpg");
+        flower3 = new ImageIcon(
+                "./src/MahjongCIS350/Images/flower3.jpg");
+        flower4 = new ImageIcon(
+                "./src/MahjongCIS350/Images/flower4.jpg");
+        flower5 = new ImageIcon(
+                "./src/MahjongCIS350/Images/flower5.jpg");
+        flower6 = new ImageIcon(
+                "./src/MahjongCIS350/Images/flower6.jpg");
+        flower7 = new ImageIcon(
+                "./src/MahjongCIS350/Images/flower7.jpg");
+        flower8 = new ImageIcon(
+                "./src/MahjongCIS350/Images/flower8.jpg");
 
         // Sets the Image for Dragon Tiles
-        redDragon = new ImageIcon
-                ("./src/MahjongCIS350/Images/redDragon.jpg");
-        greenDragon = new ImageIcon
-                ("./src/MahjongCIS350/Images/greenDragon.jpg");
-        whiteDragon = new ImageIcon
-                ("./src/MahjongCIS350/Images/whiteDragon.jpg");
+        redDragon = new ImageIcon(
+                "./src/MahjongCIS350/Images/redDragon.jpg");
+        greenDragon = new ImageIcon(
+                "./src/MahjongCIS350/Images/greenDragon.jpg");
+        whiteDragon = new ImageIcon(
+                "./src/MahjongCIS350/Images/whiteDragon.jpg");
 
         // Sets the Image for the Wind Tiles
-        eastWind = new ImageIcon
-                ("./src/MahjongCIS350/Images/eastWind.jpg");
-        southWind = new ImageIcon
-                ("./src/MahjongCIS350/Images/southWind.jpg");
-        westWind = new ImageIcon
-                ("./src/MahjongCIS350/Images/westWind.jpg");
-        northWind = new ImageIcon
-                ("./src/MahjongCIS350/Images/northWind.jpg");
+        eastWind = new ImageIcon(
+                "./src/MahjongCIS350/Images/eastWind.jpg");
+        southWind = new ImageIcon(
+                "./src/MahjongCIS350/Images/southWind.jpg");
+        westWind = new ImageIcon(
+                "./src/MahjongCIS350/Images/westWind.jpg");
+        northWind = new ImageIcon(
+                "./src/MahjongCIS350/Images/northWind.jpg");
 
         // Sets the Image for the back of a Tile
-        tileBack = new ImageIcon
-                ("./src/MahjongCIS350/Images/tileBack.jpg");
+        tileBack = new ImageIcon(
+                "./src/MahjongCIS350/Images/tileBack.jpg");
     }
 
     /*******************************************************************
@@ -603,7 +651,7 @@ public class Board extends JPanel {
      * @return an Image that correctly matches the indicated value,
      *         will return tileBack if there is an error.
      ******************************************************************/
-    private ImageIcon getCircleImage(int value) {
+    private ImageIcon getCircleImage(final int value) {
 
         switch (value) {
 
@@ -870,7 +918,20 @@ public class Board extends JPanel {
      ******************************************************************/
     private void updateDrawPile(final int drawPileSize) {
 
-        if (drawPile.size() > drawPileSize) {
+        if (pileNum > drawPileSize && removeImage) {
+
+//            drawPilePanel.remove(drawPile.get(pileNum - 1));
+//            drawPile.remove(drawPile.get(pileNum - 1));
+            Color darkGreen = new Color(0, 150, 100);
+
+            drawPile.get(pileNum - 1).setIcon(null);
+            drawPile.get(pileNum - 1).setBackground(darkGreen);
+            drawPile.get(pileNum - 1).setBorder(
+                    BorderFactory.createEmptyBorder());
+            pileNum--;
+        }
+
+        if (drawPile.size() > drawPileSize && !removeImage) {
 
             drawPilePanel.remove(drawPile.get(drawPile.size() - 1));
             drawPile.remove(drawPile.get(drawPile.size() - 1));
@@ -1247,10 +1308,23 @@ public class Board extends JPanel {
         displayBoard();
     }
 
+    private class OptionListener implements ActionListener {
+
+        /***************************************************************
+         * Action of Selecting Shade
+         * @param event ass
+         */
+        public void actionPerformed(final ActionEvent event) {
+
+            JComboBox cb = (JComboBox) event.getSource();
+            System.out.println((String) cb.getSelectedItem());
+        }
+    }
+
     /*******************************************************************
      * A class within Board that handles action listeners
      ******************************************************************/
-    private class listener implements ActionListener {
+    private class Listener implements ActionListener {
 
         public void actionPerformed(final ActionEvent event) {
 
