@@ -29,8 +29,8 @@ public class Player {
      ******************************************************************/
     public Player() {
 
-        handTile = new ArrayList<Tile>();
-        this.setPile = new ArrayList<Tile>();
+        handTile = new ArrayList<>();
+        this.setPile = new ArrayList<>();
         this.direction = null;
         point = 0;
     }
@@ -42,9 +42,9 @@ public class Player {
      *
      * @param direction The direction of the player.
      ******************************************************************/
-    public Player(String direction) {
-        this.handTile = new ArrayList<Tile>();
-        this.setPile = new ArrayList<Tile>();
+    public Player(final String direction) {
+        this.handTile = new ArrayList<>();
+        this.setPile = new ArrayList<>();
         this.direction = direction;
         point = 0;
     }
@@ -68,30 +68,30 @@ public class Player {
     /*******************************************************************
      * This method adds the Tile t to the end of the handTile
      *
-     * @param t The tile that is being added to the player's hand.
+     * @param tile The tile that is being added to the player's hand.
      ******************************************************************/
-    public void addTile(Tile t) {
+    public void addTile(final Tile tile) {
 
-        if (t == null) {
+        if (tile == null) {
             throw new NullPointerException("No such type of tile, "
                     + "can't be added");
         }
-        handTile.add(t);
+        handTile.add(tile);
     }
 
     /*******************************************************************
      * This method adds the Tile t to the end of the setPile
      *
-     * @param t The tile that is being added to the player's setPile.
+     * @param tile The tile that is being added to the player's setPile.
      ******************************************************************/
-    public void addTileSet(Tile t) {
+    public void addTileSet(final Tile tile) {
 
-        if (t == null) {
+        if (tile == null) {
 
             throw new NullPointerException("No such type of tile," +
                     " can't be added");
         }
-        setPile.add(t);
+        setPile.add(tile);
     }
 
     /*******************************************************************
@@ -100,7 +100,7 @@ public class Player {
      *
      * @param index The index of which the tile is located at.
      ******************************************************************/
-    public void removeTileSet(int index){
+    public void removeTileSet(final int index){
 
         if (index < 0 || index >= handTile.size()){
 
@@ -127,7 +127,7 @@ public class Player {
      * @param index The index where the tile is located at
      * @return The tile of located at the specific index.
      ******************************************************************/
-    public Tile getTileFromHand(int index){
+    public Tile getTileFromHand(final int index){
 
         return handTile.get(index);
     }
@@ -137,7 +137,7 @@ public class Player {
      *
      * @param handTile The hand that is given to the player.
      ******************************************************************/
-    public void setHandTile(ArrayList<Tile> handTile) {
+    public void setHandTile(final ArrayList<Tile> handTile) {
         this.handTile = handTile;
     }
 
@@ -155,7 +155,7 @@ public class Player {
      *
      * @param direction The direction of the player.
      ******************************************************************/
-    public void setDirection(String direction) {
+    public void setDirection(final String direction) {
         this.direction = direction;
     }
 
@@ -173,7 +173,7 @@ public class Player {
      * @param index The index of the tile.
      * @return The tile in the set pile at the specfic index.
      ******************************************************************/
-    public Tile getSetTile(int index){
+    public Tile getSetTile(final int index){
         return setPile.get(index);
     }
 
@@ -182,7 +182,7 @@ public class Player {
      *
      * @param point The number of points that player will have.
      ******************************************************************/
-    public void setPoint(int point) {
+    public void setPoint(final int point) {
         this.point = point;
     }
 

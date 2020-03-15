@@ -8,13 +8,13 @@ package MahjongCIS350;
  **********************************************************************/
 public class Flower extends Tile {
 
-    /** The number of a Flower Tile to determine Image **/
-    int number;
+    /** The number of a Flower Tile to determine Image. **/
+    private int number;
 
     /*******************************************************************
      * This is the constructor for the Tile class.
      ******************************************************************/
-    public Flower(int num) {
+    public Flower(final int num) {
 
         super("Flower");
         number = num;

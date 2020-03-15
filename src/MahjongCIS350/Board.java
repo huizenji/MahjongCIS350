@@ -82,8 +82,6 @@ public class Board extends JPanel {
     /** Action Listener for JButton. **/
     private Listener listener;
 
-    /** Action Listener for options of background. **/
-
     /** AI turn duration. **/
     private Timer timer;
 
@@ -102,8 +100,8 @@ public class Board extends JPanel {
     /** Number of tiles in display. **/
     private int pileNum;
 
-    /** Background Color Options Dark Green. **/
-    private final Color darkGreen = new Color(0, 150, 100);
+    /** Background Color. **/
+    private Color color;
 
     /** Default Background color of Red Shade. **/
     private final int defaultR = 0;
@@ -114,8 +112,6 @@ public class Board extends JPanel {
     /** Default Background color of Red Shade. **/
     private final int defaultB = 100;
 
-    /** Shade of background colors. **/
-    private int bgRed, bgGreen, bgBlue;
     /*******************************************************************
      * This is the Board class constructor. This implements all global
      * variables, sets up the board display, deals the Tiles, and
@@ -127,9 +123,7 @@ public class Board extends JPanel {
         game = new Game();
 
         // Set shade of rgb to default dark green color
-        bgRed = defaultR;
-        bgGreen = defaultG;
-        bgBlue = defaultB;
+        color = new Color(defaultR, defaultG, defaultB);
 
         // create piles and hands
         drawPile = new ArrayList<>();
@@ -165,29 +159,20 @@ public class Board extends JPanel {
         OptionListener optionListener = new OptionListener();
 
         // Creating the option Menu
-        String[] bgOptions = {"Red Shade", "Green Shade", "Blue "
-                + "Shade", "Default Shade"};
+        String[] bgOptions = {"Select Shade", "Red Shade",
+                "Green Shade", "Blue Shade", "Default Shade" };
+
         menuBar = new JMenuBar();
         optionMenu = new JComboBox(bgOptions);
+        optionMenu.setSelectedIndex(0);
         optionMenu.addActionListener(optionListener);
 
         // Add Menu Bar
         menuBar.add(optionMenu);
         add(menuBar);
 
-        // set background
-        drawPilePanel.setBackground(darkGreen);
-        discardPilePanel.setBackground(darkGreen);
-        p1HandPanel.setBackground(darkGreen);
-        p2HandPanel.setBackground(darkGreen);
-        p3HandPanel.setBackground(darkGreen);
-        p4HandPanel.setBackground(darkGreen);
-        p1SetPanel.setBackground(darkGreen);
-        p2SetPanel.setBackground(darkGreen);
-        p3SetPanel.setBackground(darkGreen);
-        p4SetPanel.setBackground(darkGreen);
-        gameBoard.setBackground(darkGreen);
-        gameBoard.setOpaque(true);
+        // Set background
+        updateBackground();
 
         // set Layouts
         drawPilePanel.setLayout(new GridBagLayout());
@@ -887,6 +872,38 @@ public class Board extends JPanel {
     }
 
     /*******************************************************************
+     * Updates the background of all panels.
+     ******************************************************************/
+    private void updateBackground() {
+
+        // set background
+        drawPilePanel.setBackground(color);
+        discardPilePanel.setBackground(color);
+        p1HandPanel.setBackground(color);
+        p2HandPanel.setBackground(color);
+        p3HandPanel.setBackground(color);
+        p4HandPanel.setBackground(color);
+        p1SetPanel.setBackground(color);
+        p2SetPanel.setBackground(color);
+        p3SetPanel.setBackground(color);
+        p4SetPanel.setBackground(color);
+        gameBoard.setBackground(color);
+        gameBoard.setOpaque(true);
+    }
+
+    /*******************************************************************
+     * This method resets the color of all the remove tiles from the
+     * draw pile.
+     ******************************************************************/
+    private void updateRemovedTile() {
+
+        for (int i = pileNum - 1; i < drawPile.size(); i++) {
+
+            drawPile.get(i).setBackground(color);
+        }
+    }
+
+    /*******************************************************************
      * This method updates the discard pile.
      *
      * @param discardPileSize The amount of tiles in the discard pile.
@@ -922,10 +939,9 @@ public class Board extends JPanel {
 
 //            drawPilePanel.remove(drawPile.get(pileNum - 1));
 //            drawPile.remove(drawPile.get(pileNum - 1));
-            Color darkGreen = new Color(0, 150, 100);
 
             drawPile.get(pileNum - 1).setIcon(null);
-            drawPile.get(pileNum - 1).setBackground(darkGreen);
+            drawPile.get(pileNum - 1).setBackground(color);
             drawPile.get(pileNum - 1).setBorder(
                     BorderFactory.createEmptyBorder());
             pileNum--;
@@ -1311,18 +1327,72 @@ public class Board extends JPanel {
     private class OptionListener implements ActionListener {
 
         /***************************************************************
-         * Action of Selecting Shade
-         * @param event ass
+         * Action of Selecting Shade.
+         * @param event Which option was selected
          */
         public void actionPerformed(final ActionEvent event) {
 
+            String[] colorSelect = {"red", "green", "blue"};
+
             JComboBox cb = (JComboBox) event.getSource();
-            System.out.println((String) cb.getSelectedItem());
+            int response = cb.getSelectedIndex();
+
+
+            while (response < 4 && response > 0) {
+
+                String str = JOptionPane.showInputDialog("What shade"
+                        + "of the color " + colorSelect[response - 1]
+                        + ".\nEnter a number between "
+                                + "0 - 255");
+
+                // Exit if nothing was entered
+                if (str == null) {
+
+                    break;
+                }
+
+                // Setting the color
+                int shade = Integer.parseInt(str);
+                if (shade < 0 || shade > 255) {
+
+                    JOptionPane.showMessageDialog(null,
+                            "Invalid Entry, Enter a number"
+                    + "between 0 - 255");
+                } else {
+
+                    int r = color.getRed();
+                    int g = color.getGreen();
+                    int b = color.getBlue();
+
+                  if (response == 1) {
+                      color = new Color(shade, g, b);
+                  } else if (response == 2) {
+
+                      color = new Color(r, shade, b);
+                  } else if (response == 3) {
+
+                      color = new Color(r, g, shade);
+                  }
+
+                  updateBackground();
+                  updateRemovedTile();
+                  break;
+                }
+            }
+
+            if (response == 4) {
+
+                color = new Color(defaultR, defaultG, defaultB);
+                updateRemovedTile();
+                updateBackground();
+            }
+
+            optionMenu.setSelectedIndex(0);
         }
     }
 
     /*******************************************************************
-     * A class within Board that handles action listeners
+     * A class within Board that handles action listeners of buttons.
      ******************************************************************/
     private class Listener implements ActionListener {
 

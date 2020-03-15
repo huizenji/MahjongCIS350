@@ -2,17 +2,17 @@ package MahjongCIS350;
 
 /***********************************************************************
  * This is the class for all Suit Tiles in Mahjong (Bamboo, Circle,
- * Character)
+ * Character).
  *
  * @Authors: Wayne Chen, Jillian Huizenga, Chris Paul, Aron Zhao
  * @Version: 2/28/2020
  **********************************************************************/
 public class Suit extends Tile {
 
-    /** Type of Suit Tile design **/
+    /** Type of Suit Tile design. **/
     private String design;
 
-    /** Numerical value of the Suit Tile **/
+    /** Numerical value of the Suit Tile. **/
     private int value;
 
     /*******************************************************************
@@ -32,7 +32,7 @@ public class Suit extends Tile {
      *               Character).
      * @param value the value of the Tile.
      ******************************************************************/
-    public Suit(String design, int value) {
+    public Suit(final String design, final int value) {
 
         super("Suit");
         this.design = design;
@@ -54,7 +54,7 @@ public class Suit extends Tile {
      *
      * @param design Type of design for the Tile.
      ******************************************************************/
-    public void setDesign(String design) {
+    public void setDesign(final String design) {
 
         this.design = design;
     }
@@ -74,7 +74,7 @@ public class Suit extends Tile {
      *
      * @param value Value of the Suit Tile.
      ******************************************************************/
-    public void setValue(int value) {
+    public void setValue(final int value) {
 
         this.value = value;
     }

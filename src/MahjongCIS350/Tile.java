@@ -8,15 +8,15 @@ package MahjongCIS350;
  **********************************************************************/
 public class Tile {
 
-    /** Type of tile **/
-    private String type;
+    /** Type of tile. **/
+    private final String type;
 
     /*******************************************************************
      * This is the constructor for the Tile class.
      *
      * @param type What type of tile is represented.
      ******************************************************************/
-    public Tile(String type) {
+    public Tile(final String type) {
 
         this.type = type;
     }
