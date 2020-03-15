@@ -1,4 +1,4 @@
-package MahjongCIS350;
+package mahjongCIS350;
 
 /***********************************************************************
  * This class represents each individual tile in the game of Mahjong.

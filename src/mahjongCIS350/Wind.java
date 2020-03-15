@@ -1,4 +1,4 @@
-package MahjongCIS350;
+package mahjongCIS350;
 
 /***********************************************************************
  * This is the class for any Wind Tile in the game of Mahjong.

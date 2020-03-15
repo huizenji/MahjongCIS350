@@ -1,4 +1,4 @@
-package MahjongCIS350;
+package mahjongCIS350;
 
 /***********************************************************************
  * This class contains the information on the Dragon Tile in Mahjong.

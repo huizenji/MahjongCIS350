@@ -1,4 +1,4 @@
-package MahjongCIS350;
+package mahjongCIS350;
 
 /***********************************************************************
  * This is the class for all Suit Tiles in Mahjong (Bamboo, Circle,

@@ -1,4 +1,4 @@
-package MahjongCIS350;
+package mahjongCIS350;
 
 import java.awt.*;
 import java.awt.event.*;
@@ -528,104 +528,104 @@ public class Board extends JPanel {
     private void createIcons() {
 
         // Sets the Image for circle Suit Tiles
-        circle1 = new ImageIcon("./src/MahjongCIS350/Images/"
+        circle1 = new ImageIcon("./src/mahjongCIS350/Images/"
                 + "circle1.jpg");
-        circle2 = new ImageIcon("./src/MahjongCIS350/Images/"
+        circle2 = new ImageIcon("./src/mahjongCIS350/Images/"
                 + "circle2.jpg");
-        circle3 = new ImageIcon("./src/MahjongCIS350/Images/"
+        circle3 = new ImageIcon("./src/mahjongCIS350/Images/"
                 + "circle3.jpg");
-        circle4 = new ImageIcon("./src/MahjongCIS350/Images/"
+        circle4 = new ImageIcon("./src/mahjongCIS350/Images/"
                 + "circle4.jpg");
-        circle5 = new ImageIcon("./src/MahjongCIS350/Images/"
+        circle5 = new ImageIcon("./src/mahjongCIS350/Images/"
                 + "circle5.jpg");
-        circle6 = new ImageIcon("./src/MahjongCIS350/Images/"
+        circle6 = new ImageIcon("./src/mahjongCIS350/Images/"
                 + "circle6.jpg");
-        circle7 = new ImageIcon("./src/MahjongCIS350/Images/"
+        circle7 = new ImageIcon("./src/mahjongCIS350/Images/"
                 + "circle7.jpg");
-        circle8 = new ImageIcon("./src/MahjongCIS350/Images/"
+        circle8 = new ImageIcon("./src/mahjongCIS350/Images/"
                 + "circle8.jpg");
-        circle9 = new ImageIcon("./src/MahjongCIS350/Images/"
+        circle9 = new ImageIcon("./src/mahjongCIS350/Images/"
                 + "circle9.jpg");
 
         // Sets the Image for bamboo Suit Tiles
-        bamboo1 = new ImageIcon("./src/MahjongCIS350/Images/"
+        bamboo1 = new ImageIcon("./src/mahjongCIS350/Images/"
                 + "bamboo1.jpg");
-        bamboo2 = new ImageIcon("./src/MahjongCIS350/Images/"
+        bamboo2 = new ImageIcon("./src/mahjongCIS350/Images/"
                 + "bamboo2.jpg");
-        bamboo3 = new ImageIcon("./src/MahjongCIS350/Images/"
+        bamboo3 = new ImageIcon("./src/mahjongCIS350/Images/"
                 + "bamboo3.jpg");
-        bamboo4 = new ImageIcon("./src/MahjongCIS350/Images/"
+        bamboo4 = new ImageIcon("./src/mahjongCIS350/Images/"
                 + "bamboo4.jpg");
-        bamboo5 = new ImageIcon("./src/MahjongCIS350/Images/"
+        bamboo5 = new ImageIcon("./src/mahjongCIS350/Images/"
                 + "bamboo5.jpg");
-        bamboo6 = new ImageIcon("./src/MahjongCIS350/Images/"
+        bamboo6 = new ImageIcon("./src/mahjongCIS350/Images/"
                 + "bamboo6.jpg");
-        bamboo7 = new ImageIcon("./src/MahjongCIS350/Images/"
+        bamboo7 = new ImageIcon("./src/mahjongCIS350/Images/"
                 + "bamboo7.jpg");
-        bamboo8 = new ImageIcon("./src/MahjongCIS350/Images/"
+        bamboo8 = new ImageIcon("./src/mahjongCIS350/Images/"
                 + "bamboo8.jpg");
-        bamboo9 = new ImageIcon("./src/MahjongCIS350/Images/"
+        bamboo9 = new ImageIcon("./src/mahjongCIS350/Images/"
                 + "bamboo9.jpg");
 
         // Sets the Image for character Suit Tiles
         character1 = new ImageIcon(
-                "./src/MahjongCIS350/Images/character1.jpg");
+                "./src/mahjongCIS350/Images/character1.jpg");
         character2 = new ImageIcon(
-                "./src/MahjongCIS350/Images/character2.jpg");
+                "./src/mahjongCIS350/Images/character2.jpg");
         character3 = new ImageIcon(
-                "./src/MahjongCIS350/Images/character3.jpg");
+                "./src/mahjongCIS350/Images/character3.jpg");
         character4 = new ImageIcon(
-                "./src/MahjongCIS350/Images/character4.jpg");
+                "./src/mahjongCIS350/Images/character4.jpg");
         character5 = new ImageIcon(
-                "./src/MahjongCIS350/Images/character5.jpg");
+                "./src/mahjongCIS350/Images/character5.jpg");
         character6 = new ImageIcon(
-                "./src/MahjongCIS350/Images/character6.jpg");
+                "./src/mahjongCIS350/Images/character6.jpg");
         character7 = new ImageIcon(
-                "./src/MahjongCIS350/Images/character7.jpg");
+                "./src/mahjongCIS350/Images/character7.jpg");
         character8 = new ImageIcon(
-                "./src/MahjongCIS350/Images/character8.jpg");
+                "./src/mahjongCIS350/Images/character8.jpg");
         character9 = new ImageIcon(
-                "./src/MahjongCIS350/Images/character9.jpg");
+                "./src/mahjongCIS350/Images/character9.jpg");
 
         // Sets the Image for Flower Tiles
         flower1 = new ImageIcon(
-                "./src/MahjongCIS350/Images/flower1.jpg");
+                "./src/mahjongCIS350/Images/flower1.jpg");
         flower2 = new ImageIcon(
-                "./src/MahjongCIS350/Images/flower2.jpg");
+                "./src/mahjongCIS350/Images/flower2.jpg");
         flower3 = new ImageIcon(
-                "./src/MahjongCIS350/Images/flower3.jpg");
+                "./src/mahjongCIS350/Images/flower3.jpg");
         flower4 = new ImageIcon(
-                "./src/MahjongCIS350/Images/flower4.jpg");
+                "./src/mahjongCIS350/Images/flower4.jpg");
         flower5 = new ImageIcon(
-                "./src/MahjongCIS350/Images/flower5.jpg");
+                "./src/mahjongCIS350/Images/flower5.jpg");
         flower6 = new ImageIcon(
-                "./src/MahjongCIS350/Images/flower6.jpg");
+                "./src/mahjongCIS350/Images/flower6.jpg");
         flower7 = new ImageIcon(
-                "./src/MahjongCIS350/Images/flower7.jpg");
+                "./src/mahjongCIS350/Images/flower7.jpg");
         flower8 = new ImageIcon(
-                "./src/MahjongCIS350/Images/flower8.jpg");
+                "./src/mahjongCIS350/Images/flower8.jpg");
 
         // Sets the Image for Dragon Tiles
         redDragon = new ImageIcon(
-                "./src/MahjongCIS350/Images/redDragon.jpg");
+                "./src/mahjongCIS350/Images/redDragon.jpg");
         greenDragon = new ImageIcon(
-                "./src/MahjongCIS350/Images/greenDragon.jpg");
+                "./src/mahjongCIS350/Images/greenDragon.jpg");
         whiteDragon = new ImageIcon(
-                "./src/MahjongCIS350/Images/whiteDragon.jpg");
+                "./src/mahjongCIS350/Images/whiteDragon.jpg");
 
         // Sets the Image for the Wind Tiles
         eastWind = new ImageIcon(
-                "./src/MahjongCIS350/Images/eastWind.jpg");
+                "./src/mahjongCIS350/Images/eastWind.jpg");
         southWind = new ImageIcon(
-                "./src/MahjongCIS350/Images/southWind.jpg");
+                "./src/mahjongCIS350/Images/southWind.jpg");
         westWind = new ImageIcon(
-                "./src/MahjongCIS350/Images/westWind.jpg");
+                "./src/mahjongCIS350/Images/westWind.jpg");
         northWind = new ImageIcon(
-                "./src/MahjongCIS350/Images/northWind.jpg");
+                "./src/mahjongCIS350/Images/northWind.jpg");
 
         // Sets the Image for the back of a Tile
         tileBack = new ImageIcon(
-                "./src/MahjongCIS350/Images/tileBack.jpg");
+                "./src/mahjongCIS350/Images/tileBack.jpg");
     }
 
     /*******************************************************************
