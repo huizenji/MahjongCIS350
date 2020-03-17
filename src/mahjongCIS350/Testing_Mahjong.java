@@ -1,4 +1,4 @@
-package MahjongCIS350;
+package mahjongCIS350;
 
 
 public class Testing_Mahjong {
