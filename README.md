@@ -1,1 +1,1 @@
-# MahjongCIS350
+# mahjongCIS350
