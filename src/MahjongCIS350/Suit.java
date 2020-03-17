@@ -1,23 +1,20 @@
 package MahjongCIS350;
 
 /***********************************************************************
- * This is the class for all Suit Tiles in Mahjong (Bamboo, Circle,
- * Character)
+ * This is the class for any Suit tiles in mahjong. This class covers
+ * all the Suit tiles, bamboo, circle, character.
  *
- * @Authors: Wayne Chen, Jillian Huizenga, Chris Paul, Aron Zhao
- * @Version: 2/28/2020
+ * @Authors: Jillian Huizenga, Wayne Chen, Aron Zhao
+ * @Version: 1/21/2020
  **********************************************************************/
 public class Suit extends Tile {
 
-    /** Type of Suit Tile design **/
+    /** Type of Suit tile design it is **/
     private String design;
 
-    /** Numerical value of the Suit Tile **/
+    /** Numerical value of the tile **/
     private int value;
 
-    /*******************************************************************
-     * This is the base constructor of the Suit class.
-     ******************************************************************/
     public Suit() {
 
         super("Suit");
@@ -25,12 +22,14 @@ public class Suit extends Tile {
         this.value = 0;
     }
 
+
+
     /*******************************************************************
-     * This is the constructor for a Suit Tile with parameters.
+     * Constructor for a Suit tile.
      *
-     * @param design design of the tile (Circle, Bamboo
-     *               Character).
-     * @param value the value of the Tile.
+     * @param design Design of the tile, Circle, Bamboo
+     *               Char.
+     * @param value What is the value of the Tile.
      ******************************************************************/
     public Suit(String design, int value) {
 
@@ -40,42 +39,38 @@ public class Suit extends Tile {
     }
 
     /*******************************************************************
-     * Method to return the design of the Tile.
+     * Method gets the design of the tile.
      *
-     * @return design of the Tile (Circle, Character, or Bamboo)
+     * @return design of the tile, circle, char, or bamboo
      ******************************************************************/
     public String getDesign() {
-
         return design;
     }
 
     /*******************************************************************
-     * Method that sets the design of the Tile.
+     * Method sets the design of the tile.
      *
-     * @param design Type of design for the Tile.
+     * @param design Tupe of design for the tile.
      ******************************************************************/
     public void setDesign(String design) {
-
         this.design = design;
     }
 
-    /******************************************************************
-     * This method gets the value of the Suit Tile.
+    /*******************************************************************
+     * This method gets the value of the Suit tile.
      *
-     * @return Value of the Suit Tile.
+     * @return Value of the Suit tile.
      ******************************************************************/
     public int getValue() {
-
         return value;
     }
 
     /*******************************************************************
-     * This method sets the value of the Suit Tile.
+     * This method sets the value of the Suit tile.
      *
-     * @param value Value of the Suit Tile.
+     * @param value Value of the Suit tiles.
      ******************************************************************/
     public void setValue(int value) {
-
         this.value = value;
     }
 }

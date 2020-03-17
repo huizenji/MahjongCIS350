@@ -4,132 +4,90 @@ import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
 import javax.swing.Timer;
+import java.util.concurrent.TimeUnit;
 import java.util.*;
 
-/***********************************************************************
- * This class contains the JPanel of the game along with the JButtons,
- * that interact with the GUI class.
- *
- * @Authors: Wayne Chen, Jillian Huizenga, Chris Paul, Xianghe Zhao
- * @Version: 2/28/2020
- **********************************************************************/
 public class Board extends JPanel {
 
-    /** Holds and gives access to all game information. **/
+    /** Holds and gives access to all game information **/
     private Game game;
 
-    /** Represents all Tiles that are not in play. **/
+    /** Represents all Tiles that are not in play **/
     private ArrayList<JButton> drawPile;
 
-    /** Represents all Tiles that have been discarded. **/
+    /** Represents all Tiles that have been discarded **/
     private ArrayList<JButton> discardPile;
 
-    /** Represents all Tiles in the Player's hand. **/
+    /** Represents all Tiles in the Player's hand **/
     private ArrayList<JButton> p1Hand, p2Hand, p3Hand, p4Hand;
 
-    /** Represents all Tiles in the Player's set pile. **/
+    /** Represents all Tiles in the Player's set pile **/
     private ArrayList<JButton> p1Sets, p2Sets, p3Sets, p4Sets;
 
-    /** The JButton for the reset button. **/
     private JButton resetBtn;
 
-    /** Displays all JButtons in drawPile. **/
+    /** Displays all JButtons in drawPile **/
     private JPanel drawPilePanel;
 
-    /** Displays all JButtons in discardPile. **/
+    /** Displays all JButtons in discardPile **/
     private JPanel discardPilePanel;
 
-    /** Displays all JButtons in the Player's hand. **/
+    /** Displays all JButtons in the Player's hand **/
     private JPanel p1HandPanel, p2HandPanel, p3HandPanel, p4HandPanel;
 
-    /** Displays all JButtons in the Player's set pile. **/
+    /** Displays all JButtons in the Player's set pile **/
     private JPanel p1SetPanel, p2SetPanel, p3SetPanel, p4SetPanel;
 
-    /** Displays all JPanels. **/
+    /** Displays all JPanels **/
     private JLayeredPane gameBoard;
 
-    /** Displays which Player is currently taking their turn. **/
+    /** Displays which Player is currently taking their turn **/
     private JLabel playerTurn;
 
-    /** Displays the direction of the human Player. **/
     private JLabel p1Direction;
 
-    /** Tile image of type Suit with Circle design. **/
+    /** Tile image of type Suit with Circle design **/
     private ImageIcon circle1, circle2, circle3, circle4, circle5,
             circle6, circle7, circle8, circle9;
 
-    /** Tile image of type Suit with Bamboo design. **/
+    /** Tile image of type Suit with Bamboo design **/
     private ImageIcon bamboo1, bamboo2, bamboo3, bamboo4, bamboo5,
             bamboo6, bamboo7, bamboo8, bamboo9;
 
-    /** Tile image of type Suit with Character design. **/
+    /** Tile image of type Suit with Character design **/
     private ImageIcon character1, character2, character3, character4,
             character5, character6, character7, character8, character9;
 
-    /** Tile image of type Flower. **/
+    /** Tile image of type Flower **/
     private ImageIcon flower1, flower2, flower3, flower4, flower5,
             flower6, flower7, flower8;
 
-    /** Tile image of type Dragon. **/
+    /** Tile image of type Dragon **/
     private ImageIcon redDragon, greenDragon, whiteDragon;
 
-    /** Tile image of type Wind. **/
+    /** Tile image of type Wind **/
     private ImageIcon eastWind, southWind, westWind, northWind;
 
-    /** Tile image for face-down Tiles. **/
+    /** Tile image for face-down Tiles **/
     private ImageIcon tileBack;
 
-    /** Action Listener for JButton. **/
-    private Listener listener;
+    /** Action Listener **/
+    private listener listener;
 
-    /** Action Listener for options of background. **/
-
-    /** AI turn duration. **/
+    /** AI turn duration **/
     private Timer timer;
 
-    /** Menu Bar in Jpanel. **/
-    private JMenuBar menuBar;
-
-    /** Menu contain game customization options. **/
-    private JComboBox optionMenu;
-
-    /** Determines if a Player should draw a Tile from drawPile. **/
     private boolean drawFlag = true;
 
-    /** Determine if the program should hide tiles. **/
-    private boolean removeImage;
-
-    /** Number of tiles in display. **/
-    private int pileNum;
-
-    /** Background Color Options Dark Green. **/
-    private final Color darkGreen = new Color(0, 150, 100);
-
-    /** Default Background color of Red Shade. **/
-    private final int defaultR = 0;
-
-    /** Default Background color of Red Shade. **/
-    private final int defaultG = 150;
-
-    /** Default Background color of Red Shade. **/
-    private final int defaultB = 100;
-
-    /** Shade of background colors. **/
-    private int bgRed, bgGreen, bgBlue;
-    /*******************************************************************
+    /******************************************************************
      * This is the Board class constructor. This implements all global
      * variables, sets up the board display, deals the Tiles, and
      * starts the AI turn timer.
-     ******************************************************************/
+     *****************************************************************/
     public Board() {
 
         // create Game
         game = new Game();
-
-        // Set shade of rgb to default dark green color
-        bgRed = defaultR;
-        bgGreen = defaultG;
-        bgBlue = defaultB;
 
         // create piles and hands
         drawPile = new ArrayList<>();
@@ -156,26 +114,11 @@ public class Board extends JPanel {
         p4SetPanel = new JPanel();
         gameBoard = new JLayeredPane();
 
-        playerTurn = new JLabel(game.getCurrentPlayer().
-                getDirection() + "'s Turn");
-        p1Direction = new JLabel(game.getPlayerList(0).
-                getDirection());
-
-        // Listeners
-        OptionListener optionListener = new OptionListener();
-
-        // Creating the option Menu
-        String[] bgOptions = {"Red Shade", "Green Shade", "Blue "
-                + "Shade", "Default Shade"};
-        menuBar = new JMenuBar();
-        optionMenu = new JComboBox(bgOptions);
-        optionMenu.addActionListener(optionListener);
-
-        // Add Menu Bar
-        menuBar.add(optionMenu);
-        add(menuBar);
+        playerTurn = new JLabel(game.getCuurentPlayer().getDirection() + "'s Turn");
+        p1Direction = new JLabel(game.getPlayerList(0).getDirection());
 
         // set background
+        Color darkGreen = new Color(0, 150, 100);
         drawPilePanel.setBackground(darkGreen);
         discardPilePanel.setBackground(darkGreen);
         p1HandPanel.setBackground(darkGreen);
@@ -202,127 +145,91 @@ public class Board extends JPanel {
         p4SetPanel.setLayout(new GridBagLayout());
         gameBoard.setLayout(new GridBagLayout());
 
-        discardPilePanel.setBorder(BorderFactory.
-                createBevelBorder(1));
-        discardPilePanel.setPreferredSize(
-                new Dimension(325, 200));
+        discardPilePanel.setBorder(BorderFactory.createBevelBorder(1));
+        discardPilePanel.setPreferredSize(new Dimension(325, 200));
 
         createIcons();
 
-        // set listener for JButtons
-        listener = new Listener();
+        // set listeners for JButtons
+        listener = new listener();
 
         // create reset button
-//        resetBtn = new JButton("Reset Game");
-//        resetBtn.addActionListener(listener);
-//        gameBoard.add(resetBtn);
+        resetBtn = new JButton("Reset Game");
+        resetBtn.addActionListener(listener);
+        gameBoard.add(resetBtn);
 
         placeDrawPile();
         dealPlayerTiles();
         placePanels();
 
-        // disable human Player hand at start unless it's their turn
-        if (game.getCurrentPlayerIndex() != 0) {
-
-            enablePlayer1Hand(false);
+        // disable Player hand unless it's their turn
+        if (game.getCurrentPlayer() != 0) {
+            setJButton(false);
         }
 
         displayBoard();
-        removeImage = true;
-        pileNum = drawPile.size();
+
         // AI turn timer and general turn actions
         letsPlay();
 
         timer.start();
+
     }
 
-    /*******************************************************************
-     * This method uses a timer to go through each players turn.
-     ******************************************************************/
     private void letsPlay() {
-
         timer = new Timer(1000, new ActionListener() {
-
             @Override
-            public void actionPerformed(final ActionEvent e) {
+            public void actionPerformed(ActionEvent e) {
 
-                // Check for Stalemate
-                if (game.isStalemate()) {
+                //if (game.isStalemate())
 
-                    stalemateSeq();
-                }
+                if (game.getCurrentPlayer() != 0) {
 
-                // AI turn
-                if (game.getCurrentPlayerIndex() != 0) {
-
-                    // AI draws Tile
-                    game.dumbAIDraw(game.getCurrentPlayer());
-
-                    // Check if AI can declare Mahjong
-                    if (game.isMahjong(game.getPlayerHand(game
-                            .getCurrentPlayerIndex()), null)) {
-
-                        String message = "An opponent has declared "
-                                + "Mahjong. Sorry, you lose.";
-                        JOptionPane.showMessageDialog(
-                                null, message);
-                        enablePlayer1Hand(false);
-                        timer.stop();
-                    }
-
-                    // AI discards Tile
-                    game.dumbAIDiscard(game.getCurrentPlayer());
+                    game.dumbAI(game.getCuurentPlayer());
                     displayBoard();
-                    checkSeq();
+                    // set claims go here
 
-                    if (game.getCurrentPlayerIndex() == 0) {
+                    // test code
+                    Suit disTile = (Suit)(game.getRecentDiscard());
 
-                        enablePlayer1Hand(true);
+                    if (game.isPong(game.getPlayerHand(0),
+                            disTile)){
 
-                    } else {
+                        String message = "Claim pong of tile " +
+                                disTile.getValue() + " " +
+                                disTile.getDesign() + "?";
 
-                        enablePlayer1Hand(false);
-                    }
+                        int takePong = JOptionPane.showConfirmDialog(null,
+                                message, "Claim Message", JOptionPane.YES_NO_OPTION);
 
-                    // Check for Stalemate
-                    if (game.isStalemate()) {
+                        if (takePong == JOptionPane.YES_OPTION){
 
-                        stalemateSeq();
-                    }
-
-                    // Player draws and then discards and see if they
-                    // win
-                    if (game.getCurrentPlayerIndex() == 0 && game
-                            .getPlayerList(0).
-                                    getHandTile().size()
-                            != 14 && drawFlag) {
-
-                        game.draw(game.getPlayerList(0));
-                        displayBoard();
-
-                        if (game.isMahjong(game.getPlayerHand(game
-                                        .getCurrentPlayerIndex()),
-                                null)) {
-
-                            // Player winning off of Mahjong
-                            String message = "Do you wish to declare "
-                                    + "Mahjong and win?";
-
-                            String message2 = "Congratulations, "
-                                    + "you won";
-                            int mahjong = JOptionPane.showConfirmDialog(
-                                    null, message, "Claim Message",
-                                            JOptionPane.YES_NO_OPTION);
-
-                            if (mahjong == JOptionPane.YES_OPTION) {
-
-                                JOptionPane.showMessageDialog(
-                                        null, message2);
-                                enablePlayer1Hand(false);
-                                timer.stop();
-                            }
+                            game.takePong(game.getPlayerList(0),game.getRecentDiscard());
+                            displayBoard();
+                            drawFlag = false;
                         }
+
+                        game.setNextCurrentPlayer(0);
                     }
+
+                    else {
+                        //
+                        game.setNextCurrentPlayer();
+                    }
+
+                    if (game.getCurrentPlayer() == 0) {
+                        setJButton(true);
+                    }else{
+                        setJButton(false);
+                    }
+
+                    // Player draws and then discards
+                    if (game.getCurrentPlayer() == 0 && game
+                            .getPlayerList(0).getHandTile().size()
+                            != 14 && drawFlag){
+                        game.draw(game.getPlayerList(0));
+                    }
+
 
                     displayBoard();
                 }
@@ -330,12 +237,7 @@ public class Board extends JPanel {
         });
     }
 
-    /*******************************************************************
-     * This method places the individual panels in the overall JPanel
-     * that represents the game board.
-     ******************************************************************/
     private void placePanels() {
-
         GridBagConstraints c = new GridBagConstraints();
 
         c.ipadx = 50;
@@ -343,7 +245,6 @@ public class Board extends JPanel {
 
         c.gridx = 2;
         c.gridy = 2;
-
         gameBoard.add(drawPilePanel, c);
         gameBoard.setLayer(drawPilePanel, 0);
         gameBoard.add(discardPilePanel, c);
@@ -384,40 +285,32 @@ public class Board extends JPanel {
         add(gameBoard, BorderLayout.CENTER);
     }
 
-    /*******************************************************************
+    /******************************************************************
      * Creates 144 JButtons to represent all 144 Tiles in the game.
      * Places these JButtons into drawPile and displays drawPilePanel
      * in a 2-layer box format with a hollow center.
-     ******************************************************************/
+     *****************************************************************/
     private void placeDrawPile() {
 
         for (int i = 0; i < 144; i++) {
-
             JButton temp = new JButton(null, tileBack);
             temp.setPreferredSize(new Dimension(25, 25));
             drawPile.add(temp);
         }
 
-        // add JButton to drawPilePanel to make visible
+        // add to drawPilePanel to make visible
         GridBagConstraints c = new GridBagConstraints();
         int index = 0;
-
         for (int row = 0; row < 22; row++) {
-
             for (int col = 0; col < 22; col++) {
-
                 if (row < 2 || row > 19) {
-
                     if (col > 1 && col < 20) {
-
                         c.gridx = col;
                         c.gridy = row;
                         drawPilePanel.add(drawPile.get((index)), c);
                         index++;
                     }
-
                 } else if (col < 2 || col > 19) {
-
                     c.gridx = col;
                     c.gridy = row;
                     drawPilePanel.add(drawPile.get((index)), c);
@@ -425,45 +318,40 @@ public class Board extends JPanel {
                 }
             }
         }
+
     }
 
-    /*******************************************************************
+    /******************************************************************
      * Fills p1Hand, p2Hand, p3Hand, and p4Hand and places their
      * contents into p1HandPanel, p2HandPanel, p3HandPanel, and
      * p4HandPanel.
-     ******************************************************************/
+     *****************************************************************/
     private void dealPlayerTiles() {
 
         GridBagConstraints c = new GridBagConstraints();
-        int p1HandSize = game.getPlayerList(
-                0).getHandTile().size();
-        int p2HandSize = game.getPlayerList(
-                1).getHandTile().size();
-        int p3HandSize = game.getPlayerList(
-                2).getHandTile().size();
-        int p4HandSize = game.getPlayerList(
-                3).getHandTile().size();
+        int p1HandSize = game.getPlayerList(0).getHandTile().size();
+        int p2HandSize = game.getPlayerList(1).getHandTile().size();
+        int p3HandSize = game.getPlayerList(2).getHandTile().size();
+        int p4HandSize = game.getPlayerList(3).getHandTile().size();
+
 
         for (int i = 0; i < p1HandSize; i++) {
-
             JButton temp = new JButton();
             temp.addActionListener(listener);
             p1Hand.add(temp);
             drawPilePanel.remove(drawPile.size() - 1);
             drawPile.remove(drawPile.size() - 1);
 
-            p1Hand.get(i).setIcon(updatedImage(game.getPlayerList(0)
-                    .getTileFromHand(i)));
+            p1Hand.get(i).setIcon(updatedImage(game.getPlayerList
+                    (0).getTileFromHand(i)));
 
             c.gridx = i;
             c.gridy = 0;
-            p1Hand.get(i).setPreferredSize(new Dimension(
-                    50, 50));
+            p1Hand.get(i).setPreferredSize(new Dimension(50, 50));
             p1HandPanel.add(p1Hand.get(i), c);
         }
 
         for (int i = 0; i < p2HandSize; i++) {
-
             JButton temp = new JButton(tileBack);
             temp.setPreferredSize(new Dimension(25, 25));
             p2Hand.add(temp);
@@ -476,7 +364,6 @@ public class Board extends JPanel {
         }
 
         for (int i = 0; i < p3HandSize; i++) {
-
             JButton temp = new JButton(tileBack);
             temp.setPreferredSize(new Dimension(25, 25));
             p3Hand.add(temp);
@@ -489,7 +376,6 @@ public class Board extends JPanel {
         }
 
         for (int i = 0; i < p4HandSize; i++) {
-
             JButton temp = new JButton(tileBack);
             temp.setPreferredSize(new Dimension(25, 25));
             p4Hand.add(temp);
@@ -502,16 +388,15 @@ public class Board extends JPanel {
         }
     }
 
-    /*******************************************************************
+    /******************************************************************
      * This method takes a Tile as a parameter and returns the image
      * type that correctly represents the Tile. This method is used to
      * update JButtons across the Board to correctly represent the game
      * as it proceeds.
-     *
-     * @param tile a Tile object.
-     * @return an image that correctly represents the Tile.
-     ******************************************************************/
-    private ImageIcon updatedImage(final Tile tile) {
+     * @param tile a Tile object
+     * @return an image that correctly represents the Tile
+     *****************************************************************/
+    private ImageIcon updatedImage(Tile tile) {
 
         if (tile instanceof Suit) {
             switch (((Suit) tile).getDesign()) {
@@ -537,124 +422,76 @@ public class Board extends JPanel {
         return tileBack;
     }
 
-    /*******************************************************************
+    /******************************************************************
      * Defines all global ImageIcons.
-     ******************************************************************/
+     *****************************************************************/
     private void createIcons() {
+        // Sets the Image for circle tiles
+        circle1 = new ImageIcon("./src/MahjongCIS350/Images/circle1.jpg");
+        circle2 = new ImageIcon("./src/MahjongCIS350/Images/circle2.jpg");
+        circle3 = new ImageIcon("./src/MahjongCIS350/Images/circle3.jpg");
+        circle4 = new ImageIcon("./src/MahjongCIS350/Images/circle4.jpg");
+        circle5 = new ImageIcon("./src/MahjongCIS350/Images/circle5.jpg");
+        circle6 = new ImageIcon("./src/MahjongCIS350/Images/circle6.jpg");
+        circle7 = new ImageIcon("./src/MahjongCIS350/Images/circle7.jpg");
+        circle8 = new ImageIcon("./src/MahjongCIS350/Images/circle8.jpg");
+        circle9 = new ImageIcon("./src/MahjongCIS350/Images/circle9.jpg");
 
-        // Sets the Image for circle Suit Tiles
-        circle1 = new ImageIcon("./src/MahjongCIS350/Images/"
-                + "circle1.jpg");
-        circle2 = new ImageIcon("./src/MahjongCIS350/Images/"
-                + "circle2.jpg");
-        circle3 = new ImageIcon("./src/MahjongCIS350/Images/"
-                + "circle3.jpg");
-        circle4 = new ImageIcon("./src/MahjongCIS350/Images/"
-                + "circle4.jpg");
-        circle5 = new ImageIcon("./src/MahjongCIS350/Images/"
-                + "circle5.jpg");
-        circle6 = new ImageIcon("./src/MahjongCIS350/Images/"
-                + "circle6.jpg");
-        circle7 = new ImageIcon("./src/MahjongCIS350/Images/"
-                + "circle7.jpg");
-        circle8 = new ImageIcon("./src/MahjongCIS350/Images/"
-                + "circle8.jpg");
-        circle9 = new ImageIcon("./src/MahjongCIS350/Images/"
-                + "circle9.jpg");
+        // Sets the Image for bamboo tiles
+        bamboo1 = new ImageIcon("./src/MahjongCIS350/Images/bamboo1.jpg");
+        bamboo2 = new ImageIcon("./src/MahjongCIS350/Images/bamboo2.jpg");
+        bamboo3 = new ImageIcon("./src/MahjongCIS350/Images/bamboo3.jpg");
+        bamboo4 = new ImageIcon("./src/MahjongCIS350/Images/bamboo4.jpg");
+        bamboo5 = new ImageIcon("./src/MahjongCIS350/Images/bamboo5.jpg");
+        bamboo6 = new ImageIcon("./src/MahjongCIS350/Images/bamboo6.jpg");
+        bamboo7 = new ImageIcon("./src/MahjongCIS350/Images/bamboo7.jpg");
+        bamboo8 = new ImageIcon("./src/MahjongCIS350/Images/bamboo8.jpg");
+        bamboo9 = new ImageIcon("./src/MahjongCIS350/Images/bamboo9.jpg");
 
-        // Sets the Image for bamboo Suit Tiles
-        bamboo1 = new ImageIcon("./src/MahjongCIS350/Images/"
-                + "bamboo1.jpg");
-        bamboo2 = new ImageIcon("./src/MahjongCIS350/Images/"
-                + "bamboo2.jpg");
-        bamboo3 = new ImageIcon("./src/MahjongCIS350/Images/"
-                + "bamboo3.jpg");
-        bamboo4 = new ImageIcon("./src/MahjongCIS350/Images/"
-                + "bamboo4.jpg");
-        bamboo5 = new ImageIcon("./src/MahjongCIS350/Images/"
-                + "bamboo5.jpg");
-        bamboo6 = new ImageIcon("./src/MahjongCIS350/Images/"
-                + "bamboo6.jpg");
-        bamboo7 = new ImageIcon("./src/MahjongCIS350/Images/"
-                + "bamboo7.jpg");
-        bamboo8 = new ImageIcon("./src/MahjongCIS350/Images/"
-                + "bamboo8.jpg");
-        bamboo9 = new ImageIcon("./src/MahjongCIS350/Images/"
-                + "bamboo9.jpg");
+        // Sets the Image for character tiles
+        character1 = new ImageIcon("./src/MahjongCIS350/Images/character1.jpg");
+        character2 = new ImageIcon("./src/MahjongCIS350/Images/character2.jpg");
+        character3 = new ImageIcon("./src/MahjongCIS350/Images/character3.jpg");
+        character4 = new ImageIcon("./src/MahjongCIS350/Images/character4.jpg");
+        character5 = new ImageIcon("./src/MahjongCIS350/Images/character5.jpg");
+        character6 = new ImageIcon("./src/MahjongCIS350/Images/character6.jpg");
+        character7 = new ImageIcon("./src/MahjongCIS350/Images/character7.jpg");
+        character8 = new ImageIcon("./src/MahjongCIS350/Images/character8.jpg");
+        character9 = new ImageIcon("./src/MahjongCIS350/Images/character9.jpg");
 
-        // Sets the Image for character Suit Tiles
-        character1 = new ImageIcon(
-                "./src/MahjongCIS350/Images/character1.jpg");
-        character2 = new ImageIcon(
-                "./src/MahjongCIS350/Images/character2.jpg");
-        character3 = new ImageIcon(
-                "./src/MahjongCIS350/Images/character3.jpg");
-        character4 = new ImageIcon(
-                "./src/MahjongCIS350/Images/character4.jpg");
-        character5 = new ImageIcon(
-                "./src/MahjongCIS350/Images/character5.jpg");
-        character6 = new ImageIcon(
-                "./src/MahjongCIS350/Images/character6.jpg");
-        character7 = new ImageIcon(
-                "./src/MahjongCIS350/Images/character7.jpg");
-        character8 = new ImageIcon(
-                "./src/MahjongCIS350/Images/character8.jpg");
-        character9 = new ImageIcon(
-                "./src/MahjongCIS350/Images/character9.jpg");
+        // Sets the Image for flower tiles
+        flower1 = new ImageIcon("./src/MahjongCIS350/Images/flower1.jpg");
+        flower2 = new ImageIcon("./src/MahjongCIS350/Images/flower2.jpg");
+        flower3 = new ImageIcon("./src/MahjongCIS350/Images/flower3.jpg");
+        flower4 = new ImageIcon("./src/MahjongCIS350/Images/flower4.jpg");
+        flower5 = new ImageIcon("./src/MahjongCIS350/Images/flower5.jpg");
+        flower6 = new ImageIcon("./src/MahjongCIS350/Images/flower6.jpg");
+        flower7 = new ImageIcon("./src/MahjongCIS350/Images/flower7.jpg");
+        flower8 = new ImageIcon("./src/MahjongCIS350/Images/flower8.jpg");
 
-        // Sets the Image for Flower Tiles
-        flower1 = new ImageIcon(
-                "./src/MahjongCIS350/Images/flower1.jpg");
-        flower2 = new ImageIcon(
-                "./src/MahjongCIS350/Images/flower2.jpg");
-        flower3 = new ImageIcon(
-                "./src/MahjongCIS350/Images/flower3.jpg");
-        flower4 = new ImageIcon(
-                "./src/MahjongCIS350/Images/flower4.jpg");
-        flower5 = new ImageIcon(
-                "./src/MahjongCIS350/Images/flower5.jpg");
-        flower6 = new ImageIcon(
-                "./src/MahjongCIS350/Images/flower6.jpg");
-        flower7 = new ImageIcon(
-                "./src/MahjongCIS350/Images/flower7.jpg");
-        flower8 = new ImageIcon(
-                "./src/MahjongCIS350/Images/flower8.jpg");
+        // Sets the Image for dragon tiles
+        redDragon = new ImageIcon("./src/MahjongCIS350/Images/redDragon.jpg");
+        greenDragon = new ImageIcon("./src/MahjongCIS350/Images/greenDragon.jpg");
+        whiteDragon = new ImageIcon("./src/MahjongCIS350/Images/whiteDragon.jpg");
 
-        // Sets the Image for Dragon Tiles
-        redDragon = new ImageIcon(
-                "./src/MahjongCIS350/Images/redDragon.jpg");
-        greenDragon = new ImageIcon(
-                "./src/MahjongCIS350/Images/greenDragon.jpg");
-        whiteDragon = new ImageIcon(
-                "./src/MahjongCIS350/Images/whiteDragon.jpg");
+        // Sets the Image for the wind tiles
+        eastWind = new ImageIcon("./src/MahjongCIS350/Images/eastWind.jpg");
+        southWind = new ImageIcon("./src/MahjongCIS350/Images/southWind.jpg");
+        westWind = new ImageIcon("./src/MahjongCIS350/Images/westWind.jpg");
+        northWind = new ImageIcon("./src/MahjongCIS350/Images/northWind.jpg");
 
-        // Sets the Image for the Wind Tiles
-        eastWind = new ImageIcon(
-                "./src/MahjongCIS350/Images/eastWind.jpg");
-        southWind = new ImageIcon(
-                "./src/MahjongCIS350/Images/southWind.jpg");
-        westWind = new ImageIcon(
-                "./src/MahjongCIS350/Images/westWind.jpg");
-        northWind = new ImageIcon(
-                "./src/MahjongCIS350/Images/northWind.jpg");
-
-        // Sets the Image for the back of a Tile
-        tileBack = new ImageIcon(
-                "./src/MahjongCIS350/Images/tileBack.jpg");
+        tileBack = new ImageIcon("./src/MahjongCIS350/Images/tileBack.jpg");
     }
 
-    /*******************************************************************
+    /******************************************************************
      * This method returns an image that represents a Suit Tile with a
      * Circle design of the indicated value.
-     *
-     * @param value the numerical value of a Suit Tile (1-9).
-     * @return an Image that correctly matches the indicated value,
-     *         will return tileBack if there is an error.
-     ******************************************************************/
-    private ImageIcon getCircleImage(final int value) {
-
+     * @param value the numerical value of a Suit Tile (1-9)
+     * @return an image that correctly matches the indicated value,
+     *         will return tileBack if there is an error
+     *****************************************************************/
+    private ImageIcon getCircleImage(int value) {
         switch (value) {
-
             case 1:
                 return circle1;
             case 2:
@@ -677,18 +514,15 @@ public class Board extends JPanel {
         return tileBack;
     }
 
-    /*******************************************************************
+    /******************************************************************
      * This method returns an image that represents a Suit Tile with a
      * Bamboo design of the indicated value.
-     *
-     * @param value the numerical value of a Suit Tile (1-9).
-     * @return an Image that correctly matches the indicated value,
-     *         will return tileBack if there is an error.
-     ******************************************************************/
+     * @param value the numerical value of a Suit Tile (1-9)
+     * @return an image that correctly matches the indicated value,
+     *         will return tileBack if there is an error
+     *****************************************************************/
     private ImageIcon getBambooImage(int value) {
-
         switch (value) {
-
             case 1:
                 return bamboo1;
             case 2:
@@ -708,22 +542,18 @@ public class Board extends JPanel {
             case 9:
                 return bamboo9;
         }
-
         return tileBack;
     }
 
-    /*******************************************************************
-     * This method returns an Image that represents a Suit Tile with a
+    /******************************************************************
+     * This method returns an image that represents a Suit Tile with a
      * Character design of the indicated value.
-     *
-     * @param value the numerical value of a Suit Tile (1-9).
-     * @return an Image that correctly matches the indicated value,
-     *         will return tileBack if there is an error.
-     ******************************************************************/
-    private ImageIcon getCharacterImage(final int value) {
-
+     * @param value the numerical value of a Suit Tile (1-9)
+     * @return an image that correctly matches the indicated value,
+     *         will return tileBack if there is an error
+     *****************************************************************/
+    private ImageIcon getCharacterImage(int value) {
         switch (value) {
-
             case 1:
                 return character1;
             case 2:
@@ -743,22 +573,18 @@ public class Board extends JPanel {
             case 9:
                 return character9;
         }
-
         return tileBack;
     }
 
-    /*******************************************************************
+    /******************************************************************
      * This method returns an image that represents a Dragon Tile
      * of the indicated color.
-     *
-     * @param color the color of a Dragon Tile (Red, Green, or White).
-     * @return an Image that correctly matches the indicated color,
-     *         will return tileBack if there is an error.
-     ******************************************************************/
-    private ImageIcon getDragonImage(final String color) {
-
+     * @param color the color of a Dragon Tile (Red, Green, or White)
+     * @return an image that correctly matches the indicated color,
+     *         will return tileBack if there is an error
+     *****************************************************************/
+    private ImageIcon getDragonImage(String color) {
         switch (color) {
-
             case "Red":
                 return redDragon;
             case "Green":
@@ -766,23 +592,19 @@ public class Board extends JPanel {
             case "White":
                 return whiteDragon;
         }
-
         return tileBack;
     }
 
-    /*******************************************************************
-     * This method returns an Image that represents a Wind Tile
+    /******************************************************************
+     * This method returns an image that represents a Wind Tile with a
      * of the indicated direction.
-     *
      * @param direction the cardinal direction of a Wind Tile (east,
-     *                  south, west, or north).
-     * @return an Image that correctly matches the indicated direction,
-     *         will return tileBack if there is an error.
-     ******************************************************************/
-    private ImageIcon getWindImage(final String direction) {
-
+     *                  south, west, or north)
+     * @return an image that correctly matches the indicated direction,
+     *         will return tileBack if there is an error
+     *****************************************************************/
+    private ImageIcon getWindImage(String direction) {
         switch (direction) {
-
             case "East":
                 return eastWind;
             case "South":
@@ -792,22 +614,18 @@ public class Board extends JPanel {
             case "North":
                 return northWind;
         }
-
         return tileBack;
     }
 
-    /*******************************************************************
-     * This method returns an Image that represents a Flower Tile with
+    /******************************************************************
+     * This method returns an image that represents a Flower Tile with
      * the indicated number.
-     *
-     * @param number the number of a Flower Tile (1-8).
-     * @return an Image that correctly matches the indicated number,
-     *         will return tileBack if there is an error.
-     ******************************************************************/
-    private ImageIcon getFlowerImage(final int number) {
-
+     * @param number the number of a Flower Tile (1-8)
+     * @return an image that correctly matches the indicated number,
+     *         will return tileBack if there is an error
+     *****************************************************************/
+    private ImageIcon getFlowerImage(int number) {
         switch (number) {
-
             case 1:
                 return flower1;
             case 2:
@@ -825,20 +643,17 @@ public class Board extends JPanel {
             case 8:
                 return flower8;
         }
-
         return tileBack;
     }
 
-    /*******************************************************************
+    /******************************************************************
      * This method sets p1Hand JButtons to be enabled or disabled
      * depending on whether it is p1's turn or not.
-     *
-     * @param condition true if it is p1's turn, otherwise false.
-     ******************************************************************/
-    private void enablePlayer1Hand(final boolean condition) {
+     * @param condition true if it is p1's turn, otherwise false
+     *****************************************************************/
+    private void setJButton(boolean condition) {
 
         for (int i = 0; i < p1Hand.size(); i++) {
-
             p1Hand.get(i).setEnabled(condition);
         }
     }
@@ -848,19 +663,14 @@ public class Board extends JPanel {
      *****************************************************************/
     private void displayBoard() {
 
-        int p1HandSize = game.getPlayerList(
-                0).getHandTile().size();
+        int p1HandSize = game.getPlayerList(0).getHandTile().size();
         int discardPileSize = game.getDiscardPile().size();
         int drawPileSize = game.getDrawPile().size();
 
-        int p1SetSize = game.getPlayerList(
-                0).getSetPile().size();
-        int p2SetSize = game.getPlayerList(
-                1).getSetPile().size();
-        int p3SetSize = game.getPlayerList(
-                2).getSetPile().size();
-        int p4SetSize = game.getPlayerList(
-                3).getSetPile().size();
+        int p1SetSize = game.getPlayerList(0).getSetPile().size();
+        int p2SetSize = game.getPlayerList(1).getSetPile().size();
+        int p3SetSize = game.getPlayerList(2).getSetPile().size();
+        int p4SetSize = game.getPlayerList(3).getSetPile().size();
 
         updateP1Hand(p1HandSize);
 
@@ -876,70 +686,38 @@ public class Board extends JPanel {
 
         updateDiscardPile(discardPileSize);
 
-        // update Label for Player turn or game reset
-        playerTurn.setText(game.getCurrentPlayer()
+        // update label for Player turn or game reset
+        playerTurn.setText(game.getCuurentPlayer()
                 .getDirection() + "'s Turn");
-        p1Direction.setText(game.getPlayerList(
-                0).getDirection());
+        p1Direction.setText(game.getPlayerList(0).getDirection());
 
         // display all of the updates
         repaint();
     }
 
-    /*******************************************************************
-     * This method updates the discard pile.
-     *
-     * @param discardPileSize The amount of tiles in the discard pile.
-     ******************************************************************/
-    private void updateDiscardPile(final int discardPileSize) {
-
+    private void updateDiscardPile(int discardPileSize) {
         while (discardPile.size() < discardPileSize) {
-
             JButton temp = new JButton();
             temp.setPreferredSize(new Dimension(30, 35));
             discardPile.add(temp);
-            discardPile.get(discardPile.size() - 1).setIcon(
-                    updatedImage(game.getDiscardPile().get(game
+            discardPile.get(discardPile.size() - 1).setIcon
+                    (updatedImage(game.getDiscardPile().get(game
                             .getDiscardPile().size() - 1)));
             discardPilePanel.add(temp);
         }
 
-        while (discardPile.size() > discardPileSize) {
-
+        while (discardPile.size() > discardPileSize){
             discardPilePanel.remove(discardPile.size() - 1);
             discardPile.remove(discardPile.size() - 1);
         }
     }
 
-    /*******************************************************************
-     * This method updates the draw pile.
-     *
-     * @param drawPileSize The amount of tiles in the draw pile.
-     ******************************************************************/
-    private void updateDrawPile(final int drawPileSize) {
-
-        if (pileNum > drawPileSize && removeImage) {
-
-//            drawPilePanel.remove(drawPile.get(pileNum - 1));
-//            drawPile.remove(drawPile.get(pileNum - 1));
-            Color darkGreen = new Color(0, 150, 100);
-
-            drawPile.get(pileNum - 1).setIcon(null);
-            drawPile.get(pileNum - 1).setBackground(darkGreen);
-            drawPile.get(pileNum - 1).setBorder(
-                    BorderFactory.createEmptyBorder());
-            pileNum--;
-        }
-
-        if (drawPile.size() > drawPileSize && !removeImage) {
-
+    private void updateDrawPile(int drawPileSize) {
+        if (drawPile.size() > drawPileSize){
             drawPilePanel.remove(drawPile.get(drawPile.size() - 1));
             drawPile.remove(drawPile.get(drawPile.size() - 1));
-
-        } else if (drawPile.size() < drawPileSize) {
-
-            while (drawPile.size() < drawPileSize) {
-
+        }else if (drawPile.size() < drawPileSize){
+            while(drawPile.size() < drawPileSize){
                 JButton temp = new JButton(tileBack);
                 drawPile.add(temp);
                 drawPilePanel.add(temp);
@@ -947,15 +725,8 @@ public class Board extends JPanel {
         }
     }
 
-    /*******************************************************************
-     * This method updates set the set pile of player 4.
-     *
-     * @param p4SetSize The size of the set pile of player 4.
-     ******************************************************************/
-    private void updateP4SetPile(final int p4SetSize) {
-
+    private void updateP4SetPile(int p4SetSize) {
         while (p4Sets.size() < p4SetSize) {
-
             JButton temp = new JButton();
             temp.setPreferredSize(new Dimension(25, 25));
             p4Sets.add(temp);
@@ -966,58 +737,36 @@ public class Board extends JPanel {
             p4SetPanel.add(p4Sets.get(p4Sets.size() - 1), c);
         }
 
-        while (p4Sets.size() > p4SetSize) {
-
+        while (p4Sets.size() > p4SetSize){
             p4SetPanel.remove(p4Sets.size() - 1);
             p4Sets.remove(p4Sets.size() - 1);
         }
 
         for (int i = 0; i < p4SetSize; i++) {
-
-            p4Sets.get(i).setIcon(updatedImage(
-                    game.getPlayerList(3)
-                    .getSetTile(i)));
+            p4Sets.get(i).setIcon(updatedImage(game.getPlayerList(3).getSetTile(i)));
         }
     }
 
-    /*******************************************************************
-     * This method updates set the set pile of player 3.
-     *
-     * @param p3SetSize The size of the set pile of player 3.
-     ******************************************************************/
-    private void updateP3SetPile(final int p3SetSize) {
-
+    private void updateP3SetPile(int p3SetSize) {
         while (p3Sets.size() < p3SetSize) {
-
             JButton temp = new JButton();
             temp.setPreferredSize(new Dimension(25, 25));
             p3Sets.add(temp);
             p3SetPanel.add(p3Sets.get(p3Sets.size() - 1));
         }
 
-        while (p3Sets.size() > p3SetSize) {
-
+        while (p3Sets.size() > p3SetSize){
             p3SetPanel.remove(p3Sets.size() - 1);
             p3Sets.remove(p3Sets.size() - 1);
         }
 
         for (int i = 0; i < p3SetSize; i++) {
-
-            p3Sets.get(i).setIcon(updatedImage(
-                    game.getPlayerList(2)
-                    .getSetTile(i)));
+            p3Sets.get(i).setIcon(updatedImage(game.getPlayerList(2).getSetTile(i)));
         }
     }
 
-    /*******************************************************************
-     * This method updates set the set pile of player 2.
-     *
-     * @param p2SetSize The size of the set pile of player 2.
-     ******************************************************************/
-    private void updateP2SetPile(final int p2SetSize) {
-
+    private void updateP2SetPile(int p2SetSize) {
         while (p2Sets.size() < p2SetSize) {
-
             JButton temp = new JButton();
             temp.setPreferredSize(new Dimension(25, 25));
             p2Sets.add(temp);
@@ -1028,309 +777,61 @@ public class Board extends JPanel {
             p2SetPanel.add(p2Sets.get(p2Sets.size() - 1), c);
         }
 
-        while (p2Sets.size() > p2SetSize) {
-
+        while (p2Sets.size() > p2SetSize){
             p2SetPanel.remove(p2Sets.size() - 1);
             p2Sets.remove(p2Sets.size() - 1);
         }
 
         for (int i = 0; i < p2SetSize; i++) {
-
-            p2Sets.get(i).setIcon(updatedImage(
-                    game.getPlayerList(1)
-                    .getSetTile(i)));
+            p2Sets.get(i).setIcon(updatedImage(game.getPlayerList(1).getSetTile(i)));
         }
     }
 
-    /*******************************************************************
-     * This method updates set  the set pile of player 1.
-     *
-     * @param p1SetSize The size of the set pile of player 1.
-     ******************************************************************/
-    private void updateP1SetPile(final int p1SetSize) {
-
+    private void updateP1SetPile(int p1SetSize) {
         while (p1Sets.size() < p1SetSize) {
-
             JButton temp = new JButton();
             temp.setPreferredSize(new Dimension(25, 25));
             p1Sets.add(temp);
             p1SetPanel.add(p1Sets.get(p1Sets.size() - 1));
         }
 
-        while (p1Sets.size() > p1SetSize) {
-
+        while (p1Sets.size() > p1SetSize){
             p1SetPanel.remove(p1Sets.size() - 1);
             p1Sets.remove(p1Sets.size() - 1);
         }
 
         for (int i = 0; i < p1SetSize; i++) {
-
-            p1Sets.get(i).setIcon(updatedImage(
-                    game.getPlayerList(0)
-                    .getSetTile(i)));
+            p1Sets.get(i).setIcon(updatedImage(game.getPlayerList(0).getSetTile(i)));
         }
     }
 
-    /******************************************************************
-     * This method updates the players hand.
-     *
-     * @param p1HandSize The hand of the first player.
-     *****************************************************************/
-    private void updateP1Hand(final int p1HandSize) {
-
-        while (p1Hand.size() < p1HandSize) {
-
+    private void updateP1Hand(int p1HandSize) {
+        while (p1Hand.size() < p1HandSize){
             JButton temp = new JButton();
             temp.setPreferredSize(new Dimension(50, 50));
             temp.addActionListener(listener);
             p1Hand.add(temp);
             p1HandPanel.add(p1Hand.get(p1Hand.size() - 1));
-
-            // give new Tile a border
-            p1Hand.get(p1Hand.size() - 1).setBorder(BorderFactory
-                    .createLineBorder(Color.BLUE, 5));
+            p1Hand.get(p1Hand.size() - 1).setBorder(BorderFactory.createLineBorder(Color.BLUE, 5));
         }
 
-        while (p1Hand.size() > p1HandSize) {
-
+        while(p1Hand.size() > p1HandSize){
             p1HandPanel.remove(p1Hand.size() - 1);
             p1Hand.remove(p1Hand.size() - 1);
         }
 
         for (int i = 0; i < p1HandSize; i++) {
-
-            p1Hand.get(i).setIcon(updatedImage(
-                    game.getPlayerList(0)
-                    .getTileFromHand(i)));
-        }
-    }
-
-    /*******************************************************************
-     * This method checks all the Players and returns a Player who has
-     * Mahjong.
-     *
-     * @return Player's index in Game's playerList if a player has a
-     *         Mahjong, else it returns a -1 for when a Tile is
-     *         discarded.
-     ******************************************************************/
-    private int isMahjongPlayerDiscard() {
-
-        if (game.getDiscardPile().size() == 0) {
-
-            return -1;
-        }
-
-        for (int i = 0; i < 4; i++) {
-
-            if (game.isMahjong(game.getPlayerHand((i)), game
-                    .getRecentDiscard())) {
-
-                return i;
-            }
-        }
-
-        return -1;
-    }
-
-    /*******************************************************************
-     * This performs the sequence of actions if a stalemate occurs.
-     ******************************************************************/
-    private void stalemateSeq() {
-
-        enablePlayer1Hand(false);
-        timer.stop();
-        JOptionPane.showMessageDialog(null,
-                "There are no possible ways to "
-                        + "win, therefore the game is a "
-                        + "stalemate.");
-        drawFlag = false;
-    }
-
-    /*******************************************************************
-     * This method performs a sequence of action when a chi can be
-     * claimed.
-     *
-     * @param disTile The recent discarded tile.
-     ******************************************************************/
-    private void chiSeq(final Suit disTile) {
-
-        String message = "Claim chi of tile "
-                + disTile.getValue() + " "
-                + disTile.getDesign() + "?";
-
-        int takeChi = JOptionPane.showConfirmDialog(null,
-                message, "Claim Message",
-                JOptionPane.YES_NO_OPTION);
-
-        if (takeChi == JOptionPane.YES_OPTION) {
-
-            game.takeChi(game.getPlayerList(0),
-                    game.getRecentDiscard());
-            displayBoard();
-            game.setNextCurrentPlayer(0);
-            drawFlag = false;
+            p1Hand.get(i).setIcon(updatedImage(game.getPlayerList(0).getTileFromHand(i)));
         }
     }
 
     /******************************************************************
-     * This method performs a sequence of action when a pong can
-     * be claimed.
-     *
-     * @param disTile The recent discarded tile.
-     *****************************************************************/
-    private void pongSeq(final Suit disTile) {
-
-        String message = "Claim pong of tile "
-                + disTile.getValue() + " "
-                + disTile.getDesign() + "?";
-
-        int takePong = JOptionPane.showConfirmDialog(
-                null,
-                message, "Claim Message",
-                JOptionPane.YES_NO_OPTION);
-
-        if (takePong == JOptionPane.YES_OPTION) {
-
-            game.takePong(game.getPlayerList(0), game
-                    .getRecentDiscard());
-            displayBoard();
-            game.setNextCurrentPlayer(0);
-            drawFlag = false;
-        }
-    }
-
-    /******************************************************************
-     * This method performs a sequence of action when a kong can
-     * be claimed.
-     *
-     * @param disTile The recent discarded tile.
-     *****************************************************************/
-    private void kongSeq(final Suit disTile) {
-
-        String message = "Claim Kong of tile "
-                + disTile.getValue() + " "
-                + disTile.getDesign() + "?";
-
-        int takeKong = JOptionPane.showConfirmDialog(
-                null,
-                message, "Claim Message",
-                JOptionPane.YES_NO_OPTION);
-
-        if (takeKong == JOptionPane.YES_OPTION) {
-
-            game.takeKong(game.getPlayerList(0), game
-                    .getRecentDiscard());
-            displayBoard();
-            game.setNextCurrentPlayer(0);
-            drawFlag = false;
-        }
-    }
-
-    /******************************************************************
-     * This methods is the sequence of action when a mahjong can
-     * be declared.
-     *****************************************************************/
-    private void mahjongSeq() {
-
-        // Player can claim Mahjong
-        if (isMahjongPlayerDiscard() == 0) {
-
-            String message = "Do you wish to declare "
-                    + "Mahjong and win?";
-
-            String message2 = "Congratulations, you won!";
-            int mahjong = JOptionPane.showConfirmDialog(
-                    null,
-                    message, "Claim Message",
-                    JOptionPane.YES_NO_OPTION);
-
-            if (mahjong == JOptionPane.YES_OPTION) {
-
-                JOptionPane.showMessageDialog(
-                        null, message2);
-                enablePlayer1Hand(false);
-                timer.stop();
-                drawFlag = false;
-            }
-        } else {
-
-            String message = "An opponent has declared Mahjong."
-                    + " Sorry, you lose.";
-            JOptionPane.showMessageDialog(null, message);
-            enablePlayer1Hand(false);
-            timer.stop();
-            drawFlag = false;
-        }
-    }
-
-    /*******************************************************************
-     * This method runs through a sequence of checks if a set can be
-     * claimed or a mahjong can be declared.
-     ******************************************************************/
-    private void checkSeq() {
-
-        displayBoard();
-
-        // Check for if AI or human Player Mahjong off of discard
-        if (isMahjongPlayerDiscard() != -1) {
-
-            mahjongSeq();
-        }
-
-        if (game.isKong(game.getPlayerHand(0),
-                game.getRecentDiscard())
-                && drawFlag) {
-
-            kongSeq((Suit) game.getRecentDiscard());
-        }
-
-        // Check for pongs that can be claimed
-        if (game.isPong(game.getPlayerHand(0),
-                game.getRecentDiscard())
-                && drawFlag) {
-
-            pongSeq((Suit) game.getRecentDiscard());
-        }
-
-        // Check for any chi that can be claimed
-        // drawFlag used to determine if user has already claimed pong
-        if (game.isChi(game.getPlayerList(0),
-                (Suit) game.getRecentDiscard()) && drawFlag) {
-
-            chiSeq((Suit) game.getRecentDiscard());
-        }
-
-        if (drawFlag) {
-
-            game.setNextCurrentPlayer();
-        }
-
-        displayBoard();
-    }
-
-    private class OptionListener implements ActionListener {
-
-        /***************************************************************
-         * Action of Selecting Shade
-         * @param event ass
-         */
-        public void actionPerformed(final ActionEvent event) {
-
-            JComboBox cb = (JComboBox) event.getSource();
-            System.out.println((String) cb.getSelectedItem());
-        }
-    }
-
-    /*******************************************************************
      * A class within Board that handles action listeners
-     ******************************************************************/
-    private class Listener implements ActionListener {
+     *****************************************************************/
+    private class listener implements ActionListener {
+        public void actionPerformed(ActionEvent event) {
 
-        public void actionPerformed(final ActionEvent event) {
-
-            int p1HandSize = game.getPlayerList(0)
-                    .getHandTile()
-                    .size();
+            int p1HandSize = game.getPlayerList(0).getHandTile().size();
 
             // when Tile is selected for discard, only p1 can do this
             for (int i = 0; i < p1HandSize; i++) {
@@ -1339,43 +840,36 @@ public class Board extends JPanel {
                 if (p1Hand.get(i) == event.getSource()) {
 
                     // are you sure you want to discard?
-                    int discard = JOptionPane.showConfirmDialog(
-                            null,
-                            "Discard Tile?", "Discard",
-                            JOptionPane.YES_NO_OPTION);
-
+                    int discard = JOptionPane.showConfirmDialog(null,
+                            "Discard Tile?", "Discard", JOptionPane.YES_NO_OPTION);
                     if (discard == JOptionPane.YES_OPTION) {
+                        game.discard(game.getPlayerList(0), i);
 
-                        game.discard(game.getPlayerList(
-                                0), i);
-
-                        JButton temp = new JButton(null,
-                                p1Hand.get(i).getIcon());
-                        temp.setPreferredSize(new Dimension(
-                                30, 35));
+                        JButton temp = new JButton(null, p1Hand.get(i).getIcon());
+                        temp.setPreferredSize(new Dimension(30, 35));
                         p1HandPanel.remove(p1Hand.size() - 1);
                         p1Hand.remove(p1Hand.size() - 1);
                         discardPile.add(temp);
-                        discardPilePanel.add(discardPile.get(
-                                discardPile.size() - 1));
+                        discardPilePanel.add(discardPile.get(discardPile.size() - 1));
 
                         game.setNextCurrentPlayer();
                         drawFlag = true;
-                        displayBoard();
                         break;
-
                     } else {
-
                         break;
                     }
                 }
             }
 
-//            if (event.getSource() == resetBtn){
-//                game.reset();
-//            }
+            if (event.getSource() == resetBtn){
+                game.reset();
+            }
+
+            displayBoard();
         }
     }
+
+
 }
 
 

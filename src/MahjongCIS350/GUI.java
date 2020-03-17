@@ -2,12 +2,7 @@ package MahjongCIS350;
 
 import java.awt.*;
 import javax.swing.*;
-/***********************************************************************
- * This is the class for the GUI.
- *
- * @Authors: Wayne Chen, Jillian Huizenga, Chris Paul, Aron Zhao
- * @Version: 2/28/2020
- **********************************************************************/
+
 public class GUI {
 
     public static void main(String[] args) {
@@ -31,6 +26,6 @@ public class GUI {
         frame.setPreferredSize(new Dimension(1100, 1000));
         frame.pack();
         frame.setVisible(true);
-    }
 
+    }
 }
