@@ -1173,18 +1173,54 @@ public class Board extends JPanel {
         String message = "Claim chi of tile "
                 + disTile.getValue() + " "
                 + disTile.getDesign() + "?";
+        String msgTitle = "Claim Message";
 
         int takeChi = JOptionPane.showConfirmDialog(null,
-                message, "Claim Message",
-                JOptionPane.YES_NO_OPTION);
+                message, msgTitle,
+                JOptionPane.YES_NO_OPTION, JOptionPane.INFORMATION_MESSAGE
+                ,updatedImage(disTile));
 
         if (takeChi == JOptionPane.YES_OPTION) {
 
-            game.takeChi(game.getPlayerList(0),
+            message = "Claim Chi with the displayed tiles?";
+            ArrayList<Integer> options = game.getChiTile(
+                    game.getPlayerList(0),
                     game.getRecentDiscard());
-            displayBoard();
-            game.setNextCurrentPlayer(0);
-            drawFlag = false;
+
+            // Loop Through Options
+            while (options.size() > 0){
+
+                Suit tile1 = (Suit) game.getPlayerList(0).
+                        getHandTile().get(options.get(0));
+                Suit tile2 = (Suit) game.getPlayerList(0).
+                        getHandTile().get(options.get(1));
+
+                ImageIcon icon1 = updatedImage(tile1);
+                ImageIcon icon2 = updatedImage(tile2);
+
+                int claimChi = JOptionPane.showConfirmDialog(
+                        null, new JLabel(
+                                message, icon2, SwingConstants.LEFT),
+                        msgTitle,
+                        JOptionPane.YES_NO_OPTION,
+                        JOptionPane.INFORMATION_MESSAGE
+                        , icon1);
+
+                if (claimChi == JOptionPane.YES_OPTION) {
+
+                    game.takeChi(game.getPlayerList(0),
+                            options.get(0), options.get(1));
+                    displayBoard();
+                    game.setNextCurrentPlayer(0);
+                    drawFlag = false;
+                    break;
+                }
+
+                else {
+                    options.remove(0);
+                    options.remove(0);
+                }
+            }
         }
     }
 
@@ -1203,7 +1239,8 @@ public class Board extends JPanel {
         int takePong = JOptionPane.showConfirmDialog(
                 null,
                 message, "Claim Message",
-                JOptionPane.YES_NO_OPTION);
+                JOptionPane.YES_NO_OPTION,
+                JOptionPane.INFORMATION_MESSAGE, updatedImage(disTile));
 
         if (takePong == JOptionPane.YES_OPTION) {
 
@@ -1227,10 +1264,10 @@ public class Board extends JPanel {
                 + disTile.getValue() + " "
                 + disTile.getDesign() + "?";
 
-        int takeKong = JOptionPane.showConfirmDialog(
-                null,
-                message, "Claim Message",
-                JOptionPane.YES_NO_OPTION);
+        int takeKong = JOptionPane.showConfirmDialog(null,
+                message, "Claim Kong",
+                JOptionPane.YES_NO_OPTION, JOptionPane.INFORMATION_MESSAGE
+                ,updatedImage(disTile));
 
         if (takeKong == JOptionPane.YES_OPTION) {
 

@@ -14,57 +14,26 @@ public class Game {
     /** All Tiles in Mahjong. **/
     private ArrayList<Tile> tiles;
 
-    /** All Tiles that have been discard by players**/
+    /** All Tiles that have been discard by players. **/
     private ArrayList<Tile> discardPile;
 
-    /** The max amount of Tiles in Mahjong **/
+    /** The max amount of Tiles in Mahjong. **/
     private int maxTile;
 
-    /** Index of current Player to indicate turn order **/
+    /** Index of current Player to indicate turn order. **/
     private int currentPlayer;
 
-    /** Index of Player who has the "East" direction **/
+    /** Index of Player who has the "East" direction. **/
     private int startingPlayer;
 
-    /** List of all Players **/
-    Player[] playerList;
+    /** List of all Players. **/
+    private Player[] playerList;
 
-    /** Total number of players per game **/
-    private int TOTAL_PLAYER = 4;
+    /** Total number of players per game. **/
+    private int totalPlayer = 4;
 
-    /** The total amount of turns that have gone by**/
+    /** The total amount of turns that have gone by. **/
     private int turnCount = 0;
-
-    /** A static method that has been used for testing purposes **/
-    public static void main(String[] args) {
-
-        Game test = new Game();
-        ArrayList<Tile> hand = new ArrayList<>();
-        ArrayList<Tile> desired = new ArrayList<>();
-
-        Suit tile1 = new Suit();
-        tile1.setValue(1);
-        tile1.setDesign("1");
-
-        Suit tile2 = new Suit();
-        tile2.setValue(2);
-        tile2.setDesign("2");
-
-        Dragon tile3 = new Dragon("3");
-        Wind tile4 = new Wind("4");
-
-        hand.add(tile1);
-        hand.add(tile2);
-        hand.add(tile3);
-        hand.add(tile3);
-        hand.add(tile4);
-
-        //desired.add(tile1);
-        desired.add(tile3);
-        desired.add(tile3);
-
-        System.out.println(test.findTile(hand,desired));
-    }
 
     /*******************************************************************
      * This is the constructor for the Game class.
@@ -104,7 +73,6 @@ public class Game {
                 for (int i = 0; i < 4; i++) {
 
                     tiles.add(new Suit(design[index], numtile));
-
                 }
             }
         }
@@ -150,13 +118,13 @@ public class Game {
      * the score by 1.
      * @param p The player.
      ******************************************************************/
-    public void pile_score(Player p){
+    public void pile_score(final Player p) {
 
         int s = 0;
 
-        for(int i = 0; i <= p.getHandTile().size(); ++i){
+        for(int i = 0; i <= p.getHandTile().size(); ++i) {
 
-            if(isPointTile(p.getTileFromHand(i))){
+            if (isPointTile(p.getTileFromHand(i))) {
 
                 s++;
             }
@@ -171,7 +139,7 @@ public class Game {
      * @param index Index of the tile.
      * @return Tile at indicated index
      ******************************************************************/
-    public Tile getTile(int index) {
+    public Tile getTile(final int index) {
 
         return tiles.get(index);
     }
@@ -182,7 +150,7 @@ public class Game {
      ******************************************************************/
     private void setupPlayer() {
 
-        playerList = new Player[TOTAL_PLAYER];
+        playerList = new Player[totalPlayer];
 
         // Creating 4 Players
         playerList[0] = new Player("East");
@@ -197,21 +165,22 @@ public class Game {
         // Player
         for (int i = 0; i < randVal; i++) {
 
-            for (int j = 0; j < TOTAL_PLAYER; j++) {
+            for (int j = 0; j < totalPlayer; j++) {
 
                 rotatePlayerDir(playerList[j]);
             }
         }
 
         // Find the starting player index
-        startingPlayer = randVal % TOTAL_PLAYER;
+        startingPlayer = randVal % totalPlayer;
         currentPlayer = startingPlayer;
     }
 
     /*******************************************************************
      * This method rotates the wind direction of each Player.
+     * @param player The player whose direction is rotated.
      ******************************************************************/
-    private void rotatePlayerDir(Player player) {
+    private void rotatePlayerDir(final Player player) {
 
         if (player.getDirection().equals("East")) {
 
@@ -577,7 +546,7 @@ public class Game {
             temp.add(t);
         }
 
-        if (check != null){
+        if (check != null) {
 
             temp.add(check);
             temp = autoSort(temp);
@@ -614,18 +583,18 @@ public class Game {
         }
 
         // This section checks for any chi in the players hand
-        for (int i = 0; i < temp.size(); i++){
+        for (int i = 0; i < temp.size(); i++) {
 
             outer:
-            for (int j = i + 1; j < temp.size(); j++){
+            for (int j = i + 1; j < temp.size(); j++) {
 
-                for (int k = j + 1; k < temp.size(); k++){
+                for (int k = j + 1; k < temp.size(); k++) {
 
-                    Suit a = (Suit)temp.get(i);
-                    Suit b = (Suit)temp.get(j);
-                    Suit c = (Suit)temp.get(k);
+                    Suit tile1 = (Suit) temp.get(i);
+                    Suit tile2 = (Suit) temp.get(j);
+                    Suit tile3 = (Suit) temp.get(k);
 
-                    if (compareConsecutiveSuits(a, b, c)){
+                    if (compareConsecutiveSuits(tile1, tile2, tile3)){
 
                         temp.remove(k);
                         temp.remove(j);
@@ -647,45 +616,74 @@ public class Game {
         return false;
     }
 
-    /******************************************************************
-     * This method allows a player to claim a chi.
-     *
+    /*******************************************************************
+     * This method finds the tiles the player can used to claim a chi
      * @param pl The player that claimed the chi.
      * @param discard The tile that is discarded to claim the chi.
-     *****************************************************************/
-    public void takeChi(Player pl, Tile discard){
+     * @return AN array list of integers the chi consisting of index.
+     ******************************************************************/
+    public ArrayList<Integer> getChiTile(Player pl, Tile discard) {
 
         ArrayList<Tile> desired = new ArrayList<>();
+        ArrayList<Integer> loc;
 
-        outloop:
         for (int i = 0; i < pl.getHandTile().size(); i++){
 
-            for (int j = i + 1; j < pl.getHandTile().size(); j++){
+            for (int j = i + 1; j < pl.getHandTile().size(); j++) {
 
-                if (i != j){
+                if (i != j) {
 
                     Suit suit1 = (Suit) pl.getHandTile().get(i);
                     Suit suit2 = (Suit) pl.getHandTile().get(j);
 
                     if (compareConsecutiveSuits(suit1,suit2,
-                            (Suit)discard)){
+                            (Suit) discard)){
 
                         desired.add(suit1);
                         desired.add(suit2);
-                        break outloop;
                     }
                 }
             }
         }
 
-        ArrayList<Integer> loc = findTile(pl.getHandTile(), desired);
+        loc = findTileVer2(pl.getHandTile(), desired);
 
-        for (int i = loc.size() - 1; i >= 0; i--) {
+        // Remove Repeating Tiles/Indexes
+        for (int i = 0; i < loc.size() - 2; i += 2) {
 
-            pl.removeTileSet(loc.get(i));
+            if (i + 3 > loc.size() || i + 2 > loc.size()) {
+
+                break;
+            }
+
+            // Trying to find if tiles are the same
+            else if (loc.get(i) == loc.get(i + 2)
+                    && loc.get(i + 1) == loc.get(i + 3)) {
+
+                loc.remove(i);
+                loc.remove(i);
+                i = i - 2;
+            }
+
+            else if (loc.get(i) == loc.get(i + 3)
+                    && loc.get(i + 1) == loc.get(i + 2)) {
+
+                loc.remove(i + 2);
+                loc.remove(i + 2);
+                i = i - 2;
+            }
         }
 
-        pl.addTileSet(discardPile.remove(discardPile.size() - 1));
+        return loc;
+    }
+
+
+    public void takeChi(Player player, int tile1, int tile2){
+
+        player.removeTileSet(tile2);
+        player.removeTileSet(tile1);
+        player.addTileSet(discardPile.remove(
+                discardPile.size() - 1));
     }
 
     /*******************************************************************
@@ -735,7 +733,7 @@ public class Game {
      * @param playerHand The player's hand that is being searched.
      * @param desired The tiles that are searched in the players hand
      *                as an arraylist.
-     * @return The indexs where the searched tiles are found.
+     * @return The index where the searched tiles are found.
      ******************************************************************/
     private ArrayList<Integer> findTile(ArrayList<Tile> playerHand,
                                         ArrayList<Tile> desired) {
@@ -756,6 +754,39 @@ public class Game {
                         index_loc.add(hand_index);
                         break search;
                     }
+                }
+            }
+        }
+
+        return index_loc;
+    }
+
+    /*******************************************************************
+     * This method finds the desired Tiles of an ArrayList and returns
+     * the index from the Player's hand that they are located at. This
+     * version of find tiles will take duplicate locations.
+     *
+     * @param playerHand The player's hand that is being searched.
+     * @param desired The tiles that are searched in the players hand
+     *                as an arraylist.
+     * @return The index where the searched tiles are found.
+     ******************************************************************/
+    private ArrayList<Integer> findTileVer2(ArrayList<Tile> playerHand,
+                                        ArrayList<Tile> desired) {
+
+        ArrayList<Integer> index_loc = new ArrayList();
+
+        for (int i = 0; i < desired.size(); i++) {
+
+            search:
+            for (int hand_index = 0; hand_index < playerHand.size();
+                 hand_index++) {
+
+                if (compareTile(desired.get(i),
+                        playerHand.get(hand_index))) {
+
+                        index_loc.add(hand_index);
+                        break search;
                 }
             }
         }
@@ -998,7 +1029,7 @@ public class Game {
      * @param tile The tile that is being checked.
      * @return True if the tile is a point tile, false otherwise.
      ******************************************************************/
-    private boolean isPointTile(Tile tile) {
+    private boolean isPointTile(final Tile tile) {
 
         if (tile instanceof Suit) {
 
@@ -1021,7 +1052,7 @@ public class Game {
      *
      * @param pl The current players turn.
      ******************************************************************/
-    public void draw(Player pl) {
+    public void draw(final Player pl) {
 
         Tile drawn = tiles.remove(0);
 
@@ -1248,10 +1279,10 @@ public class Game {
      ******************************************************************/
     private String scoring() {
 
-        String msg = "Once a player has declared mahjong, they win. " +
-                "The winning player will receive of a score of 1 " +
-                "point and 1 additional point for every dragon, wind" +
-                "and flower tile that is in the set pile.";
+        String msg = "Once a player has declared mahjong, they win. "
+                + "The winning player will receive of a score of 1 "
+                + "point and 1 additional point for every dragon, wind"
+                + "and flower tile that is in the set pile.";
 
         return msg;
     }
@@ -1277,16 +1308,6 @@ public class Game {
     }
 
     /******************************************************************
-     * This method gets the starting player index.
-     *
-     * @return The starting player index.
-     *****************************************************************/
-    public int getStartingPlayer() {
-
-        return startingPlayer;
-    }
-
-    /******************************************************************
      * This method sets the starting player based on index value.
      *
      * @param startingPlayer The index of the starting player.
@@ -1301,7 +1322,7 @@ public class Game {
      *****************************************************************/
     private void setNextStartingPlayer() {
 
-        startingPlayer = (startingPlayer + 1) % 4;
+        startingPlayer = (startingPlayer + 1) % totalPlayer;
     }
 
     /******************************************************************
@@ -1309,7 +1330,7 @@ public class Game {
      *****************************************************************/
     public void setNextCurrentPlayer() {
 
-        currentPlayer = (currentPlayer + 1) % 4;
+        currentPlayer = (currentPlayer + 1) % totalPlayer;
         turnCount++;
     }
 
@@ -1344,8 +1365,8 @@ public class Game {
 
         if (playerNum < 0 || playerNum > 4){
 
-            throw new IndexOutOfBoundsException("Index is out of " +
-                    "bounds. Must be from 0 - 3");
+            throw new IndexOutOfBoundsException("Index is out of "
+                    + "bounds. Must be from 0 - 3");
         }
 
         return playerList[playerNum].getHandTile();
@@ -1359,17 +1380,6 @@ public class Game {
     public ArrayList<Tile> getDiscardPile() {
 
         return discardPile;
-    }
-
-    /*******************************************************************
-     * This method sets the discard Pile.
-     *
-     * @param discardPile The tiles that are to be set ot the
-     *                   discard pile.
-     ******************************************************************/
-    public void setDiscardPile(ArrayList<Tile> discardPile) {
-
-        this.discardPile = discardPile;
     }
 
     /******************************************************************
