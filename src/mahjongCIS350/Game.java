@@ -30,7 +30,7 @@ public class Game {
     private Player[] playerList;
 
     /** Total number of players per game. **/
-    private int totalPlayer = 4;
+    private final int totalPlayer = 4;
 
     /** The total amount of turns that have gone by. **/
     private int turnCount = 0;
@@ -374,10 +374,6 @@ public class Game {
     public boolean isChi(Player pl, Suit check) {
 
         ArrayList<Tile> plHand = pl.getHandTile();
-
-        if (currentPlayer != 3){
-            return false;
-        }
 
         for (int i = 0; i < plHand.size(); i++){
 
@@ -1085,6 +1081,10 @@ public class Game {
         autoSort(pl);
     }
 
+    /*******************************************************************
+     * This method determine if the game is a stalemate.
+     * @return true if the game is going to result in a stalemate
+     ******************************************************************/
     public boolean isStalemate(){
 
         for (int i = 0; i < tiles.size();i++){
@@ -1130,8 +1130,8 @@ public class Game {
 
         if (pl == null){
 
-            throw new IllegalArgumentException("Player can not be " +
-                    "Null");
+            throw new IllegalArgumentException("Player can not be "
+                    + "Null");
         }
 
         Random rand = new Random();
@@ -1145,8 +1145,8 @@ public class Game {
      *****************************************************************/
     public String ruleBook() {
 
-        String rules = starting() + setRule() + claimChiRule() +
-                claimPongRule() + claimKongRule() + declareMahjong()
+        String rules = starting() + setRule() + claimChiRule()
+                + claimPongRule() + claimKongRule() + declareMahjong()
                 + scoring();
 
         return rules;
@@ -1400,6 +1400,10 @@ public class Game {
     public ArrayList<Tile> getDrawPile(){
 
         return tiles;
+    }
+
+    public int getTotalPlayer() {
+        return totalPlayer;
     }
 }
 

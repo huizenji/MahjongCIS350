@@ -106,10 +106,10 @@ public class Board extends JPanel {
     /** Default Background color of Red Shade. **/
     private final int defaultR = 0;
 
-    /** Default Background color of Red Shade. **/
+    /** Default Background color of Green Shade. **/
     private final int defaultG = 150;
 
-    /** Default Background color of Red Shade. **/
+    /** Default Background color of Blue Shade. **/
     private final int defaultB = 100;
 
     /*******************************************************************
@@ -937,9 +937,6 @@ public class Board extends JPanel {
 
         if (pileNum > drawPileSize && removeImage) {
 
-//            drawPilePanel.remove(drawPile.get(pileNum - 1));
-//            drawPile.remove(drawPile.get(pileNum - 1));
-
             drawPile.get(pileNum - 1).setIcon(null);
             drawPile.get(pileNum - 1).setBackground(color);
             drawPile.get(pileNum - 1).setBorder(
@@ -1330,27 +1327,66 @@ public class Board extends JPanel {
             mahjongSeq();
         }
 
-        if (game.isKong(game.getPlayerHand(0),
-                game.getRecentDiscard())
-                && drawFlag) {
+        // Checking for Kong upon discard
+        for (int i = game.getCurrentPlayerIndex() + 1;
+             i < (game.getCurrentPlayerIndex() + game.getTotalPlayer())
+                     ; i++) {
+            if (game.isKong(game.getPlayerHand(i %
+                    game.getTotalPlayer()), game.getRecentDiscard())
+                    && drawFlag) {
 
-            kongSeq((Suit) game.getRecentDiscard());
+                // Human Player Action
+                if (i % game.getTotalPlayer() == 0) {
+                    kongSeq((Suit) game.getRecentDiscard());
+
+                    // AI Action (ADD)
+                } else {
+                    ;
+                }
+            }
         }
 
         // Check for pongs that can be claimed
-        if (game.isPong(game.getPlayerHand(0),
-                game.getRecentDiscard())
-                && drawFlag) {
+        /** To do Check for all players in order later **/
+        for (int i = game.getCurrentPlayerIndex() + 1;
+             i < (game.getCurrentPlayerIndex() + game.getTotalPlayer())
+                ; i++) {
 
-            pongSeq((Suit) game.getRecentDiscard());
+            if (game.isPong(game.getPlayerHand(0),
+                    game.getRecentDiscard())
+                    && drawFlag) {
+
+                // Human Action
+                if (i % game.getTotalPlayer() == 0) {
+                    pongSeq((Suit) game.getRecentDiscard());
+                }
+
+                // AI Action (ADD)
+                else{
+
+
+                }
+            }
         }
 
         // Check for any chi that can be claimed
         // drawFlag used to determine if user has already claimed pong
-        if (game.isChi(game.getPlayerList(0),
+        int nextPlIndex = (game.getCurrentPlayerIndex() + 1) %
+                game.getTotalPlayer();
+
+        if (game.isChi(game.getPlayerList(nextPlIndex),
                 (Suit) game.getRecentDiscard()) && drawFlag) {
 
-            chiSeq((Suit) game.getRecentDiscard());
+            // If Human Player
+            if (nextPlIndex == 0) {
+                chiSeq((Suit) game.getRecentDiscard());
+            }
+
+            // AI Action (ADD)
+            else {
+
+                ;
+            }
         }
 
         if (drawFlag) {
@@ -1366,7 +1402,7 @@ public class Board extends JPanel {
         /***************************************************************
          * Action of Selecting Shade.
          * @param event Which option was selected
-         */
+         **************************************************************/
         public void actionPerformed(final ActionEvent event) {
 
             String[] colorSelect = {"red", "green", "blue"};
