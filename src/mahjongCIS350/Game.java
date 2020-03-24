@@ -522,6 +522,42 @@ public class Game {
         }
     }
 
+
+    /*******************************************************************
+     * This methods determines if the player has drawn into a kong that
+     * can be formed using a pong in the set pile.
+     *
+     * @param player The player that is being checked.
+     * @return true if the player can form a kong using the set pile.
+     ******************************************************************/
+    public boolean isKongDraw(Player player) {
+
+        boolean kong = false;
+        // Note when a tile is draw, the tile is in the last index in
+        // the array.
+
+        // Counter to keep track of the number of tiles that are the
+        // same
+        int totalTile = 0;
+
+        ArrayList<Tile> setPile = player.getSetPile();
+
+        for (int i = 0; i < setPile.size() - 1; i++) {
+
+            if(compareTile(setPile.get(i), setPile.get(
+                    setPile.size() - 1))) {
+
+                totalTile++;
+            }
+        }
+
+        if (totalTile == 3) {
+            kong = true;
+        }
+
+        return kong;
+    }
+
     /*******************************************************************
      * This method checks if a Player can Mahjong. It only checks
      * what is left of the Player's hand. If there are only chi's and
@@ -590,7 +626,7 @@ public class Game {
                     Suit tile2 = (Suit) temp.get(j);
                     Suit tile3 = (Suit) temp.get(k);
 
-                    if (compareConsecutiveSuits(tile1, tile2, tile3)){
+                    if (compareConsecutiveSuits(tile1, tile2, tile3)) {
 
                         temp.remove(k);
                         temp.remove(j);
@@ -604,7 +640,7 @@ public class Game {
 
         // If a player has 2 tiles remaining and they are the same,
         // then they have mahjong.
-        if (temp.size() == 2 && compareTile(temp.get(0), temp.get(1))){
+        if (temp.size() == 2 && compareTile(temp.get(0), temp.get(1))) {
 
             return true;
         }
@@ -618,12 +654,12 @@ public class Game {
      * @param discard The tile that is discarded to claim the chi.
      * @return AN array list of integers the chi consisting of index.
      ******************************************************************/
-    public ArrayList<Integer> getChiTile(Player pl, Tile discard) {
+     public ArrayList<Integer> getChiTile(Player pl, Tile discard) {
 
         ArrayList<Tile> desired = new ArrayList<>();
         ArrayList<Integer> loc;
 
-        for (int i = 0; i < pl.getHandTile().size(); i++){
+        for (int i = 0; i < pl.getHandTile().size(); i++) {
 
             for (int j = i + 1; j < pl.getHandTile().size(); j++) {
 
@@ -708,17 +744,33 @@ public class Game {
     /*******************************************************************
      * This method allows the player to claim a kong.
      *
-     * @param pl The player that is claiming the kong.
+     * @param player The player that is claiming the kong.
      * @param tile The tile that is being used to claim the kong.
      ******************************************************************/
-    public void takeKong(Player pl, Tile tile){
+    public void takeKong(Player player, Tile tile){
 
         // Add Tile and remove Kong
-        pl.getHandTile().add(tile);
+        player.getHandTile().add(tile);
         removeKongHand();
 
         // draw Tile and remove any Kong
-        draw(pl);
+        draw(player);
+        removeKongHand();
+    }
+
+    /*******************************************************************
+     * This method allows the player to move a tile to the set pile
+     * to form a Kong
+     *
+     * @param player Player who drew into a kong.
+     ******************************************************************/
+    public void takeKongDraw(Player player){
+
+        // Add the tile from hand to setpile
+        int lastLoc = player.getHandTile().size() - 1;
+        player.getSetPile().add(player.getHandTile().remove(lastLoc));
+
+        draw(player);
         removeKongHand();
     }
 
@@ -1087,7 +1139,7 @@ public class Game {
      ******************************************************************/
     public boolean isStalemate(){
 
-        for (int i = 0; i < tiles.size();i++){
+        for (int i = 0; i < tiles.size(); i++){
 
             if (tiles.get(i) instanceof Suit){
 
@@ -1109,8 +1161,8 @@ public class Game {
 
         if (pl == null){
 
-            throw new IllegalArgumentException("Player can not be " +
-                    "Null");
+            throw new IllegalArgumentException("Player can not be "
+                    + "Null");
         }
 
         if (turnCount != 0) {
@@ -1181,18 +1233,18 @@ public class Game {
      ******************************************************************/
     private String setRule() {
 
-        String msg = "A set of tiles consist of 3 tiles. This 3 tiles" +
-                "may all be the same, thus forming a 3 of a kind or " +
-                "they all form a 3 tile straight of the same " +
-                "suit.\n\nAll sets that are formed in the hand by " +
-                "drawing do not have to be revealed to the opposing " +
-                "players. However, any set or kong that are claimed" +
-                "must be revealed to all opposing players.\n\n" +
-                "It is important to know that a kong is not consider " +
-                "a set but it can be claimed.\n\n Once a player " +
-                "declares that they can from a set, they move the" +
-                "tiles that they used to from a set along with the " +
-                "recently discarded tile to the set pile.";
+        String msg = "A set of tiles consist of 3 tiles. This 3 tiles"
+                + "may all be the same, thus forming a 3 of a kind or "
+                + "they all form a 3 tile straight of the same "
+                + "suit.\n\nAll sets that are formed in the hand by "
+                + "drawing do not have to be revealed to the opposing "
+                + "players. However, any set or kong that are claimed"
+                + "must be revealed to all opposing players.\n\n"
+                + "It is important to know that a kong is not consider "
+                + "a set but it can be claimed.\n\n Once a player "
+                + "declares that they can from a set, they move the"
+                + "tiles that they used to from a set along with the "
+                + "recently discarded tile to the set pile.";
 
         return msg;
     }
@@ -1204,12 +1256,12 @@ public class Game {
      ******************************************************************/
     private String claimChiRule() {
 
-        String msg = "A chi can only be claimed when the opposing " +
-                "player directly to right discards a " +
-                "tile. In addition, the discarded the tile must be " +
-                " able to use to form a 3 tile straight in the " +
-                "players hand using the same suit. Also, the straight" +
-                "can not extend from 9 to 1 or vise versa.\n\n";
+        String msg = "A chi can only be claimed when the opposing "
+                + "player directly to right discards a "
+                + "tile. In addition, the discarded the tile must be "
+                + " able to use to form a 3 tile straight in the "
+                + "players hand using the same suit. Also, the straight"
+                + "can not extend from 9 to 1 or vise versa.\n\n";
 
         return msg;
     }
@@ -1221,10 +1273,10 @@ public class Game {
      ******************************************************************/
     private String claimPongRule() {
 
-        String msg = "A pong can be claimed when any opposing player" +
-                " discards a tile and you have a 2 tiles in your hand" +
-                " that can be used to form a 3 of a kind with the " +
-                "discarded tile.\n\n";
+        String msg = "A pong can be claimed when any opposing player"
+                + " discards a tile and you have a 2 tiles in your hand"
+                + " that can be used to form a 3 of a kind with the "
+                + "discarded tile.\n\n";
 
         return msg;
     }
@@ -1236,19 +1288,21 @@ public class Game {
      ******************************************************************/
     private String claimKongRule() {
 
-        String msg = "A kong can be claimed when any opposing player" +
-                " discards a tile and you have a 3 tiles in your hand" +
-                " that can be used to form a 4 of a kind with the " +
-                "discarded tile. In addition, the player must draw a " +
-                "new tile from the main deck/wall before discarding a" +
-                " tile.\n\nAny kong that is formed by drawing a tile " +
-                "is does not have to be revealed to the opposing" +
-                " players. This is optional. However, it is to " +
-                "your advantage to not reveal the tiles because it " +
-                "could possibly hinder your opponents game. In " +
-                "addition, a kong can not remain in the hand, instead" +
-                "the kong that forms by drawing must be moved to the" +
-                "set pile or discard a tile to break up the kong.";
+        String msg = "A kong can be claimed when any opposing player"
+                + " discards a tile and you have a 3 tiles in your hand"
+                + " that can be used to form a 4 of a kind with the "
+                + "discarded tile. In addition, the player must draw a "
+                + "new tile from the main deck/wall before discarding a"
+                + " tile.\n\nAny kong that is formed by drawing a tile "
+                + "is does not have to be revealed to the opposing"
+                + " players. This is optional. However, it is to "
+                + "your advantage to not reveal the tiles because it "
+                + "could possibly hinder your opponents game. In "
+                + "addition, a kong can not remain in the hand, instead"
+                + "the kong that forms by drawing must be moved to the"
+                + "set pile or discard a tile to break up the kong."
+                + "A speacial rule with Kong is that you can form a "
+                + "kong with a pong in your set pile";
 
         return msg;
 
@@ -1261,13 +1315,13 @@ public class Game {
      ******************************************************************/
     private String declareMahjong() {
 
-        String msg = "A mahjong can be claimed when a player has " +
-                "all sets(chi,pong,kong), any point tiles and a " +
-                "single pair in their hand or set pile combined." +
-                "In addition, there can not be a kong that " +
-                "in the declared players hand. At this point, the " +
-                "player that declares Mahjong wins and their score" +
-                "will be calculated based on the scoring rules.\n\n";
+        String msg = "A mahjong can be claimed when a player has "
+                + "all sets(chi,pong,kong), any point tiles and a "
+                + "single pair in their hand or set pile combined."
+                + "In addition, there can not be a kong that "
+                + "in the declared players hand. At this point, the "
+                + "player that declares Mahjong wins and their score"
+                + "will be calculated based on the scoring rules.\n\n";
 
         return msg;
     }
@@ -1402,6 +1456,11 @@ public class Game {
         return tiles;
     }
 
+    /*******************************************************************
+     * This method gets the total number of players.
+     *
+     * @return The total number of players.
+     ******************************************************************/
     public int getTotalPlayer() {
         return totalPlayer;
     }
