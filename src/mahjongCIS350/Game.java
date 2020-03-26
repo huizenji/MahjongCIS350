@@ -66,8 +66,7 @@ public class Game {
 
         String[] design = {"Circle", "Bamboo", "Character"};
 
-        for (int index = 0; index < 3; index++) {
-
+        for (int index = 0; index < design.length; index++) {
             for (int numtile = 1; numtile <= 9; numtile++) {
 
                 for (int i = 0; i < 4; i++) {
@@ -110,38 +109,6 @@ public class Game {
 
             tiles.add(new Flower(i));
         }
-    }
-
-    /*******************************************************************
-     * Whenever Player draws a Tile, if it's a point Tile then score
-     * increase by 1. If there's a point Tile in hand, also increase
-     * the score by 1.
-     * @param p The player.
-     ******************************************************************/
-    public void pile_score(final Player p) {
-
-        int s = 0;
-
-        for(int i = 0; i <= p.getHandTile().size(); ++i) {
-
-            if (isPointTile(p.getTileFromHand(i))) {
-
-                s++;
-            }
-        }
-
-        p.setPoint(p.getPoint() + s);
-    }
-
-    /*******************************************************************
-     * A getter function for individual Tiles.
-     *
-     * @param index Index of the tile.
-     * @return Tile at indicated index
-     ******************************************************************/
-    public Tile getTile(final int index) {
-
-        return tiles.get(index);
     }
 
     /*******************************************************************
@@ -361,6 +328,27 @@ public class Game {
         }
 
         return -1;
+    }
+
+    /*******************************************************************
+     * Whenever Player draws a Tile, if it's a point Tile then score
+     * increase by 1. If there's a point Tile in hand, also increase
+     * the score by 1.
+     * @param player The player.
+     ******************************************************************/
+    public void pileScore(final Player player) {
+
+        int point = 0;
+
+        for(int i = 0; i <= player.getSetPile().size(); i++) {
+
+            if (isPointTile(player.getSetTile(i))) {
+
+                point++;
+            }
+        }
+
+        player.setPoint(player.getPoint() + point);
     }
 
     /*******************************************************************
