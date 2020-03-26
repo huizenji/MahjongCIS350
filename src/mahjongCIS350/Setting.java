@@ -12,6 +12,7 @@ import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
 import java.util.Hashtable;
 
 /***********************************************************************
@@ -45,6 +46,9 @@ public class Setting extends JPanel {
 
     /** Represents JSlider for the blue shade. **/
     private JSlider blueShade;
+
+    /** Represents JSlider for AIs. **/
+    private ArrayList<JSlider> AISetting;
 
     /** JButton To Apply Changes. **/
     private JButton apply;
@@ -89,9 +93,12 @@ public class Setting extends JPanel {
         slider = new SliderListener();
         button = new ButtonListener();
 
+
         // Setting up Panels
         setBgColorPanel();
+        AIDiffSetting();
         applySetting();
+
     }
 
     /*******************************************************************
@@ -157,12 +164,70 @@ public class Setting extends JPanel {
         add(bgColor);
     }
 
+    /*******************************************************************
+     * This method sets up the sliders for the the AI difficulty
+     * setting.
+     ******************************************************************/
+    private void AIDiffSetting() {
+
+        int numAI = 3;
+
+        // Create the panel
+        final JPanel overallAIPanel = new JPanel();
+        overallAIPanel.setLayout(new GridLayout(0, numAI));
+        final JPanel[] AI = new JPanel[numAI];
+
+        // Create Array list of JSlider and a temp Slider
+        AISetting = new ArrayList<>();
+
+
+
+        // Customize Labels and tick marks for temp Slider
+        final Hashtable label = new Hashtable();
+        label.put(Game.DUMB, new JLabel("Dumb"));
+        label.put(Game.BEGINNER, new JLabel("Beginner"));
+        label.put(Game.ADVANCE, new JLabel("Advance"));
+
+
+
+        for (int i = 0; i < Game.TOTALPLAYER - 1; i++){
+
+            // Set up Temp Slider
+            JSlider temp = new JSlider(JSlider.HORIZONTAL, Game.DUMB,
+                    Game.ADVANCE, Game.defaultAI);
+            temp.setMajorTickSpacing(1);
+            temp.setPaintTicks(true);
+            temp.setLabelTable(label);
+            temp.setPaintLabels(true);
+
+            // Create an AI Slider and Panel
+            AISetting.add(temp);
+            AI[i] = new JPanel();
+
+            // Set Layout of each AI difficulty slider panel
+            AI[i].setLayout(new BorderLayout());
+
+            // ADD JLabel and JSlider to Panel
+            AI[i].add(new JLabel("AI Player " + (i + 1),
+                            SwingConstants.CENTER), BorderLayout.NORTH);
+            AI[i].add(AISetting.get(i), BorderLayout.CENTER);
+            overallAIPanel.add(AI[i]);
+        }
+
+        // Add to main Component
+        add(overallAIPanel);
+    }
+
+    /*******************************************************************
+     * This method sets up the apply and default button.
+     ******************************************************************/
     private void applySetting() {
 
         JPanel applyPanel = new JPanel();
-        JPanel buttomPanel = new JPanel();
+        JPanel bottomPanel = new JPanel();
         int totalButton = 2;
 
+        // Set up Button and add them to appropriate panels.
         apply = new JButton("Apply");
         defaultSetting = new JButton("Default");
         bgColor = new JButton("Background Color");
@@ -173,11 +238,11 @@ public class Setting extends JPanel {
         bgColor.setBackground(new Color(redShade.getValue(),
                 greenShade.getValue(), blueShade.getValue()));
 
-        buttomPanel.setLayout(new GridLayout(0, totalButton));
-        buttomPanel.add(apply);
-        buttomPanel.add(defaultSetting);
+        bottomPanel.setLayout(new GridLayout(0, totalButton));
+        bottomPanel.add(apply);
+        bottomPanel.add(defaultSetting);
         applyPanel.setLayout(new BorderLayout());
-        applyPanel.add(buttomPanel, BorderLayout.SOUTH);
+        applyPanel.add(bottomPanel, BorderLayout.SOUTH);
         applyPanel.add(bgColor, BorderLayout.CENTER);
 
         // Add to Main Panel
@@ -199,6 +264,12 @@ public class Setting extends JPanel {
             if (event.getSource() == apply) {
                 board.updateBgColor(redShade.getValue(),
                         greenShade.getValue(), blueShade.getValue());
+
+                for (int i = 1; i < Game.TOTALPLAYER; i++) {
+
+                    board.setAIDiff(AISetting.get(i - 1).getValue(),
+                            i);
+                }
             } else if(event.getSource() == defaultSetting){
                 board.updateBgColor(defaultR, defaultG, defaultB);
                 bgColor.setBackground(new Color(defaultR, defaultG,

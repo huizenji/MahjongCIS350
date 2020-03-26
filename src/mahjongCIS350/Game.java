@@ -29,11 +29,26 @@ public class Game {
     /** List of all Players. **/
     private Player[] playerList;
 
+    /** The Difficulty of the AI, levels 1 - 3. **/
+    private int[] AIDiff;
+
     /** Total number of players per game. **/
-    private final int totalPlayer = 4;
+    public static final int TOTALPLAYER = 4;
 
     /** The total amount of turns that have gone by. **/
     private int turnCount = 0;
+
+    /** The constant for an very dumb AI. **/
+    public static final int DUMB = 1;
+
+    /** The constant for a beginner level AI. **/
+    public static final int BEGINNER = 2;
+
+    /** The constant for an advance level AI. **/
+    public static final int ADVANCE = 3;
+
+    /** The constant for default setting for AI. **/
+    public static final int defaultAI = BEGINNER;
 
     /*******************************************************************
      * This is the constructor for the Game class.
@@ -48,6 +63,7 @@ public class Game {
         shuffle();
         dealTile_13();
         removeKongHand();
+        setupAIDiff();
     }
 
     /*******************************************************************
@@ -117,7 +133,7 @@ public class Game {
      ******************************************************************/
     private void setupPlayer() {
 
-        playerList = new Player[totalPlayer];
+        playerList = new Player[TOTALPLAYER];
 
         // Creating 4 Players
         playerList[0] = new Player("East");
@@ -132,14 +148,14 @@ public class Game {
         // Player
         for (int i = 0; i < randVal; i++) {
 
-            for (int j = 0; j < totalPlayer; j++) {
+            for (int j = 0; j < TOTALPLAYER; j++) {
 
                 rotatePlayerDir(playerList[j]);
             }
         }
 
         // Find the starting player index
-        startingPlayer = randVal % totalPlayer;
+        startingPlayer = randVal % TOTALPLAYER;
         currentPlayer = startingPlayer;
     }
 
@@ -272,24 +288,25 @@ public class Game {
      ******************************************************************/
     private void removeKongHand() {
 
-        int kongIndex;
+        Tile kongTile;
 
         for (int i = 0; i < playerList.length; i++) {
 
-            while (isKongHand(playerList[i]) != -1) {
+            kongTile = isKongHand(playerList[i]);
+            while (kongTile != null) {
 
-                kongIndex = isKongHand(playerList[i]);
+                for (int k = playerList[i].getHandTile().size() - 1;
+                     k >= 0 ; k--) {
 
-                if (kongIndex != -1) {
-
-                    for (int k = 0; k < 4; k++) {
-
-                        playerList[i].removeTileSet(kongIndex);
-                    }
+                    if (compareTile(playerList[i].getHandTile().get(k),
+                            kongTile))
 
                     draw(playerList[i]);
                     autoSort(playerList[i]);
                 }
+
+                // reset till
+                kongTile = isKongHand(playerList[i]);
             }
         }
     }
@@ -297,37 +314,49 @@ public class Game {
     /*******************************************************************
      * This method determines if the Player has a kong in their hand.
      *
-     * @param pl The player hands that is being checked.
-     * @return It will return -1 if there is no Kong, but it will
-     *         return the starting index of where the Kong starts if
-     *         there is a Kong.
+     * @param player The player hands that is being checked.
+     * @return Returns the tile that forms the kong.
      ******************************************************************/
-    private int isKongHand(Player pl) {
+    private Tile isKongHand(Player player) {
 
-        ArrayList<Tile> hand = pl.getHandTile();
-        boolean temp = true;
+        ArrayList<Tile> hand = player.getHandTile();
+        int totalCopy = 4;
+        int count = 0;
+        Tile kong = null;
 
-        for (int i = 0; i < pl.getHandTile().size() - 4; i++) {
+        for (int i = 0; i < hand.size() - totalCopy; i++) {
+            for (int k = i + 1; k < hand.size(); k++) {
 
-            for (int k = 1; k < 4; k++) {
+                if ((compareTile((hand.get(i)), (hand.get(k))))) {
 
-                if (!(compareSuit((Suit) (hand.get(i)),
-                        (Suit) (hand.get(i + k))))) {
-
-                    temp = false;
+                    count++;
                 }
             }
 
             // Checking if there is a kong
-            if (temp) {
+            if (count == totalCopy) {
 
-                return i;
+                kong = hand.get(i);
             }
 
-            temp = true;
+            // reset counter
+            count = 0;
         }
 
-        return -1;
+        return kong;
+    }
+
+    /*******************************************************************
+     * This method sets the AI to the basic level (beginner)
+     ******************************************************************/
+    private void setupAIDiff(){
+
+        AIDiff = new int[TOTALPLAYER - 1];
+
+        for (int i = 0; i < AIDiff.length; i++) {
+
+            AIDiff[i] = BEGINNER;
+        }
     }
 
     /*******************************************************************
@@ -1364,7 +1393,7 @@ public class Game {
      *****************************************************************/
     private void setNextStartingPlayer() {
 
-        startingPlayer = (startingPlayer + 1) % totalPlayer;
+        startingPlayer = (startingPlayer + 1) % TOTALPLAYER;
     }
 
     /******************************************************************
@@ -1372,7 +1401,7 @@ public class Game {
      *****************************************************************/
     public void setNextCurrentPlayer() {
 
-        currentPlayer = (currentPlayer + 1) % totalPlayer;
+        currentPlayer = (currentPlayer + 1) % TOTALPLAYER;
         turnCount++;
     }
 
@@ -1445,12 +1474,24 @@ public class Game {
     }
 
     /*******************************************************************
-     * This method gets the total number of players.
-     *
-     * @return The total number of players.
+     * This method sets the difficulty of the AI.
+     * @param difficulty Difficult of the AI.
+     * @param playerIndex Which AI.
      ******************************************************************/
-    public int getTotalPlayer() {
-        return totalPlayer;
+    public void setAIDiff(int difficulty, int playerIndex) {
+
+        if (difficulty < Game.DUMB || difficulty > Game.ADVANCE) {
+
+            throw new IllegalArgumentException("Difficulty " +
+                    "setting not Excepted.");
+        }
+
+        if (playerIndex < 1 || playerIndex > Game.TOTALPLAYER) {
+
+            throw new IllegalArgumentException("Index of Player is" +
+                    "not an AI");
+        }
+        AIDiff[playerIndex] = difficulty;
     }
 }
 

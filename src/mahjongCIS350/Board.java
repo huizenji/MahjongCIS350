@@ -1355,14 +1355,14 @@ public class Board extends JPanel {
 
         // Checking for Kong upon discard
         for (int i = game.getCurrentPlayerIndex() + 1;
-             i < (game.getCurrentPlayerIndex() + game.getTotalPlayer())
+             i < (game.getCurrentPlayerIndex() + game.TOTALPLAYER)
                      ; i++) {
             if (game.isKong(game.getPlayerHand(i %
-                    game.getTotalPlayer()), game.getRecentDiscard())
+                    game.TOTALPLAYER), game.getRecentDiscard())
                     && drawFlag) {
 
                 // Human Player Action
-                if (i % game.getTotalPlayer() == 0) {
+                if (i % game.TOTALPLAYER == 0) {
                     kongSeq((Suit) game.getRecentDiscard());
 
                     // AI Action (ADD)
@@ -1376,14 +1376,14 @@ public class Board extends JPanel {
         /** To do Check for all players in order later **/
         if (drawFlag) {
             for (int i = game.getCurrentPlayerIndex() + 1;
-                 i < (game.getCurrentPlayerIndex() + game.getTotalPlayer())
+                 i < (game.getCurrentPlayerIndex() + game.TOTALPLAYER)
                     ; i++) {
 
                 if (game.isPong(game.getPlayerHand(0),
                         game.getRecentDiscard())) {
 
                     // Human Action
-                    if (i % game.getTotalPlayer() == 0) {
+                    if (i % game.TOTALPLAYER == 0) {
                         pongSeq((Suit) game.getRecentDiscard());
                     }
 
@@ -1399,7 +1399,7 @@ public class Board extends JPanel {
         // Check for any chi that can be claimed
         // drawFlag used to determine if user has already claimed pong
         int nextPlIndex = (game.getCurrentPlayerIndex() + 1) %
-                game.getTotalPlayer();
+                game.TOTALPLAYER;
 
         if (drawFlag) {
             if (game.isChi(game.getPlayerList(nextPlIndex),
@@ -1513,6 +1513,28 @@ public class Board extends JPanel {
         color = new Color(red, green, blue);
         updateBackground();
         updateRemovedTile();
+    }
+
+    /*******************************************************************
+     * This method sets the difficulty of the AI.
+     * @param difficulty Difficult of the AI.
+     * @param playerIndex Which AI.
+     ******************************************************************/
+    public void setAIDiff (int difficulty, int playerIndex) {
+
+        if (difficulty < Game.DUMB || difficulty > Game.ADVANCE) {
+
+            throw new IllegalArgumentException("Difficulty " +
+                    "setting not Excepted.");
+        }
+
+        if (playerIndex < 1 || playerIndex > Game.TOTALPLAYER) {
+
+            throw new IllegalArgumentException("Index of Player is" +
+                    "not an AI");
+        }
+
+        game.setAIDiff(difficulty, playerIndex);
     }
 
     /*******************************************************************
