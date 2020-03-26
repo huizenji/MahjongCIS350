@@ -193,6 +193,7 @@ public class Board extends JPanel {
         displayBoard();
         removeImage = true;
         pileNum = drawPile.size();
+
         // AI turn timer and general turn actions
         letsPlay();
 
@@ -1528,7 +1529,7 @@ public class Board extends JPanel {
                     "setting not Excepted.");
         }
 
-        if (playerIndex < 1 || playerIndex > Game.TOTALPLAYER) {
+        if (playerIndex < 0 || playerIndex > Game.TOTALPLAYER - 1) {
 
             throw new IllegalArgumentException("Index of Player is" +
                     "not an AI");

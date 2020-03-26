@@ -1,13 +1,9 @@
 package mahjongCIS350;
 
-import javax.swing.JLabel;
-import javax.swing.JButton;
-import javax.swing.JPanel;
-import javax.swing.JSlider;
+import javax.swing.*;
 import java.awt.BorderLayout;
 import java.awt.GridLayout;
 import java.awt.Color;
-import javax.swing.SwingConstants;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 import java.awt.event.ActionEvent;
@@ -32,12 +28,6 @@ public class Setting extends JPanel {
     /** Default Background color of Blue Shade. **/
     private final int defaultB = 100;
 
-    /** The maximum color shade of each color. **/
-    private final int maxShade = 255;
-
-    /** The minimum color shade of each color. **/
-    private final int minShade = 0;
-
     /** Represents JSlider for the red shade. **/
     private JSlider redShade;
 
@@ -58,12 +48,6 @@ public class Setting extends JPanel {
 
     /** Background Color of GameBoard. **/
     private JButton bgColor;
-
-    /** The label of the minimum value side. **/
-    private final String minLabel = "0";
-
-    /** The label of the maximum value side. **/
-    private final String maxLabel = "255";
 
     /** Listener for all Sliders. **/
     private final SliderListener slider;
@@ -88,11 +72,11 @@ public class Setting extends JPanel {
 
         // Set Overall Layout
         setLayout(new GridLayout(numGrid, 0));
+        setBorder(BorderFactory.createLineBorder(Color.BLACK));
 
         // Initiate Listeners
         slider = new SliderListener();
         button = new ButtonListener();
-
 
         // Setting up Panels
         setBgColorPanel();
@@ -106,6 +90,13 @@ public class Setting extends JPanel {
      ******************************************************************/
     private void setBgColorPanel() {
 
+        /** The label of the max & min value side. **/
+        String minLabel = "0";
+        String maxLabel = "255";
+
+        /** The max & min color shade of each color. **/
+        int maxShade = 255;
+        int minShade = 0;
         int numColor = 3;
         int colorLabel = (maxShade - minShade) / 2;
 
@@ -159,6 +150,8 @@ public class Setting extends JPanel {
         bgColor.add(colorSlider, BorderLayout.CENTER);
         bgColor.add(new JLabel("Background Color Adjustment",
                         SwingConstants.CENTER), BorderLayout.NORTH);
+        bgColor.setBorder(BorderFactory.createLineBorder(Color.BLACK));
+
 
         // Add to main Component
         add(bgColor);
@@ -175,20 +168,15 @@ public class Setting extends JPanel {
         // Create the panel
         final JPanel overallAIPanel = new JPanel();
         overallAIPanel.setLayout(new GridLayout(0, numAI));
-        final JPanel[] AI = new JPanel[numAI];
 
         // Create Array list of JSlider and a temp Slider
         AISetting = new ArrayList<>();
-
-
 
         // Customize Labels and tick marks for temp Slider
         final Hashtable label = new Hashtable();
         label.put(Game.DUMB, new JLabel("Dumb"));
         label.put(Game.BEGINNER, new JLabel("Beginner"));
         label.put(Game.ADVANCE, new JLabel("Advance"));
-
-
 
         for (int i = 0; i < Game.TOTALPLAYER - 1; i++){
 
@@ -202,19 +190,21 @@ public class Setting extends JPanel {
 
             // Create an AI Slider and Panel
             AISetting.add(temp);
-            AI[i] = new JPanel();
+            JPanel AISet = new JPanel();
 
             // Set Layout of each AI difficulty slider panel
-            AI[i].setLayout(new BorderLayout());
+            AISet.setLayout(new BorderLayout());
 
             // ADD JLabel and JSlider to Panel
-            AI[i].add(new JLabel("AI Player " + (i + 1),
+            AISet.add(new JLabel("AI Player " + (i + 1),
                             SwingConstants.CENTER), BorderLayout.NORTH);
-            AI[i].add(AISetting.get(i), BorderLayout.CENTER);
-            overallAIPanel.add(AI[i]);
+            AISet.add(AISetting.get(i), BorderLayout.CENTER);
+            overallAIPanel.add(AISet);
         }
 
         // Add to main Component
+        overallAIPanel.setBorder(BorderFactory.createLineBorder(
+                Color.BLACK));
         add(overallAIPanel);
     }
 
@@ -246,6 +236,8 @@ public class Setting extends JPanel {
         applyPanel.add(bgColor, BorderLayout.CENTER);
 
         // Add to Main Panel
+        applyPanel.setBorder(BorderFactory.createLineBorder(
+                Color.BLACK));
         add(applyPanel);
     }
 
@@ -265,10 +257,11 @@ public class Setting extends JPanel {
                 board.updateBgColor(redShade.getValue(),
                         greenShade.getValue(), blueShade.getValue());
 
-                for (int i = 1; i < Game.TOTALPLAYER; i++) {
+                for (int i = 0; i < Game.TOTALPLAYER - 1; i++) {
 
-                    board.setAIDiff(AISetting.get(i - 1).getValue(),
+                    board.setAIDiff(AISetting.get(i).getValue(),
                             i);
+                    System.out.println(AISetting.get(i).getValue());
                 }
             } else if(event.getSource() == defaultSetting){
                 board.updateBgColor(defaultR, defaultG, defaultB);

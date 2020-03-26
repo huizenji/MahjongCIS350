@@ -1486,11 +1486,12 @@ public class Game {
                     "setting not Excepted.");
         }
 
-        if (playerIndex < 1 || playerIndex > Game.TOTALPLAYER) {
+        if (playerIndex < 0 || playerIndex> AIDiff.length) {
 
             throw new IllegalArgumentException("Index of Player is" +
                     "not an AI");
         }
+
         AIDiff[playerIndex] = difficulty;
     }
 }
