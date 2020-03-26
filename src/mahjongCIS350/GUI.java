@@ -15,6 +15,7 @@ public class GUI {
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
         Board board = new Board();
+        Setting setting = new Setting(board);
         Game game = new Game();
 
         JPanel ruleBook = new JPanel();
@@ -25,6 +26,7 @@ public class GUI {
         JTabbedPane tabbedPane = new JTabbedPane();
         tabbedPane.add("Board", board);
         tabbedPane.add("Rules", ruleBook);
+        tabbedPane.add("Settings", setting);
         frame.getContentPane().add(tabbedPane);
 
         frame.setResizable(true);
