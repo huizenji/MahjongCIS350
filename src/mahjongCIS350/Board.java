@@ -11,7 +11,7 @@ import java.util.*;
  * that interact with the GUI class.
  *
  * @Authors: Wayne Chen, Jillian Huizenga, Chris Paul, Xianghe Zhao
- * @Version: 2/28/2020
+ * @Version: 3/24/2020
  **********************************************************************/
 public class Board extends JPanel {
 
@@ -106,10 +106,10 @@ public class Board extends JPanel {
     /** Default Background color of Red Shade. **/
     private final int defaultR = 0;
 
-    /** Default Background color of Red Shade. **/
+    /** Default Background color of Green Shade. **/
     private final int defaultG = 150;
 
-    /** Default Background color of Red Shade. **/
+    /** Default Background color of Blue Shade. **/
     private final int defaultB = 100;
 
     /*******************************************************************
@@ -231,6 +231,16 @@ public class Board extends JPanel {
             @Override
             public void actionPerformed(final ActionEvent e) {
 
+                String msgAIMahjong = "An opponent has declared "
+                        + "Mahjong. Sorry, you lose.";
+
+                // Player winning off of Mahjong
+                String msgWin = "Do you wish to declare "
+                        + "Mahjong and win?";
+
+                String msgWin2 = "Congratulations, "
+                        + "you won";
+
                 // Check for Stalemate
                 if (game.isStalemate()) {
 
@@ -243,20 +253,30 @@ public class Board extends JPanel {
                     // AI draws Tile
                     game.dumbAIDraw(game.getCurrentPlayer());
 
+
                     // Check if AI can declare Mahjong
                     if (game.isMahjong(game.getPlayerHand(game
                             .getCurrentPlayerIndex()), null)) {
 
-                        String message = "An opponent has declared "
-                                + "Mahjong. Sorry, you lose.";
                         JOptionPane.showMessageDialog(
-                                null, message);
+                                null, msgAIMahjong);
                         enablePlayer1Hand(false);
                         timer.stop();
                     }
 
+                    // Checking if kong is drawn into using set Pile
+                    if (game.isKongDraw(game.getPlayerList(
+                            game.getCurrentPlayerIndex()))) {
+
+                        ;
+                    }
+                        // Add AI Action for discarding
+                    else{
+
+                        game.dumbAIDiscard(game.getCurrentPlayer());
+                    }
+
                     // AI discards Tile
-                    game.dumbAIDiscard(game.getCurrentPlayer());
                     displayBoard();
                     checkSeq();
 
@@ -289,23 +309,24 @@ public class Board extends JPanel {
                                         .getCurrentPlayerIndex()),
                                 null)) {
 
-                            // Player winning off of Mahjong
-                            String message = "Do you wish to declare "
-                                    + "Mahjong and win?";
-
-                            String message2 = "Congratulations, "
-                                    + "you won";
                             int mahjong = JOptionPane.showConfirmDialog(
-                                    null, message, "Claim Message",
+                                    null, msgWin,
+                                    "Claim Message",
                                     JOptionPane.YES_NO_OPTION);
 
                             if (mahjong == JOptionPane.YES_OPTION) {
 
                                 JOptionPane.showMessageDialog(
-                                        null, message2);
+                                        null, msgWin2);
                                 enablePlayer1Hand(false);
                                 timer.stop();
                             }
+                        }
+
+                        if (game.isKongDraw(game.getPlayerList(
+                                0))) {
+
+                            kongDrawSeq();
                         }
                     }
 
@@ -937,9 +958,6 @@ public class Board extends JPanel {
 
         if (pileNum > drawPileSize && removeImage) {
 
-//            drawPilePanel.remove(drawPile.get(pileNum - 1));
-//            drawPile.remove(drawPile.get(pileNum - 1));
-
             drawPile.get(pileNum - 1).setIcon(null);
             drawPile.get(pileNum - 1).setBackground(color);
             drawPile.get(pileNum - 1).setBorder(
@@ -1173,18 +1191,54 @@ public class Board extends JPanel {
         String message = "Claim chi of tile "
                 + disTile.getValue() + " "
                 + disTile.getDesign() + "?";
+        String msgTitle = "Claim Message";
 
         int takeChi = JOptionPane.showConfirmDialog(null,
-                message, "Claim Message",
-                JOptionPane.YES_NO_OPTION);
+                message, msgTitle,
+                JOptionPane.YES_NO_OPTION, JOptionPane.INFORMATION_MESSAGE
+                ,updatedImage(disTile));
 
         if (takeChi == JOptionPane.YES_OPTION) {
 
-            game.takeChi(game.getPlayerList(0),
+            message = "Claim Chi with the displayed tiles?";
+            ArrayList<Integer> options = game.getChiTile(
+                    game.getPlayerList(0),
                     game.getRecentDiscard());
-            displayBoard();
-            game.setNextCurrentPlayer(0);
-            drawFlag = false;
+
+            // Loop Through Options
+            while (options.size() > 0){
+
+                Suit tile1 = (Suit) game.getPlayerList(0).
+                        getHandTile().get(options.get(0));
+                Suit tile2 = (Suit) game.getPlayerList(0).
+                        getHandTile().get(options.get(1));
+
+                ImageIcon icon1 = updatedImage(tile1);
+                ImageIcon icon2 = updatedImage(tile2);
+
+                int claimChi = JOptionPane.showConfirmDialog(
+                        null, new JLabel(
+                                message, icon2, SwingConstants.LEFT),
+                        msgTitle,
+                        JOptionPane.YES_NO_OPTION,
+                        JOptionPane.INFORMATION_MESSAGE
+                        , icon1);
+
+                if (claimChi == JOptionPane.YES_OPTION) {
+
+                    game.takeChi(game.getPlayerList(0),
+                            options.get(0), options.get(1));
+                    displayBoard();
+                    game.setNextCurrentPlayer(0);
+                    drawFlag = false;
+                    break;
+                }
+
+                else {
+                    options.remove(0);
+                    options.remove(0);
+                }
+            }
         }
     }
 
@@ -1203,7 +1257,8 @@ public class Board extends JPanel {
         int takePong = JOptionPane.showConfirmDialog(
                 null,
                 message, "Claim Message",
-                JOptionPane.YES_NO_OPTION);
+                JOptionPane.YES_NO_OPTION,
+                JOptionPane.INFORMATION_MESSAGE, updatedImage(disTile));
 
         if (takePong == JOptionPane.YES_OPTION) {
 
@@ -1227,10 +1282,10 @@ public class Board extends JPanel {
                 + disTile.getValue() + " "
                 + disTile.getDesign() + "?";
 
-        int takeKong = JOptionPane.showConfirmDialog(
-                null,
-                message, "Claim Message",
-                JOptionPane.YES_NO_OPTION);
+        int takeKong = JOptionPane.showConfirmDialog(null,
+                message, "Claim Kong",
+                JOptionPane.YES_NO_OPTION, JOptionPane.INFORMATION_MESSAGE
+                ,updatedImage(disTile));
 
         if (takeKong == JOptionPane.YES_OPTION) {
 
@@ -1241,6 +1296,31 @@ public class Board extends JPanel {
             drawFlag = false;
         }
     }
+
+
+    private void kongDrawSeq() {
+
+        ArrayList<Tile> hand = game.getPlayerList(0)
+                .getHandTile();
+        Tile kongTile = hand.get(hand.size() - 1);
+
+        String message = "Form a kong with the display tile using the"
+                + "pong in the set pile?";
+
+        int takeKong = JOptionPane.showConfirmDialog(null,
+                message, "Claim Kong",
+                JOptionPane.YES_NO_OPTION, JOptionPane.INFORMATION_MESSAGE
+                ,updatedImage(kongTile));
+
+        if (takeKong == JOptionPane.YES_OPTION) {
+
+            game.takeKongDraw(game.getPlayerList(0));
+            displayBoard();
+            game.setNextCurrentPlayer(0);
+            drawFlag = false;
+        }
+    }
+
 
     /******************************************************************
      * This methods is the sequence of action when a mahjong can
@@ -1293,27 +1373,66 @@ public class Board extends JPanel {
             mahjongSeq();
         }
 
-        if (game.isKong(game.getPlayerHand(0),
-                game.getRecentDiscard())
-                && drawFlag) {
+        // Checking for Kong upon discard
+        for (int i = game.getCurrentPlayerIndex() + 1;
+             i < (game.getCurrentPlayerIndex() + game.getTotalPlayer())
+                     ; i++) {
+            if (game.isKong(game.getPlayerHand(i %
+                    game.getTotalPlayer()), game.getRecentDiscard())
+                    && drawFlag) {
 
-            kongSeq((Suit) game.getRecentDiscard());
+                // Human Player Action
+                if (i % game.getTotalPlayer() == 0) {
+                    kongSeq((Suit) game.getRecentDiscard());
+
+                    // AI Action (ADD)
+                } else {
+                    ;
+                }
+            }
         }
 
         // Check for pongs that can be claimed
-        if (game.isPong(game.getPlayerHand(0),
-                game.getRecentDiscard())
-                && drawFlag) {
+        /** To do Check for all players in order later **/
+        for (int i = game.getCurrentPlayerIndex() + 1;
+             i < (game.getCurrentPlayerIndex() + game.getTotalPlayer())
+                ; i++) {
 
-            pongSeq((Suit) game.getRecentDiscard());
+            if (game.isPong(game.getPlayerHand(0),
+                    game.getRecentDiscard())
+                    && drawFlag) {
+
+                // Human Action
+                if (i % game.getTotalPlayer() == 0) {
+                    pongSeq((Suit) game.getRecentDiscard());
+                }
+
+                // AI Action (ADD)
+                else{
+
+
+                }
+            }
         }
 
         // Check for any chi that can be claimed
         // drawFlag used to determine if user has already claimed pong
-        if (game.isChi(game.getPlayerList(0),
+        int nextPlIndex = (game.getCurrentPlayerIndex() + 1) %
+                game.getTotalPlayer();
+
+        if (game.isChi(game.getPlayerList(nextPlIndex),
                 (Suit) game.getRecentDiscard()) && drawFlag) {
 
-            chiSeq((Suit) game.getRecentDiscard());
+            // If Human Player
+            if (nextPlIndex == 0) {
+                chiSeq((Suit) game.getRecentDiscard());
+            }
+
+            // AI Action (ADD)
+            else {
+
+                ;
+            }
         }
 
         if (drawFlag) {
@@ -1329,7 +1448,7 @@ public class Board extends JPanel {
         /***************************************************************
          * Action of Selecting Shade.
          * @param event Which option was selected
-         */
+         **************************************************************/
         public void actionPerformed(final ActionEvent event) {
 
             String[] colorSelect = {"red", "green", "blue"};
