@@ -38,7 +38,7 @@ public class Setting extends JPanel {
     private JSlider blueShade;
 
     /** Represents JSlider for AIs. **/
-    private ArrayList<JSlider> AISetting;
+    private ArrayList<JSlider> settingAI;
 
     /** JButton To Apply Changes. **/
     private JButton apply;
@@ -80,7 +80,7 @@ public class Setting extends JPanel {
 
         // Setting up Panels
         setBgColorPanel();
-        AIDiffSetting();
+        diffAISetting();
         applySetting();
 
     }
@@ -90,11 +90,11 @@ public class Setting extends JPanel {
      ******************************************************************/
     private void setBgColorPanel() {
 
-        /** The label of the max & min value side. **/
+        // The label of the max & min value side
         String minLabel = "0";
         String maxLabel = "255";
 
-        /** The max & min color shade of each color. **/
+        // The max & min color shade of each color.
         int maxShade = 255;
         int minShade = 0;
         int numColor = 3;
@@ -161,7 +161,7 @@ public class Setting extends JPanel {
      * This method sets up the sliders for the the AI difficulty
      * setting.
      ******************************************************************/
-    private void AIDiffSetting() {
+    private void diffAISetting() {
 
         int numAI = 3;
 
@@ -170,7 +170,7 @@ public class Setting extends JPanel {
         overallAIPanel.setLayout(new GridLayout(0, numAI));
 
         // Create Array list of JSlider and a temp Slider
-        AISetting = new ArrayList<>();
+        settingAI = new ArrayList<>();
 
         // Customize Labels and tick marks for temp Slider
         final Hashtable label = new Hashtable();
@@ -189,17 +189,17 @@ public class Setting extends JPanel {
             temp.setPaintLabels(true);
 
             // Create an AI Slider and Panel
-            AISetting.add(temp);
-            JPanel AISet = new JPanel();
+            settingAI.add(temp);
+            JPanel setAI = new JPanel();
 
             // Set Layout of each AI difficulty slider panel
-            AISet.setLayout(new BorderLayout());
+            setAI.setLayout(new BorderLayout());
 
             // ADD JLabel and JSlider to Panel
-            AISet.add(new JLabel("AI Player " + (i + 1),
+            setAI.add(new JLabel("AI Player " + (i + 1),
                             SwingConstants.CENTER), BorderLayout.NORTH);
-            AISet.add(AISetting.get(i), BorderLayout.CENTER);
-            overallAIPanel.add(AISet);
+            setAI.add(settingAI.get(i), BorderLayout.CENTER);
+            overallAIPanel.add(setAI);
         }
 
         // Add to main Component
@@ -251,7 +251,7 @@ public class Setting extends JPanel {
          * @param event Which slider was triggered
          **************************************************************/
         @Override
-        public void actionPerformed(ActionEvent event) {
+        public void actionPerformed(final ActionEvent event) {
 
             if (event.getSource() == apply) {
                 board.updateBgColor(redShade.getValue(),
@@ -259,9 +259,8 @@ public class Setting extends JPanel {
 
                 for (int i = 0; i < Game.TOTALPLAYER - 1; i++) {
 
-                    board.setAIDiff(AISetting.get(i).getValue(),
+                    board.setAIDiff(settingAI.get(i).getValue(),
                             i);
-                    System.out.println(AISetting.get(i).getValue());
                 }
             } else if(event.getSource() == defaultSetting){
                 board.updateBgColor(defaultR, defaultG, defaultB);

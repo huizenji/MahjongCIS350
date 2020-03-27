@@ -179,6 +179,7 @@ public class Board extends JPanel {
         resetBtn = new JButton("Reset");
         resetBtn.addActionListener(listener);
         gameBoard.add(resetBtn);
+        resetBtn.setEnabled(false);
 
         placeDrawPile();
         dealPlayerTiles();
@@ -241,6 +242,12 @@ public class Board extends JPanel {
                                 null, msgAIMahjong);
                         enablePlayer1Hand(false);
                         timer.stop();
+
+                        if (game.getCurrentPlayerIndex()
+                                != game.getStartingPlayer()){
+
+                            game.setNextStartingPlayer();
+                        }
                     }
 
                     // Checking if kong is drawn into using set Pile
@@ -299,6 +306,11 @@ public class Board extends JPanel {
                                         null, msgWin2);
                                 enablePlayer1Hand(false);
                                 timer.stop();
+
+                                if (0 != game.getStartingPlayer()){
+
+                                    game.setNextStartingPlayer();
+                                }
                             }
                         }
 
@@ -1154,6 +1166,7 @@ public class Board extends JPanel {
                         + "win, therefore the game is a "
                         + "stalemate.");
         drawFlag = false;
+        resetBtn.setEnabled(true);
     }
 
     /*******************************************************************
@@ -1309,8 +1322,9 @@ public class Board extends JPanel {
      ******************************************************************/
     private void mahjongSeq() {
 
+        int winner = isMahjongPlayerDiscard();
         // Player can claim Mahjong
-        if (isMahjongPlayerDiscard() == 0) {
+        if (winner == 0) {
 
             String message = "Do you wish to declare "
                     + "Mahjong and win?";
@@ -1328,6 +1342,12 @@ public class Board extends JPanel {
                 enablePlayer1Hand(false);
                 timer.stop();
                 drawFlag = false;
+                resetBtn.setEnabled(true);
+
+                if (winner != game.getStartingPlayer()){
+
+                    game.setNextStartingPlayer();
+                }
             }
         } else {
 
@@ -1337,6 +1357,12 @@ public class Board extends JPanel {
             enablePlayer1Hand(false);
             timer.stop();
             drawFlag = false;
+            resetBtn.setEnabled(true);
+
+            if (winner != game.getStartingPlayer()){
+
+                game.setNextStartingPlayer();
+            }
         }
     }
 
@@ -1539,14 +1565,6 @@ public class Board extends JPanel {
     }
 
     /*******************************************************************
-     * This method gets the back of the tile.
-     * @return Tile image of the back of the tile.
-     ******************************************************************/
-    public ImageIcon getTileBack() {
-        return tileBack;
-    }
-
-    /*******************************************************************
      * A class within Board that handles action listeners of buttons.
      ******************************************************************/
     private class Listener implements ActionListener {
@@ -1599,6 +1617,7 @@ public class Board extends JPanel {
             if (event.getSource() == resetBtn){
                 game.reset();
                 resetBoard();
+                resetBtn.setEnabled(false);
             }
         }
     }

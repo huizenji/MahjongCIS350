@@ -20,6 +20,7 @@ public class GUI {
 
         JPanel ruleBook = new JPanel();
         TextArea rules = new TextArea();
+        ruleBook.setLayout(new BorderLayout());
         rules.append(game.ruleBook());
         ruleBook.add(rules, BorderLayout.CENTER);
 

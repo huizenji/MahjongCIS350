@@ -1214,11 +1214,9 @@ public class Game {
      *****************************************************************/
     public String ruleBook() {
 
-        String rules = starting() + setRule() + claimChiRule()
+        return starting() + setRule() + claimChiRule()
                 + claimPongRule() + claimKongRule() + declareMahjong()
                 + scoring();
-
-        return rules;
     }
 
     /*******************************************************************
@@ -1228,19 +1226,18 @@ public class Game {
      ******************************************************************/
     private String starting() {
 
-        String msg = "Players start with 13 tiles each. Each player " +
-                "is assigned a wind (East-South-West-North). " +
-                "East starts the game by picking a tile from the " +
-                "wall and discarding a tile. Players then take" +
-                " clockwise turns picking a tile from " +
-                "the wall and then discarding one tile from the hand." +
-                " It is also possible to claim a tile discarded by " +
-                "another player under certain circumstances. " +
-                "In such cases, the player to the left of the " +
-                "claiming player becomes next in turn. So some " +
-                "players may lose their turn in a go-around.\n\n";
-
-        return msg;
+        return "General Rules: \n"
+                + "Players start with 13 tiles each. Each player "
+                + "is assigned a wind (East-South-West-North). "
+                + "East starts the game by picking a tile from the "
+                + "wall and discarding a tile.\nPlayers then take"
+                + " clockwise turns picking a tile from "
+                + "the wall and then discarding one tile from the hand."
+                + " It is also possible to claim a tile discarded by "
+                + "another player\n under certain circumstances. "
+                + "In such cases, the player to the left of the "
+                + "claiming player becomes next in turn. So some "
+                + "players may lose their turn in a go-around.\n\n";
     }
 
     /*******************************************************************
@@ -1250,20 +1247,22 @@ public class Game {
      ******************************************************************/
     private String setRule() {
 
-        String msg = "A set of tiles consist of 3 tiles. This 3 tiles"
+        return "Rules on Sets: \n"
+                + "A set of tiles consist of 3 tiles. This 3 tiles "
                 + "may all be the same, thus forming a 3 of a kind or "
                 + "they all form a 3 tile straight of the same "
-                + "suit.\n\nAll sets that are formed in the hand by "
+                + "suit.\nAll sets that are formed in the hand by "
                 + "drawing do not have to be revealed to the opposing "
-                + "players. However, any set or kong that are claimed"
-                + "must be revealed to all opposing players.\n\n"
-                + "It is important to know that a kong is not consider "
-                + "a set but it can be claimed.\n\n Once a player "
-                + "declares that they can from a set, they move the"
-                + "tiles that they used to from a set along with the "
-                + "recently discarded tile to the set pile.";
-
-        return msg;
+                + "players. However, any set or kong that are claimed "
+                + "must be revealed\nto all opposing players."
+                + "It is important to know that a kong is consider as"
+                + "1 set. Once a player "
+                + "declares that they can from a set, they move the "
+                + "tiles that they used\nto from a set along with the "
+                + "recently discarded tile to the set pile. Then, the "
+                + "player who claimed the set discards a tile. \nThe"
+                + "next player turn is the player that is next in "
+                + "rotation of the player that discarded the tile.\n\n";
     }
 
     /*******************************************************************
@@ -1273,12 +1272,14 @@ public class Game {
      ******************************************************************/
     private String claimChiRule() {
 
-        String msg = "A chi can only be claimed when the opposing "
+        String msg = "Claiming Chi:\n"
+                + "A chi can only be claimed when the opposing "
                 + "player directly to right discards a "
                 + "tile. In addition, the discarded the tile must be "
-                + " able to use to form a 3 tile straight in the "
+                + " able to use to form a 3 tile straight\n in the "
                 + "players hand using the same suit. Also, the straight"
-                + "can not extend from 9 to 1 or vise versa.\n\n";
+                + "can not extend from 9 to 1 or vise versa and"
+                + " can not be done with dragon or wind tiles.\n\n";
 
         return msg;
     }
@@ -1290,12 +1291,11 @@ public class Game {
      ******************************************************************/
     private String claimPongRule() {
 
-        String msg = "A pong can be claimed when any opposing player"
+        return "Claiming Pong:\n"
+                + "A pong can be claimed when any opposing player"
                 + " discards a tile and you have a 2 tiles in your hand"
                 + " that can be used to form a 3 of a kind with the "
                 + "discarded tile.\n\n";
-
-        return msg;
     }
 
     /*******************************************************************
@@ -1305,24 +1305,17 @@ public class Game {
      ******************************************************************/
     private String claimKongRule() {
 
-        String msg = "A kong can be claimed when any opposing player"
+        return  "A kong can be claimed when any opposing player"
                 + " discards a tile and you have a 3 tiles in your hand"
                 + " that can be used to form a 4 of a kind with the "
-                + "discarded tile. In addition, the player must draw a "
-                + "new tile from the main deck/wall before discarding a"
-                + " tile.\n\nAny kong that is formed by drawing a tile "
-                + "is does not have to be revealed to the opposing"
-                + " players. This is optional. However, it is to "
-                + "your advantage to not reveal the tiles because it "
-                + "could possibly hinder your opponents game. In "
-                + "addition, a kong can not remain in the hand, instead"
-                + "the kong that forms by drawing must be moved to the"
-                + "set pile or discard a tile to break up the kong."
-                + "A speacial rule with Kong is that you can form a "
-                + "kong with a pong in your set pile";
-
-        return msg;
-
+                + "discarded tile.\nIn addition, the player must draw a "
+                + "new tile from the main wall before discarding a"
+                + " tile. In addition, a kong can not remain in "
+                + "the hand.\nInstead the kong that forms by drawing "
+                + "must be moved to the"
+                + "set pile or discard a tile to break up the kong. "
+                + "A special rule with Kong is that you can form a\n"
+                + "kong with a pong in your set pile.\n\n";
     }
 
     /*******************************************************************
@@ -1332,15 +1325,14 @@ public class Game {
      ******************************************************************/
     private String declareMahjong() {
 
-        String msg = "A mahjong can be claimed when a player has "
+        return  "Declaring Mahjong: \n"
+                + "A mahjong can be claimed when a player has "
                 + "all sets(chi,pong,kong), any point tiles and a "
-                + "single pair in their hand or set pile combined."
-                + "In addition, there can not be a kong that "
+                + "single pair in their hand or set pile combined. "
+                + "\nIn addition, there can not be a kong that "
                 + "in the declared players hand. At this point, the "
-                + "player that declares Mahjong wins and their score"
+                + "player that declares Mahjong wins and their score\n"
                 + "will be calculated based on the scoring rules.\n\n";
-
-        return msg;
     }
 
     /*******************************************************************
@@ -1350,12 +1342,14 @@ public class Game {
      ******************************************************************/
     private String scoring() {
 
-        String msg = "Once a player has declared mahjong, they win. "
+        return "Scoring: \n"
+                + "Once a player has declared mahjong, they win. "
                 + "The winning player will receive of a score of 1 "
                 + "point and 1 additional point for every dragon, wind"
-                + "and flower tile that is in the set pile.";
-
-        return msg;
+                + " and flower tile\nthat is in the set pile for"
+                + "game option 1. Game option 2 sets scores based"
+                + "on the players hand and set pile when the "
+                + "declare Mahjong.";
     }
 
     /*******************************************************************
@@ -1368,30 +1362,28 @@ public class Game {
         return currentPlayer;
     }
 
-    /******************************************************************
+    /*******************************************************************
      * This method get the current player.
      *
      * @return The current player.
-     *****************************************************************/
+     ******************************************************************/
     public Player getCurrentPlayer(){
 
         return playerList[currentPlayer];
     }
 
-    /******************************************************************
-     * This method sets the starting player based on index value.
-     *
-     * @param startingPlayer The index of the starting player.
-     *****************************************************************/
-    public void setStartingPlayer(int startingPlayer) {
-
-        this.startingPlayer = startingPlayer;
+    /*******************************************************************
+     * This method gets the starting player.
+     * @return The starting player.
+     ******************************************************************/
+    public int getStartingPlayer() {
+        return startingPlayer;
     }
 
     /******************************************************************
      * This method sets the next starting player.
      *****************************************************************/
-    private void setNextStartingPlayer() {
+    public void setNextStartingPlayer() {
 
         startingPlayer = (startingPlayer + 1) % TOTALPLAYER;
     }
