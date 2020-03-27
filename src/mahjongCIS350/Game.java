@@ -61,11 +61,11 @@ public class Game {
         tiles = new ArrayList<>();
         discardPile = new ArrayList<>();
         maxTile = 144;
-        gameOptionSimple = true;
+        gameOptionSimple = false;
         createTile();
         setupPlayer();
         shuffle();
-        dealTile_13();
+        dealTile13();
         removeKongHand();
         setupAIDiff();
     }
@@ -103,7 +103,6 @@ public class Game {
     private void createPointTile() {
 
         String[] dragonColor = {"Red", "Green", "White"};
-
         String[] windDir = {"North", "East", "South", "West"};
 
         // creating Dragon Tiles
@@ -221,7 +220,7 @@ public class Game {
         createTile();
         setupPlayer();
         shuffle();
-        dealTile_13();
+        dealTile13();
         removeKongHand();
     }
 
@@ -229,7 +228,7 @@ public class Game {
      * This method deals out 13 Suit Tiles to three Players, and 14
      * Tiles to the East Player
      ******************************************************************/
-    private void dealTile_13() {
+    private void dealTile13() {
 
         // Give out 12 Tiles
         for (int index = 0; index < 4; index++) {
@@ -252,17 +251,15 @@ public class Game {
         // Giving starting player 1 extra tile
         playerList[startingPlayer].addTile(tiles.remove(0));
 
-        // Only Remove Point Tile if Simple Game Option is in Play
-        if (gameOptionSimple) {
-            replacePointTile();
-        }
+        // Only Appropriate tile depending on game mode
+        replacePointTile();
     }
 
     /*******************************************************************
      * If a Player draws a point Tile, then the Tile is moved to their
      * set pile and they draw a new Tile to replace it. This is done
      * until all Tiles in a Player's hand are Suits. If game mode is
-     * set to traditonal, only removes flower tile.
+     * set to traditional, only removes flower tile.
      ******************************************************************/
     private void replacePointTile() {
 
@@ -311,6 +308,7 @@ public class Game {
 
                     draw(playerList[i]);
                     autoSort(playerList[i]);
+
                 }
 
                 // reset till
@@ -396,9 +394,14 @@ public class Game {
      *              player of the current player
      * @return True if the player can claim a chi.
      ******************************************************************/
-    public boolean isChi(Player pl, Suit check) {
+    public boolean isChi(Player pl, Tile check) {
 
         ArrayList<Tile> plHand = pl.getHandTile();
+
+        if (!(check instanceof Suit)){
+
+            return false;
+        }
 
         for (int i = 0; i < plHand.size(); i++){
 
@@ -406,12 +409,17 @@ public class Game {
 
                 if (i != j){
 
-                    Suit suit1 = (Suit)plHand.get(i);
-                    Suit suit2 = (Suit)plHand.get(j);
+                    if (plHand.get(i) instanceof Suit
+                        && plHand.get(j) instanceof Suit) {
 
-                    if (compareConsecutiveSuits(suit1, suit2, check)){
+                        Suit suit1 = (Suit) plHand.get(i);
+                        Suit suit2 = (Suit) plHand.get(j);
 
-                        return true;
+                        if (compareConsecutiveSuits(suit1, suit2,
+                                (Suit) check)) {
+
+                            return true;
+                        }
                     }
                 }
             }
@@ -480,18 +488,17 @@ public class Game {
         if (tile1.getType().equals(tile2.getType())) {
 
             //If the tiles are Winds, check direction match
-            if (tile1.getType() == "Wind") {
+            if (tile1.getType().equals("Wind")) {
 
                 if (((Wind) tile1).getDirection().equals(((Wind) tile2).
                         getDirection())) {
 
                     return true;
-
                 }
             }
 
             //If the tiles are Dragons, check color match
-            if (tile1.getType() == "Dragon") {
+            if (tile1.getType().equals("Dragon")) {
 
                 if (((Dragon) tile1).getColor().equals(((Dragon) tile2).
                         getColor())) {
@@ -647,17 +654,22 @@ public class Game {
 
                 for (int k = j + 1; k < temp.size(); k++) {
 
-                    Suit tile1 = (Suit) temp.get(i);
-                    Suit tile2 = (Suit) temp.get(j);
-                    Suit tile3 = (Suit) temp.get(k);
+                    if (temp.get(i) instanceof Suit
+                        && temp.get(j) instanceof Suit
+                        && temp.get(j) instanceof Suit) {
+                        Suit tile1 = (Suit) temp.get(i);
+                        Suit tile2 = (Suit) temp.get(j);
+                        Suit tile3 = (Suit) temp.get(j);
 
-                    if (compareConsecutiveSuits(tile1, tile2, tile3)) {
+                        if (compareConsecutiveSuits(tile1, tile2,
+                                tile3)) {
 
-                        temp.remove(k);
-                        temp.remove(j);
-                        temp.remove(i);
-                        i--;
-                        break outer;
+                            temp.remove(k);
+                            temp.remove(j);
+                            temp.remove(i);
+                            i--;
+                            break outer;
+                        }
                     }
                 }
             }
@@ -672,6 +684,7 @@ public class Game {
 
         return false;
     }
+
 
     /*******************************************************************
      * This method finds the tiles the player can used to claim a chi
@@ -690,14 +703,18 @@ public class Game {
 
                 if (i != j) {
 
-                    Suit suit1 = (Suit) pl.getHandTile().get(i);
-                    Suit suit2 = (Suit) pl.getHandTile().get(j);
+                    if (pl.getHandTile().get(i) instanceof Suit
+                     && pl.getHandTile().get(j) instanceof Suit) {
 
-                    if (compareConsecutiveSuits(suit1,suit2,
-                            (Suit) discard)){
+                        Suit suit1 = (Suit) pl.getHandTile().get(i);
+                        Suit suit2 = (Suit) pl.getHandTile().get(j);
 
-                        desired.add(suit1);
-                        desired.add(suit2);
+                        if (compareConsecutiveSuits(suit1, suit2,
+                                (Suit) discard)) {
+
+                            desired.add(suit1);
+                            desired.add(suit2);
+                        }
                     }
                 }
             }
@@ -876,24 +893,53 @@ public class Game {
     private void autoSort(Player player) {
 
         ArrayList<Tile> temp = new ArrayList<>();
-
-        // Suit that will be placed first
-        Suit comp = new Suit();
+        String[] dragonColor = {"Red", "Green", "White"};
+        String[] windDir = {"North", "East", "South", "West"};
 
         // Tile from player that is being checked
-        Suit playerTile;
+        Tile playerTile;
+
+        // Tiles created for comparision
+        Dragon compD = new Dragon();
+        Wind compW = new Wind();
+        Suit compS = new Suit();
+
+        for (int i = 0; i < dragonColor.length; i++){
+
+            compD.setColor(dragonColor[i]);
+
+            for (int k = 0; k < player.getHandTile().size(); k++){
+                playerTile = player.getHandTile().get(k);
+                if (compareTile(compD, playerTile)){
+
+                    temp.add(playerTile);
+                }
+            }
+        }
+
+        for (int i = 0; i < windDir.length; i++){
+
+            compW.setDirection(windDir[i]);
+
+            for (int k = 0; k < player.getHandTile().size(); k++){
+                playerTile = player.getHandTile().get(k);
+                if (compareTile(compW, playerTile)){
+
+                    temp.add(playerTile);
+                }
+            }
+        }
 
         // Adding Circle Tiles
-        comp.setDesign("Circle");
+        compS.setDesign("Circle");
 
         for (int value = 1; value <= 9; value++) {
-
             for (int i = 0; i < player.getHandTile().size(); i++) {
 
-                playerTile = (Suit) player.getHandTile().get(i);
-                comp.setValue(value);
+                playerTile = player.getHandTile().get(i);
+                compS.setValue(value);
 
-                if (compareSuit(comp, playerTile)) {
+                if (compareTile(compS, playerTile)) {
 
                     temp.add(playerTile);
                 }
@@ -901,16 +947,16 @@ public class Game {
         }
 
         // Adding Bamboo Tiles
-        comp.setDesign("Bamboo");
+        compS.setDesign("Bamboo");
 
         for (int value = 1; value <= 9; value++) {
 
             for (int i = 0; i < player.getHandTile().size(); i++) {
 
-                playerTile = (Suit) player.getHandTile().get(i);
-                comp.setValue(value);
+                playerTile = player.getHandTile().get(i);
+                compS.setValue(value);
 
-                if (compareSuit(comp, playerTile)) {
+                if (compareTile(compS, playerTile)) {
 
                     temp.add(playerTile);
                 }
@@ -918,16 +964,16 @@ public class Game {
         }
 
         // Adding Character Tiles
-        comp.setDesign("Character");
+        compS.setDesign("Character");
 
         for (int value = 1; value <= 9; value++) {
 
             for (int i = 0; i < player.getHandTile().size(); i++) {
 
-                playerTile = (Suit) player.getHandTile().get(i);
-                comp.setValue(value);
+                playerTile = player.getHandTile().get(i);
+                compS.setValue(value);
 
-                if (compareSuit(comp, playerTile)) {
+                if (compareTile(compS, playerTile)) {
 
                     temp.add(playerTile);
                 }
@@ -947,24 +993,52 @@ public class Game {
     private ArrayList<Tile> autoSort(ArrayList<Tile> hand) {
 
         ArrayList<Tile> temp = new ArrayList<>();
+        String[] dragonColor = {"Red", "Green", "White"};
+        String[] windDir = {"North", "East", "South", "West"};
 
-        // Suit that will be placed first
-        Suit comp = new Suit();
+        // Tile from player that is being checked
+        Tile playerTile;
 
-        // Tile from Player that is being checked
-        Suit playerTile;
+        // Tiles created for comparision
+        Dragon compD = new Dragon();
+        Wind compW = new Wind();
+        Suit compS = new Suit();
+
+        for (int i = 0; i < dragonColor.length; i++){
+            compD.setColor(dragonColor[i]);
+
+            for (int k = 0; k < hand.size(); k++){
+                playerTile = hand.get(k);
+                if (compareTile(compD, playerTile)){
+
+                    temp.add(playerTile);
+                }
+            }
+        }
+
+        for (int i = 0; i < windDir.length; i++){
+
+            compW.setDirection(windDir[i]);
+
+            for (int k = 0; k < hand.size(); k++){
+                playerTile = hand.get(k);
+                if (compareTile(compD, playerTile)){
+
+                    temp.add(playerTile);
+                }
+            }
+        }
 
         // Adding Circle Tiles
-        comp.setDesign("Circle");
+        compS.setDesign("Circle");
 
         for (int value = 1; value <= 9; value++) {
-
             for (int i = 0; i < hand.size(); i++) {
 
-                playerTile = (Suit) hand.get(i);
-                comp.setValue(value);
+                playerTile = hand.get(i);
+                compS.setValue(value);
 
-                if (compareSuit(comp, playerTile)) {
+                if (compareTile(compS, playerTile)) {
 
                     temp.add(playerTile);
                 }
@@ -972,16 +1046,16 @@ public class Game {
         }
 
         // Adding Bamboo Tiles
-        comp.setDesign("Bamboo");
+        compS.setDesign("Bamboo");
 
         for (int value = 1; value <= 9; value++) {
 
             for (int i = 0; i < hand.size(); i++) {
 
-                playerTile = (Suit) hand.get(i);
-                comp.setValue(value);
+                playerTile = hand.get(i);
+                compS.setValue(value);
 
-                if (compareSuit(comp, playerTile)) {
+                if (compareTile(compS, playerTile)) {
 
                     temp.add(playerTile);
                 }
@@ -989,23 +1063,23 @@ public class Game {
         }
 
         // Adding Character Tiles
-        comp.setDesign("Character");
+        compS.setDesign("Character");
 
         for (int value = 1; value <= 9; value++) {
 
             for (int i = 0; i < hand.size(); i++) {
 
-                playerTile = (Suit) hand.get(i);
-                comp.setValue(value);
+                playerTile = hand.get(i);
+                compS.setValue(value);
 
-                if (compareSuit(comp, playerTile)) {
+                if (compareTile(compS, playerTile)) {
 
                     temp.add(playerTile);
                 }
             }
         }
 
-        // Setting the sorted hand to Player
+        // Setting the sorted hand to player
         return temp;
     }
 
@@ -1078,8 +1152,6 @@ public class Game {
 
         // check if they are consecutive and values are not
         // equal to each other
-        boolean[] visited = new boolean[3];
-
         if (tile1.getDesign().equals(tile2.getDesign()) &&
                 tile1.getDesign().equals(tile3.getDesign())) {
 
@@ -1120,6 +1192,7 @@ public class Game {
 
                 isPoint = false;
             }
+
         } else {
 
             if (tile instanceof Flower) {
@@ -1158,19 +1231,19 @@ public class Game {
      * This methods removes a tile from hand based on the player and
      * the tile index in their hand.
      *
-     * @param pl The player that is discarding the tile.
+     * @param player The player that is discarding the tile.
      * @param tileIndex The tile index in the selected players hand.
      ******************************************************************/
-    public void discard(Player pl, int tileIndex) {
+    public void discard(Player player, int tileIndex) {
 
-        if (tileIndex >= pl.getHandTile().size() || tileIndex < 0) {
+        if (tileIndex >= player.getHandTile().size() || tileIndex < 0) {
 
-            throw new IndexOutOfBoundsException("tile index is out of" +
-                    " bounds.");
+            throw new IndexOutOfBoundsException("tile index is out of"
+                    + " bounds.");
         }
 
-        discardPile.add(pl.getHandTile().remove(tileIndex));
-        autoSort(pl);
+        discardPile.add(player.getHandTile().remove(tileIndex));
+        autoSort(player);
     }
 
     /*******************************************************************
@@ -1542,4 +1615,3 @@ public class Game {
         AIDiff[playerIndex] = difficulty;
     }
 }
-

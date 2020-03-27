@@ -11,6 +11,15 @@ public class Dragon extends Tile {
     /** Color of the Dragon Tile. **/
     private String color;
 
+    /*******************************************************************
+     * This is an empty constructor that sets the color of the dragon
+     * to null;
+     ******************************************************************/
+    public Dragon() {
+        super("Dragon");
+        this.color = null;
+    }
+
     /*******************************************************************`
      * This ia a constructor that creates for the Dragon class. This
      * only ask for the color of the Dragon.

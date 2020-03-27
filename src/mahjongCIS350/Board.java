@@ -1237,11 +1237,9 @@ public class Board extends JPanel {
      *
      * @param disTile The recent discarded tile.
      *****************************************************************/
-    private void pongSeq(final Suit disTile) {
+    private void pongSeq(final Tile disTile) {
 
-        String message = "Claim pong of tile "
-                + disTile.getValue() + " "
-                + disTile.getDesign() + "?";
+        String message = "Claim pong of the Displayed Tile.";
 
         int takePong = JOptionPane.showConfirmDialog(
                 null,
@@ -1411,7 +1409,7 @@ public class Board extends JPanel {
 
                     // Human Action
                     if (i % game.TOTALPLAYER == 0) {
-                        pongSeq((Suit) game.getRecentDiscard());
+                        pongSeq(game.getRecentDiscard());
                     }
 
                     // AI Action (ADD)
@@ -1430,7 +1428,7 @@ public class Board extends JPanel {
 
         if (drawFlag) {
             if (game.isChi(game.getPlayerList(nextPlIndex),
-                    (Suit) game.getRecentDiscard())) {
+                     game.getRecentDiscard())) {
 
                 // If Human Player
                 if (nextPlIndex == 0) {
