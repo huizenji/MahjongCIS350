@@ -38,6 +38,9 @@ public class Game {
     /** The total amount of turns that have gone by. **/
     private int turnCount = 0;
 
+    /** The 2 game options that the user can set to. **/
+    private boolean gameOptionSimple;
+
     /** The constant for an very dumb AI. **/
     public static final int DUMB = 1;
 
@@ -58,6 +61,7 @@ public class Game {
         tiles = new ArrayList<>();
         discardPile = new ArrayList<>();
         maxTile = 144;
+        gameOptionSimple = true;
         createTile();
         setupPlayer();
         shuffle();
@@ -248,13 +252,17 @@ public class Game {
         // Giving starting player 1 extra tile
         playerList[startingPlayer].addTile(tiles.remove(0));
 
-        replacePointTile();
+        // Only Remove Point Tile if Simple Game Option is in Play
+        if (gameOptionSimple) {
+            replacePointTile();
+        }
     }
 
     /*******************************************************************
      * If a Player draws a point Tile, then the Tile is moved to their
      * set pile and they draw a new Tile to replace it. This is done
-     * until all Tiles in a Player's hand are Suits.
+     * until all Tiles in a Player's hand are Suits. If game mode is
+     * set to traditonal, only removes flower tile.
      ******************************************************************/
     private void replacePointTile() {
 
@@ -266,8 +274,8 @@ public class Game {
                     getHandTile().size(); i++) {
 
                 // Check tile if it is a point tile
-                if (!(playerList[index].getHandTile().get(i)
-                        instanceof Suit)) {
+                if (isPointTile(playerList[index].getHandTile().
+                        get(i))) {
 
                     playerList[index].getSetPile().
                             add(playerList[index].getHandTile().
@@ -1096,19 +1104,34 @@ public class Game {
      ******************************************************************/
     private boolean isPointTile(final Tile tile) {
 
-        if (tile instanceof Suit) {
+        boolean isPoint;
 
-            return false;
+        if (gameOptionSimple) {
+            if (tile instanceof Suit) {
 
-        } else if (tile instanceof Dragon || tile instanceof Wind ||
-                tile instanceof Flower) {
+                isPoint = false;
 
-            return true;
+            } else if (tile instanceof Dragon || tile instanceof Wind ||
+                    tile instanceof Flower) {
 
+                isPoint = true;
+
+            } else {
+
+                isPoint = false;
+            }
         } else {
 
-            return false;
+            if (tile instanceof Flower) {
+
+                isPoint = true;
+            } else {
+
+                isPoint = false;
+            }
         }
+
+        return isPoint;
     }
 
     /*******************************************************************
@@ -1216,7 +1239,7 @@ public class Game {
 
         return starting() + setRule() + claimChiRule()
                 + claimPongRule() + claimKongRule() + declareMahjong()
-                + scoring();
+                + scoring() + gameMode();
     }
 
     /*******************************************************************
@@ -1353,6 +1376,20 @@ public class Game {
     }
 
     /*******************************************************************
+     * This method explains the rules about the 2 different game modes.
+     *
+     * @return The rules about the game modes.
+     ******************************************************************/
+    private String gameMode() {
+
+        return  "Game Mode: \n"
+                + "The simple game mode automatically moves all non"
+                + "suit tiles to the set pile and is treated as a "
+                + "point.\nThe more traditional game mode only moves"
+                + "flower tiles to the set pile. This will allow "
+                + "for pongs to be made with dragon and wind tiles";
+    }
+    /*******************************************************************
      * This method gets the index of the current player.
      *
      * @return THe index of the current player
@@ -1380,50 +1417,23 @@ public class Game {
         return startingPlayer;
     }
 
-    /******************************************************************
-     * This method sets the next starting player.
-     *****************************************************************/
-    public void setNextStartingPlayer() {
-
-        startingPlayer = (startingPlayer + 1) % TOTALPLAYER;
-    }
-
-    /******************************************************************
-     * This method sets the next current player.
-     *****************************************************************/
-    public void setNextCurrentPlayer() {
-
-        currentPlayer = (currentPlayer + 1) % TOTALPLAYER;
-        turnCount++;
-    }
-
-    /******************************************************************
-     * This method sets the next player based on index.
-     *
-     * @param pl Index of the next player in the sequence
-     *****************************************************************/
-    public void setNextCurrentPlayer(int pl){
-
-        currentPlayer = pl;
-    }
-
-    /******************************************************************
+    /*******************************************************************
      * This method gets the player based off the player list.
      *
      * @param playerNum THe index of the player.
      * @return The player based of the index.
-     *****************************************************************/
+     ******************************************************************/
     public Player getPlayerList(int playerNum) {
 
         return playerList[playerNum];
     }
 
-    /******************************************************************
+    /*******************************************************************
      * This method gets the player hand.
      *
      * @param playerNum The index of the player.
      * @return The players hand based off the players index.
-     *****************************************************************/
+     ******************************************************************/
     public ArrayList<Tile> getPlayerHand(int playerNum){
 
         if (playerNum < 0 || playerNum > 4){
@@ -1435,21 +1445,21 @@ public class Game {
         return playerList[playerNum].getHandTile();
     }
 
-    /******************************************************************
+    /*******************************************************************
      * This method gets the entire discard pile.
      *
      * @return The discard pile.
-     *****************************************************************/
+     ******************************************************************/
     public ArrayList<Tile> getDiscardPile() {
 
         return discardPile;
     }
 
-    /******************************************************************
+    /*******************************************************************
      * This method gets the most recently discarded tile.
      *
      * @return The most recently discarded tile.
-     *****************************************************************/
+     ******************************************************************/
     public Tile getRecentDiscard(){
 
         return discardPile.get(discardPile.size() - 1);
@@ -1463,6 +1473,51 @@ public class Game {
     public ArrayList<Tile> getDrawPile(){
 
         return tiles;
+    }
+
+    /******************************************************************
+     * This method sets the next starting player.
+     ******************************************************************/
+    public void setNextStartingPlayer() {
+
+        startingPlayer = (startingPlayer + 1) % TOTALPLAYER;
+    }
+
+    /*******************************************************************
+     * This method sets the next current player.
+     ******************************************************************/
+    public void setNextCurrentPlayer() {
+
+        currentPlayer = (currentPlayer + 1) % TOTALPLAYER;
+        turnCount++;
+    }
+
+    /*******************************************************************
+     * This method sets the next player based on index.
+     *
+     * @param pl Index of the next player in the sequence
+     ******************************************************************/
+    public void setNextCurrentPlayer(int pl){
+
+        currentPlayer = pl;
+    }
+
+    /*******************************************************************
+     * This method gets what game mode the game is currently in.
+     * @return The game mode
+     ******************************************************************/
+    public boolean isGameOptionSimple() {
+        return gameOptionSimple;
+    }
+
+    /*******************************************************************
+     * This method sets what type of style the game is played in.
+     * @param mode True for simple game mode, false for complicated or
+     *             more traditional format.
+     ******************************************************************/
+    public void setGameOptionSimple(boolean mode){
+
+        gameOptionSimple = mode;
     }
 
     /*******************************************************************

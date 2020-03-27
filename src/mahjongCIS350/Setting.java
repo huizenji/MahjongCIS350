@@ -68,7 +68,7 @@ public class Setting extends JPanel {
         super();
 
         this.board = gameBoard;
-        int numGrid = 4;
+        int numGrid = 3;
 
         // Set Overall Layout
         setLayout(new GridLayout(numGrid, 0));
@@ -266,6 +266,16 @@ public class Setting extends JPanel {
                 board.updateBgColor(defaultR, defaultG, defaultB);
                 bgColor.setBackground(new Color(defaultR, defaultG,
                         defaultB));
+
+                for (int i = 0; i < Game.TOTALPLAYER - 1; i++) {
+
+                    board.setAIDiff(Game.defaultAI, i);
+                    settingAI.get(i).setValue(Game.defaultAI);
+                }
+
+                redShade.setValue(defaultR);
+                greenShade.setValue(defaultG);
+                blueShade.setValue(defaultB);
             }
         }
     }
