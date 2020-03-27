@@ -61,7 +61,7 @@ public class Game {
         tiles = new ArrayList<>();
         discardPile = new ArrayList<>();
         maxTile = 144;
-        gameOptionSimple = false;
+        gameOptionSimple = true;
         createTile();
         setupPlayer();
         shuffle();
@@ -1579,7 +1579,7 @@ public class Game {
      * This method gets what game mode the game is currently in.
      * @return The game mode
      ******************************************************************/
-    public boolean isGameOptionSimple() {
+    public boolean getGameOptionSimple() {
         return gameOptionSimple;
     }
 

@@ -198,8 +198,12 @@ public class Board extends JPanel {
         // AI turn timer and general turn actions
         letsPlay();
 
+        // Ask if user wants to player more traditional game mode
+        // Switch mode if applicable
+        gameModeSwap();
         timer.start();
     }
+
 
     /*******************************************************************
      * This method uses a timer to go through each players turn.
@@ -449,8 +453,8 @@ public class Board extends JPanel {
             drawPilePanel.remove(drawPile.size() - 1);
             drawPile.remove(drawPile.size() - 1);
 
-            p1Hand.get(i).setIcon(updatedImage(game.getPlayerList(0)
-                    .getTileFromHand(i)));
+            p1Hand.get(i).setIcon(updatedImage(game.getPlayerList(
+                    0).getTileFromHand(i)));
 
             c.gridx = i;
             c.gridy = 0;
@@ -1127,6 +1131,32 @@ public class Board extends JPanel {
         }
     }
 
+    private void gameModeSwap() {
+
+        String message = "Would you like to switch the game mode to ";
+        String message2;
+
+        if (!game.getGameOptionSimple()){
+
+            message2 = "Simple Mode";
+        } else {
+
+            message2 = "Traditional Mode";
+        }
+        int takeKong = JOptionPane.showConfirmDialog(
+                null, message + message2,
+                "Mode Switch",
+                JOptionPane.YES_NO_OPTION);
+
+        if (takeKong == JOptionPane.YES_OPTION) {
+
+            game.setGameOptionSimple(!game.getGameOptionSimple());
+            game.reset();
+            resetBoard();
+            resetBtn.setEnabled(false);
+        }
+    }
+
     /*******************************************************************
      * This method checks all the Players and returns a Player who has
      * Mahjong.
@@ -1167,6 +1197,7 @@ public class Board extends JPanel {
                         + "stalemate.");
         drawFlag = false;
         resetBtn.setEnabled(true);
+        gameModeSwap();
     }
 
     /*******************************************************************
@@ -1346,6 +1377,8 @@ public class Board extends JPanel {
 
                     game.setNextStartingPlayer();
                 }
+
+                gameModeSwap();
             }
         } else {
 
@@ -1361,6 +1394,8 @@ public class Board extends JPanel {
 
                 game.setNextStartingPlayer();
             }
+
+            gameModeSwap();
         }
     }
 
