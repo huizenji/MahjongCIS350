@@ -54,6 +54,9 @@ public class Board extends JPanel {
     /** Displays the direction of the human Player. **/
     private JLabel p1Direction;
 
+    /** Displays the current score of the game. **/
+    private JLabel scoreBoard;
+
     /** Tile image of type Suit with Circle design. **/
     private ImageIcon circle1, circle2, circle3, circle4, circle5,
             circle6, circle7, circle8, circle9;
@@ -84,12 +87,6 @@ public class Board extends JPanel {
 
     /** AI turn duration. **/
     private Timer timer;
-
-    /** Menu Bar in Jpanel. **/
-    private JMenuBar menuBar;
-
-    /** Menu contain game customization options. **/
-    private JComboBox optionMenu;
 
     /** Determines if a Player should draw a Tile from drawPile. **/
     private boolean drawFlag = true;
@@ -125,6 +122,8 @@ public class Board extends JPanel {
         // Set shade of rgb to default dark green color
         color = new Color(defaultR, defaultG, defaultB);
 
+        scoreBoard = new JLabel();
+
         // create piles and hands
         drawPile = new ArrayList<>();
         discardPile = new ArrayList<>();
@@ -155,22 +154,6 @@ public class Board extends JPanel {
         p1Direction = new JLabel(game.getPlayerList(0).
                 getDirection());
 
-        // Listeners
-        OptionListener optionListener = new OptionListener();
-
-        // Creating the option Menu
-        String[] bgOptions = {"Select Shade", "Red Shade",
-                "Green Shade", "Blue Shade", "Default Shade" };
-
-        menuBar = new JMenuBar();
-        optionMenu = new JComboBox(bgOptions);
-        optionMenu.setSelectedIndex(0);
-        optionMenu.addActionListener(optionListener);
-
-        // Add Menu Bar
-        menuBar.add(optionMenu);
-        add(menuBar);
-
         // Set background
         updateBackground();
 
@@ -198,10 +181,12 @@ public class Board extends JPanel {
         listener = new Listener();
 
         // create reset button
-//        resetBtn = new JButton("Reset Game");
-//        resetBtn.addActionListener(listener);
-//        gameBoard.add(resetBtn);
+        resetBtn = new JButton("Reset");
+        resetBtn.addActionListener(listener);
+        gameBoard.add(resetBtn);
+        resetBtn.setEnabled(false);
 
+        add(scoreBoard, BorderLayout.NORTH);
         placeDrawPile();
         dealPlayerTiles();
         placePanels();
@@ -215,11 +200,17 @@ public class Board extends JPanel {
         displayBoard();
         removeImage = true;
         pileNum = drawPile.size();
+
         // AI turn timer and general turn actions
         letsPlay();
 
+        // Ask if user wants to player more traditional game mode
+        // Switch mode if applicable
+        gameModeSwap();
+        updateScore();
         timer.start();
     }
+
 
     /*******************************************************************
      * This method uses a timer to go through each players turn.
@@ -262,6 +253,13 @@ public class Board extends JPanel {
                                 null, msgAIMahjong);
                         enablePlayer1Hand(false);
                         timer.stop();
+
+                        updateScore();
+                        if (game.getCurrentPlayerIndex()
+                                != game.getStartingPlayer()){
+
+                            game.setNextStartingPlayer();
+                        }
                     }
 
                     // Checking if kong is drawn into using set Pile
@@ -319,7 +317,13 @@ public class Board extends JPanel {
                                 JOptionPane.showMessageDialog(
                                         null, msgWin2);
                                 enablePlayer1Hand(false);
+                                updateScore();
                                 timer.stop();
+
+                                if (0 != game.getStartingPlayer()){
+
+                                    game.setNextStartingPlayer();
+                                }
                             }
                         }
 
@@ -458,8 +462,8 @@ public class Board extends JPanel {
             drawPilePanel.remove(drawPile.size() - 1);
             drawPile.remove(drawPile.size() - 1);
 
-            p1Hand.get(i).setIcon(updatedImage(game.getPlayerList(0)
-                    .getTileFromHand(i)));
+            p1Hand.get(i).setIcon(updatedImage(game.getPlayerList(
+                    0).getTileFromHand(i)));
 
             c.gridx = i;
             c.gridy = 0;
@@ -871,11 +875,8 @@ public class Board extends JPanel {
         updateP1Hand(p1HandSize);
 
         updateP1SetPile(p1SetSize);
-
         updateP2SetPile(p2SetSize);
-
         updateP3SetPile(p3SetSize);
-
         updateP4SetPile(p4SetSize);
 
         updateDrawPile(drawPileSize);
@@ -1139,6 +1140,32 @@ public class Board extends JPanel {
         }
     }
 
+    private void gameModeSwap() {
+
+        String message = "Would you like to switch the game mode to ";
+        String message2;
+
+        if (!game.getGameOptionSimple()){
+
+            message2 = "Simple Mode";
+        } else {
+
+            message2 = "Traditional Mode";
+        }
+        int takeKong = JOptionPane.showConfirmDialog(
+                null, message + message2,
+                "Mode Switch",
+                JOptionPane.YES_NO_OPTION);
+
+        if (takeKong == JOptionPane.YES_OPTION) {
+
+            game.setGameOptionSimple(!game.getGameOptionSimple());
+            game.reset();
+            resetBoard();
+            resetBtn.setEnabled(false);
+        }
+    }
+
     /*******************************************************************
      * This method checks all the Players and returns a Player who has
      * Mahjong.
@@ -1178,6 +1205,9 @@ public class Board extends JPanel {
                         + "win, therefore the game is a "
                         + "stalemate.");
         drawFlag = false;
+        resetBtn.setEnabled(true);
+        game.setNextStartingPlayer();
+        gameModeSwap();
     }
 
     /*******************************************************************
@@ -1248,11 +1278,9 @@ public class Board extends JPanel {
      *
      * @param disTile The recent discarded tile.
      *****************************************************************/
-    private void pongSeq(final Suit disTile) {
+    private void pongSeq(final Tile disTile) {
 
-        String message = "Claim pong of tile "
-                + disTile.getValue() + " "
-                + disTile.getDesign() + "?";
+        String message = "Claim pong of the Displayed Tile.";
 
         int takePong = JOptionPane.showConfirmDialog(
                 null,
@@ -1282,9 +1310,10 @@ public class Board extends JPanel {
                 + disTile.getValue() + " "
                 + disTile.getDesign() + "?";
 
-        int takeKong = JOptionPane.showConfirmDialog(null,
-                message, "Claim Kong",
-                JOptionPane.YES_NO_OPTION, JOptionPane.INFORMATION_MESSAGE
+        int takeKong = JOptionPane.showConfirmDialog(
+                null, message, "Claim Kong",
+                JOptionPane.YES_NO_OPTION,
+                JOptionPane.INFORMATION_MESSAGE
                 ,updatedImage(disTile));
 
         if (takeKong == JOptionPane.YES_OPTION) {
@@ -1297,7 +1326,10 @@ public class Board extends JPanel {
         }
     }
 
-
+    /*******************************************************************
+     * This method is for the sequence of actions the program will make
+     * if the player draws into a kong.
+     ******************************************************************/
     private void kongDrawSeq() {
 
         ArrayList<Tile> hand = game.getPlayerList(0)
@@ -1307,9 +1339,10 @@ public class Board extends JPanel {
         String message = "Form a kong with the display tile using the"
                 + "pong in the set pile?";
 
-        int takeKong = JOptionPane.showConfirmDialog(null,
-                message, "Claim Kong",
-                JOptionPane.YES_NO_OPTION, JOptionPane.INFORMATION_MESSAGE
+        int takeKong = JOptionPane.showConfirmDialog(
+                null, message, "Claim Kong",
+                JOptionPane.YES_NO_OPTION,
+                JOptionPane.INFORMATION_MESSAGE
                 ,updatedImage(kongTile));
 
         if (takeKong == JOptionPane.YES_OPTION) {
@@ -1322,14 +1355,15 @@ public class Board extends JPanel {
     }
 
 
-    /******************************************************************
+    /*******************************************************************
      * This methods is the sequence of action when a mahjong can
      * be declared.
-     *****************************************************************/
+     ******************************************************************/
     private void mahjongSeq() {
 
+        int winner = isMahjongPlayerDiscard();
         // Player can claim Mahjong
-        if (isMahjongPlayerDiscard() == 0) {
+        if (winner == 0) {
 
             String message = "Do you wish to declare "
                     + "Mahjong and win?";
@@ -1347,6 +1381,14 @@ public class Board extends JPanel {
                 enablePlayer1Hand(false);
                 timer.stop();
                 drawFlag = false;
+                resetBtn.setEnabled(true);
+
+                if (winner != game.getStartingPlayer()){
+
+                    game.setNextStartingPlayer();
+                }
+
+                gameModeSwap();
             }
         } else {
 
@@ -1356,6 +1398,14 @@ public class Board extends JPanel {
             enablePlayer1Hand(false);
             timer.stop();
             drawFlag = false;
+            resetBtn.setEnabled(true);
+
+            if (winner != game.getStartingPlayer()){
+
+                game.setNextStartingPlayer();
+            }
+
+            gameModeSwap();
         }
     }
 
@@ -1375,14 +1425,14 @@ public class Board extends JPanel {
 
         // Checking for Kong upon discard
         for (int i = game.getCurrentPlayerIndex() + 1;
-             i < (game.getCurrentPlayerIndex() + game.getTotalPlayer())
+             i < (game.getCurrentPlayerIndex() + game.TOTALPLAYER)
                      ; i++) {
             if (game.isKong(game.getPlayerHand(i %
-                    game.getTotalPlayer()), game.getRecentDiscard())
+                    game.TOTALPLAYER), game.getRecentDiscard())
                     && drawFlag) {
 
                 // Human Player Action
-                if (i % game.getTotalPlayer() == 0) {
+                if (i % game.TOTALPLAYER == 0) {
                     kongSeq((Suit) game.getRecentDiscard());
 
                     // AI Action (ADD)
@@ -1394,23 +1444,24 @@ public class Board extends JPanel {
 
         // Check for pongs that can be claimed
         /** To do Check for all players in order later **/
-        for (int i = game.getCurrentPlayerIndex() + 1;
-             i < (game.getCurrentPlayerIndex() + game.getTotalPlayer())
-                ; i++) {
+        if (drawFlag) {
+            for (int i = game.getCurrentPlayerIndex() + 1;
+                 i < (game.getCurrentPlayerIndex() + game.TOTALPLAYER)
+                    ; i++) {
 
-            if (game.isPong(game.getPlayerHand(0),
-                    game.getRecentDiscard())
-                    && drawFlag) {
+                if (game.isPong(game.getPlayerHand(0),
+                        game.getRecentDiscard())) {
 
-                // Human Action
-                if (i % game.getTotalPlayer() == 0) {
-                    pongSeq((Suit) game.getRecentDiscard());
-                }
+                    // Human Action
+                    if (i % game.TOTALPLAYER == 0) {
+                        pongSeq(game.getRecentDiscard());
+                    }
 
-                // AI Action (ADD)
-                else{
+                    // AI Action (ADD)
+                    else {
 
 
+                    }
                 }
             }
         }
@@ -1418,20 +1469,22 @@ public class Board extends JPanel {
         // Check for any chi that can be claimed
         // drawFlag used to determine if user has already claimed pong
         int nextPlIndex = (game.getCurrentPlayerIndex() + 1) %
-                game.getTotalPlayer();
+                game.TOTALPLAYER;
 
-        if (game.isChi(game.getPlayerList(nextPlIndex),
-                (Suit) game.getRecentDiscard()) && drawFlag) {
+        if (drawFlag) {
+            if (game.isChi(game.getPlayerList(nextPlIndex),
+                     game.getRecentDiscard())) {
 
-            // If Human Player
-            if (nextPlIndex == 0) {
-                chiSeq((Suit) game.getRecentDiscard());
-            }
+                // If Human Player
+                if (nextPlIndex == 0) {
+                    chiSeq((Suit) game.getRecentDiscard());
+                }
 
-            // AI Action (ADD)
-            else {
+                // AI Action (ADD)
+                else {
 
-                ;
+                    ;
+                }
             }
         }
 
@@ -1443,71 +1496,128 @@ public class Board extends JPanel {
         displayBoard();
     }
 
-    private class OptionListener implements ActionListener {
+    /*******************************************************************
+     * This method resets the game board in the board class.
+     ******************************************************************/
+    private void resetBoard() {
 
-        /***************************************************************
-         * Action of Selecting Shade.
-         * @param event Which option was selected
-         **************************************************************/
-        public void actionPerformed(final ActionEvent event) {
+        // Removing all tiles.
+        removeImage = false;
+        removeTileButton();
 
-            String[] colorSelect = {"red", "green", "blue"};
+        // Placing Image of new Game Board
+        placeDrawPile();
+        dealPlayerTiles();
 
-            JComboBox cb = (JComboBox) event.getSource();
-            int response = cb.getSelectedIndex();
+        // disable human Player hand at start unless it's their turn
+        if (game.getCurrentPlayerIndex() != 0) {
 
-
-            while (response < 4 && response > 0) {
-
-                String str = JOptionPane.showInputDialog("What shade"
-                        + "of the color " + colorSelect[response - 1]
-                        + ".\nEnter a number between "
-                        + "0 - 255");
-
-                // Exit if nothing was entered
-                if (str == null) {
-
-                    break;
-                }
-
-                // Setting the color
-                int shade = Integer.parseInt(str);
-                if (shade < 0 || shade > 255) {
-
-                    JOptionPane.showMessageDialog(null,
-                            "Invalid Entry, Enter a number"
-                                    + "between 0 - 255");
-                } else {
-
-                    int r = color.getRed();
-                    int g = color.getGreen();
-                    int b = color.getBlue();
-
-                    if (response == 1) {
-                        color = new Color(shade, g, b);
-                    } else if (response == 2) {
-
-                        color = new Color(r, shade, b);
-                    } else if (response == 3) {
-
-                        color = new Color(r, g, shade);
-                    }
-
-                    updateBackground();
-                    updateRemovedTile();
-                    break;
-                }
-            }
-
-            if (response == 4) {
-
-                color = new Color(defaultR, defaultG, defaultB);
-                updateRemovedTile();
-                updateBackground();
-            }
-
-            optionMenu.setSelectedIndex(0);
+            enablePlayer1Hand(false);
         }
+
+        // Reset Flags, Counters and Start Timer
+        displayBoard();
+        removeImage = true;
+        pileNum = drawPile.size();
+        timer.start();
+    }
+
+    /*******************************************************************
+     * This method removes all JButtons that are connected to tiles that
+     * are on the board.
+     ******************************************************************/
+    private void removeTileButton() {
+
+        // Remove draw and discard
+        while (drawPile.size() > 0) {
+            drawPilePanel.remove(drawPile.get(drawPile.size() - 1));
+            drawPile.remove(drawPile.get(drawPile.size() - 1));
+        }
+
+        while (discardPile.size() > 0) {
+
+            discardPilePanel.remove(discardPile.size() - 1);
+            discardPile.remove(discardPile.size() - 1);
+        }
+
+        // Removing Player 1 Set and Hand Tiles
+        while (p1Hand.size() > 0) {
+
+            p1HandPanel.remove(p1Hand.size() - 1);
+            p1Hand.remove(p1Hand.size() - 1);
+        }
+
+        while (p1Sets.size() > 0) {
+
+            p1SetPanel.remove(p1Sets.size() - 1);
+            p1Sets.remove(p1Sets.size() - 1);
+        }
+
+        while (p2Sets.size() > 0) {
+
+            p2SetPanel.remove(p2Sets.size() - 1);
+            p2Sets.remove(p2Sets.size() - 1);
+        }
+
+        while (p3Sets.size() > 0) {
+
+            p3SetPanel.remove(p3Sets.size() - 1);
+            p3Sets.remove(p3Sets.size() - 1);
+        }
+
+        while (p4Sets.size() > 0) {
+
+            p4SetPanel.remove(p4Sets.size() - 1);
+            p4Sets.remove(p4Sets.size() - 1);
+        }
+    }
+
+    /*******************************************************************
+     * This method updates the background color of the board.
+     * @param red The shade of the red element.
+     * @param green The shade of the green element.
+     * @param blue The shade of the blue element.
+     ******************************************************************/
+    public void updateBgColor(int red, int green, int blue) {
+
+        color = new Color(red, green, blue);
+        updateBackground();
+        updateRemovedTile();
+    }
+
+    /*******************************************************************
+     * This method sets the difficulty of the AI.
+     * @param difficulty Difficult of the AI.
+     * @param playerIndex Which AI.
+     ******************************************************************/
+    public void setAIDiff (int difficulty, int playerIndex) {
+
+        if (difficulty < Game.DUMB || difficulty > Game.ADVANCE) {
+
+            throw new IllegalArgumentException("Difficulty " +
+                    "setting not Excepted.");
+        }
+
+        if (playerIndex < 0 || playerIndex > Game.TOTALPLAYER - 1) {
+
+            throw new IllegalArgumentException("Index of Player is" +
+                    "not an AI");
+        }
+
+        game.setAIDiff(difficulty, playerIndex);
+    }
+
+    private void updateScore() {
+
+        int p1score = game.getPlayerList(0).getPoint();
+        int p2score = game.getPlayerList(1).getPoint();
+        int p3score = game.getPlayerList(2).getPoint();
+        int p4score = game.getPlayerList(3).getPoint();
+
+        scoreBoard.setText("Player 1 Score: " + p1score + "     "
+            + "Player 2 Score: " + p2score + "     "
+            + "Player 3 Score: " + p3score + "     "
+            + "Player 4 Score: " + p4score);
     }
 
     /*******************************************************************
@@ -1560,9 +1670,12 @@ public class Board extends JPanel {
                 }
             }
 
-//            if (event.getSource() == resetBtn){
-//                game.reset();
-//            }
+            if (event.getSource() == resetBtn){
+                game.reset();
+                resetBoard();
+                resetBtn.setEnabled(false);
+                updateScore();
+            }
         }
     }
 }

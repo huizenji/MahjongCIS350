@@ -29,11 +29,29 @@ public class Game {
     /** List of all Players. **/
     private Player[] playerList;
 
+    /** The Difficulty of the AI, levels 1 - 3. **/
+    private int[] AIDiff;
+
     /** Total number of players per game. **/
-    private final int totalPlayer = 4;
+    public static final int TOTALPLAYER = 4;
 
     /** The total amount of turns that have gone by. **/
     private int turnCount = 0;
+
+    /** The 2 game options that the user can set to. **/
+    private boolean gameOptionSimple;
+
+    /** The constant for an very dumb AI. **/
+    public static final int DUMB = 1;
+
+    /** The constant for a beginner level AI. **/
+    public static final int BEGINNER = 2;
+
+    /** The constant for an advance level AI. **/
+    public static final int ADVANCE = 3;
+
+    /** The constant for default setting for AI. **/
+    public static final int defaultAI = BEGINNER;
 
     /*******************************************************************
      * This is the constructor for the Game class.
@@ -43,11 +61,13 @@ public class Game {
         tiles = new ArrayList<>();
         discardPile = new ArrayList<>();
         maxTile = 144;
+        gameOptionSimple = true;
         createTile();
         setupPlayer();
         shuffle();
-        dealTile_13();
+        dealTile13();
         removeKongHand();
+        setupAIDiff();
     }
 
     /*******************************************************************
@@ -66,8 +86,7 @@ public class Game {
 
         String[] design = {"Circle", "Bamboo", "Character"};
 
-        for (int index = 0; index < 3; index++) {
-
+        for (int index = 0; index < design.length; index++) {
             for (int numtile = 1; numtile <= 9; numtile++) {
 
                 for (int i = 0; i < 4; i++) {
@@ -84,7 +103,6 @@ public class Game {
     private void createPointTile() {
 
         String[] dragonColor = {"Red", "Green", "White"};
-
         String[] windDir = {"North", "East", "South", "West"};
 
         // creating Dragon Tiles
@@ -113,44 +131,12 @@ public class Game {
     }
 
     /*******************************************************************
-     * Whenever Player draws a Tile, if it's a point Tile then score
-     * increase by 1. If there's a point Tile in hand, also increase
-     * the score by 1.
-     * @param p The player.
-     ******************************************************************/
-    public void pile_score(final Player p) {
-
-        int s = 0;
-
-        for(int i = 0; i <= p.getHandTile().size(); ++i) {
-
-            if (isPointTile(p.getTileFromHand(i))) {
-
-                s++;
-            }
-        }
-
-        p.setPoint(p.getPoint() + s);
-    }
-
-    /*******************************************************************
-     * A getter function for individual Tiles.
-     *
-     * @param index Index of the tile.
-     * @return Tile at indicated index
-     ******************************************************************/
-    public Tile getTile(final int index) {
-
-        return tiles.get(index);
-    }
-
-    /*******************************************************************
      * This method creates all the players in the game and randomly
      * assigns one of the player to be the starting player.
      ******************************************************************/
     private void setupPlayer() {
 
-        playerList = new Player[totalPlayer];
+        playerList = new Player[TOTALPLAYER];
 
         // Creating 4 Players
         playerList[0] = new Player("East");
@@ -165,14 +151,14 @@ public class Game {
         // Player
         for (int i = 0; i < randVal; i++) {
 
-            for (int j = 0; j < totalPlayer; j++) {
+            for (int j = 0; j < TOTALPLAYER; j++) {
 
                 rotatePlayerDir(playerList[j]);
             }
         }
 
         // Find the starting player index
-        startingPlayer = randVal % totalPlayer;
+        startingPlayer = randVal % TOTALPLAYER;
         currentPlayer = startingPlayer;
     }
 
@@ -234,7 +220,7 @@ public class Game {
         createTile();
         setupPlayer();
         shuffle();
-        dealTile_13();
+        dealTile13();
         removeKongHand();
     }
 
@@ -242,7 +228,7 @@ public class Game {
      * This method deals out 13 Suit Tiles to three Players, and 14
      * Tiles to the East Player
      ******************************************************************/
-    private void dealTile_13() {
+    private void dealTile13() {
 
         // Give out 12 Tiles
         for (int index = 0; index < 4; index++) {
@@ -265,13 +251,15 @@ public class Game {
         // Giving starting player 1 extra tile
         playerList[startingPlayer].addTile(tiles.remove(0));
 
+        // Only Appropriate tile depending on game mode
         replacePointTile();
     }
 
     /*******************************************************************
      * If a Player draws a point Tile, then the Tile is moved to their
      * set pile and they draw a new Tile to replace it. This is done
-     * until all Tiles in a Player's hand are Suits.
+     * until all Tiles in a Player's hand are Suits. If game mode is
+     * set to traditional, only removes flower tile.
      ******************************************************************/
     private void replacePointTile() {
 
@@ -283,8 +271,8 @@ public class Game {
                     getHandTile().size(); i++) {
 
                 // Check tile if it is a point tile
-                if (!(playerList[index].getHandTile().get(i)
-                        instanceof Suit)) {
+                if (isPointTile(playerList[index].getHandTile().
+                        get(i))) {
 
                     playerList[index].getSetPile().
                             add(playerList[index].getHandTile().
@@ -305,24 +293,26 @@ public class Game {
      ******************************************************************/
     private void removeKongHand() {
 
-        int kongIndex;
+        Tile kongTile;
 
         for (int i = 0; i < playerList.length; i++) {
 
-            while (isKongHand(playerList[i]) != -1) {
+            kongTile = isKongHand(playerList[i]);
+            while (kongTile != null) {
 
-                kongIndex = isKongHand(playerList[i]);
+                for (int k = playerList[i].getHandTile().size() - 1;
+                     k >= 0 ; k--) {
 
-                if (kongIndex != -1) {
-
-                    for (int k = 0; k < 4; k++) {
-
-                        playerList[i].removeTileSet(kongIndex);
-                    }
+                    if (compareTile(playerList[i].getHandTile().get(k),
+                            kongTile))
 
                     draw(playerList[i]);
                     autoSort(playerList[i]);
+
                 }
+
+                // reset till
+                kongTile = isKongHand(playerList[i]);
             }
         }
     }
@@ -330,37 +320,70 @@ public class Game {
     /*******************************************************************
      * This method determines if the Player has a kong in their hand.
      *
-     * @param pl The player hands that is being checked.
-     * @return It will return -1 if there is no Kong, but it will
-     *         return the starting index of where the Kong starts if
-     *         there is a Kong.
+     * @param player The player hands that is being checked.
+     * @return Returns the tile that forms the kong.
      ******************************************************************/
-    private int isKongHand(Player pl) {
+    private Tile isKongHand(Player player) {
 
-        ArrayList<Tile> hand = pl.getHandTile();
-        boolean temp = true;
+        ArrayList<Tile> hand = player.getHandTile();
+        int totalCopy = 4;
+        int count = 0;
+        Tile kong = null;
 
-        for (int i = 0; i < pl.getHandTile().size() - 4; i++) {
+        for (int i = 0; i < hand.size() - totalCopy; i++) {
+            for (int k = i + 1; k < hand.size(); k++) {
 
-            for (int k = 1; k < 4; k++) {
+                if ((compareTile((hand.get(i)), (hand.get(k))))) {
 
-                if (!(compareSuit((Suit) (hand.get(i)),
-                        (Suit) (hand.get(i + k))))) {
-
-                    temp = false;
+                    count++;
                 }
             }
 
             // Checking if there is a kong
-            if (temp) {
+            if (count == totalCopy) {
 
-                return i;
+                kong = hand.get(i);
             }
 
-            temp = true;
+            // reset counter
+            count = 0;
         }
 
-        return -1;
+        return kong;
+    }
+
+    /*******************************************************************
+     * This method sets the AI to the basic level (beginner)
+     ******************************************************************/
+    private void setupAIDiff(){
+
+        AIDiff = new int[TOTALPLAYER - 1];
+
+        for (int i = 0; i < AIDiff.length; i++) {
+
+            AIDiff[i] = BEGINNER;
+        }
+    }
+
+    /*******************************************************************
+     * Whenever Player draws a Tile, if it's a point Tile then score
+     * increase by 1. If there's a point Tile in hand, also increase
+     * the score by 1.
+     * @param player The player.
+     ******************************************************************/
+    public void pileScore(final Player player) {
+
+        int point = 0;
+
+        for(int i = 0; i <= player.getSetPile().size(); i++) {
+
+            if (isPointTile(player.getSetTile(i))) {
+
+                point++;
+            }
+        }
+
+        player.setPoint(player.getPoint() + point);
     }
 
     /*******************************************************************
@@ -371,9 +394,14 @@ public class Game {
      *              player of the current player
      * @return True if the player can claim a chi.
      ******************************************************************/
-    public boolean isChi(Player pl, Suit check) {
+    public boolean isChi(Player pl, Tile check) {
 
         ArrayList<Tile> plHand = pl.getHandTile();
+
+        if (!(check instanceof Suit)){
+
+            return false;
+        }
 
         for (int i = 0; i < plHand.size(); i++){
 
@@ -381,12 +409,17 @@ public class Game {
 
                 if (i != j){
 
-                    Suit suit1 = (Suit)plHand.get(i);
-                    Suit suit2 = (Suit)plHand.get(j);
+                    if (plHand.get(i) instanceof Suit
+                        && plHand.get(j) instanceof Suit) {
 
-                    if (compareConsecutiveSuits(suit1, suit2, check)){
+                        Suit suit1 = (Suit) plHand.get(i);
+                        Suit suit2 = (Suit) plHand.get(j);
 
-                        return true;
+                        if (compareConsecutiveSuits(suit1, suit2,
+                                (Suit) check)) {
+
+                            return true;
+                        }
                     }
                 }
             }
@@ -455,18 +488,17 @@ public class Game {
         if (tile1.getType().equals(tile2.getType())) {
 
             //If the tiles are Winds, check direction match
-            if (tile1.getType() == "Wind") {
+            if (tile1.getType().equals("Wind")) {
 
                 if (((Wind) tile1).getDirection().equals(((Wind) tile2).
                         getDirection())) {
 
                     return true;
-
                 }
             }
 
             //If the tiles are Dragons, check color match
-            if (tile1.getType() == "Dragon") {
+            if (tile1.getType().equals("Dragon")) {
 
                 if (((Dragon) tile1).getColor().equals(((Dragon) tile2).
                         getColor())) {
@@ -584,6 +616,35 @@ public class Game {
             temp = autoSort(temp);
         }
 
+        // This section checks for any chi in the players hand
+        for (int i = 0; i < temp.size(); i++) {
+
+            outer:
+            for (int j = i + 1; j < temp.size(); j++) {
+
+                for (int k = j + 1; k < temp.size(); k++) {
+
+                    if (temp.get(i) instanceof Suit
+                            && temp.get(j) instanceof Suit
+                            && temp.get(j) instanceof Suit) {
+                        Suit tile1 = (Suit) temp.get(i);
+                        Suit tile2 = (Suit) temp.get(j);
+                        Suit tile3 = (Suit) temp.get(j);
+
+                        if (compareConsecutiveSuits(tile1, tile2,
+                                tile3)) {
+
+                            temp.remove(k);
+                            temp.remove(j);
+                            temp.remove(i);
+                            i--;
+                            break outer;
+                        }
+                    }
+                }
+            }
+        }
+
         // This section checks for any pongs in the Player's hand
         for (int i = 0; i < temp.size(); i++) {
 
@@ -614,29 +675,6 @@ public class Game {
             }
         }
 
-        // This section checks for any chi in the players hand
-        for (int i = 0; i < temp.size(); i++) {
-
-            outer:
-            for (int j = i + 1; j < temp.size(); j++) {
-
-                for (int k = j + 1; k < temp.size(); k++) {
-
-                    Suit tile1 = (Suit) temp.get(i);
-                    Suit tile2 = (Suit) temp.get(j);
-                    Suit tile3 = (Suit) temp.get(k);
-
-                    if (compareConsecutiveSuits(tile1, tile2, tile3)) {
-
-                        temp.remove(k);
-                        temp.remove(j);
-                        temp.remove(i);
-                        i--;
-                        break outer;
-                    }
-                }
-            }
-        }
 
         // If a player has 2 tiles remaining and they are the same,
         // then they have mahjong.
@@ -647,6 +685,7 @@ public class Game {
 
         return false;
     }
+
 
     /*******************************************************************
      * This method finds the tiles the player can used to claim a chi
@@ -665,14 +704,18 @@ public class Game {
 
                 if (i != j) {
 
-                    Suit suit1 = (Suit) pl.getHandTile().get(i);
-                    Suit suit2 = (Suit) pl.getHandTile().get(j);
+                    if (pl.getHandTile().get(i) instanceof Suit
+                     && pl.getHandTile().get(j) instanceof Suit) {
 
-                    if (compareConsecutiveSuits(suit1,suit2,
-                            (Suit) discard)){
+                        Suit suit1 = (Suit) pl.getHandTile().get(i);
+                        Suit suit2 = (Suit) pl.getHandTile().get(j);
 
-                        desired.add(suit1);
-                        desired.add(suit2);
+                        if (compareConsecutiveSuits(suit1, suit2,
+                                (Suit) discard)) {
+
+                            desired.add(suit1);
+                            desired.add(suit2);
+                        }
                     }
                 }
             }
@@ -851,24 +894,53 @@ public class Game {
     private void autoSort(Player player) {
 
         ArrayList<Tile> temp = new ArrayList<>();
-
-        // Suit that will be placed first
-        Suit comp = new Suit();
+        String[] dragonColor = {"Red", "Green", "White"};
+        String[] windDir = {"North", "East", "South", "West"};
 
         // Tile from player that is being checked
-        Suit playerTile;
+        Tile playerTile;
+
+        // Tiles created for comparision
+        Dragon compD = new Dragon();
+        Wind compW = new Wind();
+        Suit compS = new Suit();
+
+        for (int i = 0; i < dragonColor.length; i++){
+
+            compD.setColor(dragonColor[i]);
+
+            for (int k = 0; k < player.getHandTile().size(); k++){
+                playerTile = player.getHandTile().get(k);
+                if (compareTile(compD, playerTile)){
+
+                    temp.add(playerTile);
+                }
+            }
+        }
+
+        for (int i = 0; i < windDir.length; i++){
+
+            compW.setDirection(windDir[i]);
+
+            for (int k = 0; k < player.getHandTile().size(); k++){
+                playerTile = player.getHandTile().get(k);
+                if (compareTile(compW, playerTile)){
+
+                    temp.add(playerTile);
+                }
+            }
+        }
 
         // Adding Circle Tiles
-        comp.setDesign("Circle");
+        compS.setDesign("Circle");
 
         for (int value = 1; value <= 9; value++) {
-
             for (int i = 0; i < player.getHandTile().size(); i++) {
 
-                playerTile = (Suit) player.getHandTile().get(i);
-                comp.setValue(value);
+                playerTile = player.getHandTile().get(i);
+                compS.setValue(value);
 
-                if (compareSuit(comp, playerTile)) {
+                if (compareTile(compS, playerTile)) {
 
                     temp.add(playerTile);
                 }
@@ -876,16 +948,16 @@ public class Game {
         }
 
         // Adding Bamboo Tiles
-        comp.setDesign("Bamboo");
+        compS.setDesign("Bamboo");
 
         for (int value = 1; value <= 9; value++) {
 
             for (int i = 0; i < player.getHandTile().size(); i++) {
 
-                playerTile = (Suit) player.getHandTile().get(i);
-                comp.setValue(value);
+                playerTile = player.getHandTile().get(i);
+                compS.setValue(value);
 
-                if (compareSuit(comp, playerTile)) {
+                if (compareTile(compS, playerTile)) {
 
                     temp.add(playerTile);
                 }
@@ -893,16 +965,16 @@ public class Game {
         }
 
         // Adding Character Tiles
-        comp.setDesign("Character");
+        compS.setDesign("Character");
 
         for (int value = 1; value <= 9; value++) {
 
             for (int i = 0; i < player.getHandTile().size(); i++) {
 
-                playerTile = (Suit) player.getHandTile().get(i);
-                comp.setValue(value);
+                playerTile = player.getHandTile().get(i);
+                compS.setValue(value);
 
-                if (compareSuit(comp, playerTile)) {
+                if (compareTile(compS, playerTile)) {
 
                     temp.add(playerTile);
                 }
@@ -922,24 +994,52 @@ public class Game {
     private ArrayList<Tile> autoSort(ArrayList<Tile> hand) {
 
         ArrayList<Tile> temp = new ArrayList<>();
+        String[] dragonColor = {"Red", "Green", "White"};
+        String[] windDir = {"North", "East", "South", "West"};
 
-        // Suit that will be placed first
-        Suit comp = new Suit();
+        // Tile from player that is being checked
+        Tile playerTile;
 
-        // Tile from Player that is being checked
-        Suit playerTile;
+        // Tiles created for comparision
+        Dragon compD = new Dragon();
+        Wind compW = new Wind();
+        Suit compS = new Suit();
+
+        for (int i = 0; i < dragonColor.length; i++){
+            compD.setColor(dragonColor[i]);
+
+            for (int k = 0; k < hand.size(); k++){
+                playerTile = hand.get(k);
+                if (compareTile(compD, playerTile)){
+
+                    temp.add(playerTile);
+                }
+            }
+        }
+
+        for (int i = 0; i < windDir.length; i++){
+
+            compW.setDirection(windDir[i]);
+
+            for (int k = 0; k < hand.size(); k++){
+                playerTile = hand.get(k);
+                if (compareTile(compD, playerTile)){
+
+                    temp.add(playerTile);
+                }
+            }
+        }
 
         // Adding Circle Tiles
-        comp.setDesign("Circle");
+        compS.setDesign("Circle");
 
         for (int value = 1; value <= 9; value++) {
-
             for (int i = 0; i < hand.size(); i++) {
 
-                playerTile = (Suit) hand.get(i);
-                comp.setValue(value);
+                playerTile = hand.get(i);
+                compS.setValue(value);
 
-                if (compareSuit(comp, playerTile)) {
+                if (compareTile(compS, playerTile)) {
 
                     temp.add(playerTile);
                 }
@@ -947,16 +1047,16 @@ public class Game {
         }
 
         // Adding Bamboo Tiles
-        comp.setDesign("Bamboo");
+        compS.setDesign("Bamboo");
 
         for (int value = 1; value <= 9; value++) {
 
             for (int i = 0; i < hand.size(); i++) {
 
-                playerTile = (Suit) hand.get(i);
-                comp.setValue(value);
+                playerTile = hand.get(i);
+                compS.setValue(value);
 
-                if (compareSuit(comp, playerTile)) {
+                if (compareTile(compS, playerTile)) {
 
                     temp.add(playerTile);
                 }
@@ -964,23 +1064,23 @@ public class Game {
         }
 
         // Adding Character Tiles
-        comp.setDesign("Character");
+        compS.setDesign("Character");
 
         for (int value = 1; value <= 9; value++) {
 
             for (int i = 0; i < hand.size(); i++) {
 
-                playerTile = (Suit) hand.get(i);
-                comp.setValue(value);
+                playerTile = hand.get(i);
+                compS.setValue(value);
 
-                if (compareSuit(comp, playerTile)) {
+                if (compareTile(compS, playerTile)) {
 
                     temp.add(playerTile);
                 }
             }
         }
 
-        // Setting the sorted hand to Player
+        // Setting the sorted hand to player
         return temp;
     }
 
@@ -1053,8 +1153,6 @@ public class Game {
 
         // check if they are consecutive and values are not
         // equal to each other
-        boolean[] visited = new boolean[3];
-
         if (tile1.getDesign().equals(tile2.getDesign()) &&
                 tile1.getDesign().equals(tile3.getDesign())) {
 
@@ -1079,19 +1177,35 @@ public class Game {
      ******************************************************************/
     private boolean isPointTile(final Tile tile) {
 
-        if (tile instanceof Suit) {
+        boolean isPoint;
 
-            return false;
+        if (gameOptionSimple) {
+            if (tile instanceof Suit) {
 
-        } else if (tile instanceof Dragon || tile instanceof Wind ||
-                tile instanceof Flower) {
+                isPoint = false;
 
-            return true;
+            } else if (tile instanceof Dragon || tile instanceof Wind ||
+                    tile instanceof Flower) {
+
+                isPoint = true;
+
+            } else {
+
+                isPoint = false;
+            }
 
         } else {
 
-            return false;
+            if (tile instanceof Flower) {
+
+                isPoint = true;
+            } else {
+
+                isPoint = false;
+            }
         }
+
+        return isPoint;
     }
 
     /*******************************************************************
@@ -1118,19 +1232,19 @@ public class Game {
      * This methods removes a tile from hand based on the player and
      * the tile index in their hand.
      *
-     * @param pl The player that is discarding the tile.
+     * @param player The player that is discarding the tile.
      * @param tileIndex The tile index in the selected players hand.
      ******************************************************************/
-    public void discard(Player pl, int tileIndex) {
+    public void discard(Player player, int tileIndex) {
 
-        if (tileIndex >= pl.getHandTile().size() || tileIndex < 0) {
+        if (tileIndex >= player.getHandTile().size() || tileIndex < 0) {
 
-            throw new IndexOutOfBoundsException("tile index is out of" +
-                    " bounds.");
+            throw new IndexOutOfBoundsException("tile index is out of"
+                    + " bounds.");
         }
 
-        discardPile.add(pl.getHandTile().remove(tileIndex));
-        autoSort(pl);
+        discardPile.add(player.getHandTile().remove(tileIndex));
+        autoSort(player);
     }
 
     /*******************************************************************
@@ -1197,11 +1311,9 @@ public class Game {
      *****************************************************************/
     public String ruleBook() {
 
-        String rules = starting() + setRule() + claimChiRule()
+        return starting() + setRule() + claimChiRule()
                 + claimPongRule() + claimKongRule() + declareMahjong()
-                + scoring();
-
-        return rules;
+                + scoring() + gameMode();
     }
 
     /*******************************************************************
@@ -1211,19 +1323,18 @@ public class Game {
      ******************************************************************/
     private String starting() {
 
-        String msg = "Players start with 13 tiles each. Each player " +
-                "is assigned a wind (East-South-West-North). " +
-                "East starts the game by picking a tile from the " +
-                "wall and discarding a tile. Players then take" +
-                " clockwise turns picking a tile from " +
-                "the wall and then discarding one tile from the hand." +
-                " It is also possible to claim a tile discarded by " +
-                "another player under certain circumstances. " +
-                "In such cases, the player to the left of the " +
-                "claiming player becomes next in turn. So some " +
-                "players may lose their turn in a go-around.\n\n";
-
-        return msg;
+        return "General Rules: \n"
+                + "Players start with 13 tiles each. Each player "
+                + "is assigned a wind (East-South-West-North). "
+                + "East starts the game by picking a tile from the "
+                + "wall and discarding a tile.\nPlayers then take"
+                + " clockwise turns picking a tile from "
+                + "the wall and then discarding one tile from the hand."
+                + " It is also possible to claim a tile discarded by "
+                + "another player\n under certain circumstances. "
+                + "In such cases, the player to the left of the "
+                + "claiming player becomes next in turn. So some "
+                + "players may lose their turn in a go-around.\n\n";
     }
 
     /*******************************************************************
@@ -1233,20 +1344,22 @@ public class Game {
      ******************************************************************/
     private String setRule() {
 
-        String msg = "A set of tiles consist of 3 tiles. This 3 tiles"
+        return "Rules on Sets: \n"
+                + "A set of tiles consist of 3 tiles. This 3 tiles "
                 + "may all be the same, thus forming a 3 of a kind or "
                 + "they all form a 3 tile straight of the same "
-                + "suit.\n\nAll sets that are formed in the hand by "
+                + "suit.\nAll sets that are formed in the hand by "
                 + "drawing do not have to be revealed to the opposing "
-                + "players. However, any set or kong that are claimed"
-                + "must be revealed to all opposing players.\n\n"
-                + "It is important to know that a kong is not consider "
-                + "a set but it can be claimed.\n\n Once a player "
-                + "declares that they can from a set, they move the"
-                + "tiles that they used to from a set along with the "
-                + "recently discarded tile to the set pile.";
-
-        return msg;
+                + "players. However, any set or kong that are claimed "
+                + "must be revealed\nto all opposing players."
+                + "It is important to know that a kong is consider as"
+                + "1 set. Once a player "
+                + "declares that they can from a set, they move the "
+                + "tiles that they used\nto from a set along with the "
+                + "recently discarded tile to the set pile. Then, the "
+                + "player who claimed the set discards a tile. \nThe"
+                + "next player turn is the player that is next in "
+                + "rotation of the player that discarded the tile.\n\n";
     }
 
     /*******************************************************************
@@ -1256,12 +1369,14 @@ public class Game {
      ******************************************************************/
     private String claimChiRule() {
 
-        String msg = "A chi can only be claimed when the opposing "
+        String msg = "Claiming Chi:\n"
+                + "A chi can only be claimed when the opposing "
                 + "player directly to right discards a "
                 + "tile. In addition, the discarded the tile must be "
-                + " able to use to form a 3 tile straight in the "
+                + " able to use to form a 3 tile straight\n in the "
                 + "players hand using the same suit. Also, the straight"
-                + "can not extend from 9 to 1 or vise versa.\n\n";
+                + "can not extend from 9 to 1 or vise versa and"
+                + " can not be done with dragon or wind tiles.\n\n";
 
         return msg;
     }
@@ -1273,12 +1388,11 @@ public class Game {
      ******************************************************************/
     private String claimPongRule() {
 
-        String msg = "A pong can be claimed when any opposing player"
+        return "Claiming Pong:\n"
+                + "A pong can be claimed when any opposing player"
                 + " discards a tile and you have a 2 tiles in your hand"
                 + " that can be used to form a 3 of a kind with the "
                 + "discarded tile.\n\n";
-
-        return msg;
     }
 
     /*******************************************************************
@@ -1288,24 +1402,17 @@ public class Game {
      ******************************************************************/
     private String claimKongRule() {
 
-        String msg = "A kong can be claimed when any opposing player"
+        return  "A kong can be claimed when any opposing player"
                 + " discards a tile and you have a 3 tiles in your hand"
                 + " that can be used to form a 4 of a kind with the "
-                + "discarded tile. In addition, the player must draw a "
-                + "new tile from the main deck/wall before discarding a"
-                + " tile.\n\nAny kong that is formed by drawing a tile "
-                + "is does not have to be revealed to the opposing"
-                + " players. This is optional. However, it is to "
-                + "your advantage to not reveal the tiles because it "
-                + "could possibly hinder your opponents game. In "
-                + "addition, a kong can not remain in the hand, instead"
-                + "the kong that forms by drawing must be moved to the"
-                + "set pile or discard a tile to break up the kong."
-                + "A speacial rule with Kong is that you can form a "
-                + "kong with a pong in your set pile";
-
-        return msg;
-
+                + "discarded tile.\nIn addition, the player must draw a "
+                + "new tile from the main wall before discarding a"
+                + " tile. In addition, a kong can not remain in "
+                + "the hand.\nInstead the kong that forms by drawing "
+                + "must be moved to the"
+                + "set pile or discard a tile to break up the kong. "
+                + "A special rule with Kong is that you can form a\n"
+                + "kong with a pong in your set pile.\n\n";
     }
 
     /*******************************************************************
@@ -1315,15 +1422,14 @@ public class Game {
      ******************************************************************/
     private String declareMahjong() {
 
-        String msg = "A mahjong can be claimed when a player has "
+        return  "Declaring Mahjong: \n"
+                + "A mahjong can be claimed when a player has "
                 + "all sets(chi,pong,kong), any point tiles and a "
-                + "single pair in their hand or set pile combined."
-                + "In addition, there can not be a kong that "
+                + "single pair in their hand or set pile combined. "
+                + "\nIn addition, there can not be a kong that "
                 + "in the declared players hand. At this point, the "
-                + "player that declares Mahjong wins and their score"
+                + "player that declares Mahjong wins and their score\n"
                 + "will be calculated based on the scoring rules.\n\n";
-
-        return msg;
     }
 
     /*******************************************************************
@@ -1333,14 +1439,30 @@ public class Game {
      ******************************************************************/
     private String scoring() {
 
-        String msg = "Once a player has declared mahjong, they win. "
+        return "Scoring: \n"
+                + "Once a player has declared mahjong, they win. "
                 + "The winning player will receive of a score of 1 "
                 + "point and 1 additional point for every dragon, wind"
-                + "and flower tile that is in the set pile.";
-
-        return msg;
+                + " and flower tile\nthat is in the set pile for"
+                + "game option 1. Game option 2 sets scores based"
+                + "on the players hand and set pile when the "
+                + "declare Mahjong.";
     }
 
+    /*******************************************************************
+     * This method explains the rules about the 2 different game modes.
+     *
+     * @return The rules about the game modes.
+     ******************************************************************/
+    private String gameMode() {
+
+        return  "Game Mode: \n"
+                + "The simple game mode automatically moves all non"
+                + "suit tiles to the set pile and is treated as a "
+                + "point.\nThe more traditional game mode only moves"
+                + "flower tiles to the set pile. This will allow "
+                + "for pongs to be made with dragon and wind tiles";
+    }
     /*******************************************************************
      * This method gets the index of the current player.
      *
@@ -1351,70 +1473,41 @@ public class Game {
         return currentPlayer;
     }
 
-    /******************************************************************
+    /*******************************************************************
      * This method get the current player.
      *
      * @return The current player.
-     *****************************************************************/
+     ******************************************************************/
     public Player getCurrentPlayer(){
 
         return playerList[currentPlayer];
     }
 
-    /******************************************************************
-     * This method sets the starting player based on index value.
-     *
-     * @param startingPlayer The index of the starting player.
-     *****************************************************************/
-    public void setStartingPlayer(int startingPlayer) {
-
-        this.startingPlayer = startingPlayer;
+    /*******************************************************************
+     * This method gets the starting player.
+     * @return The starting player.
+     ******************************************************************/
+    public int getStartingPlayer() {
+        return startingPlayer;
     }
 
-    /******************************************************************
-     * This method sets the next starting player.
-     *****************************************************************/
-    private void setNextStartingPlayer() {
-
-        startingPlayer = (startingPlayer + 1) % totalPlayer;
-    }
-
-    /******************************************************************
-     * This method sets the next current player.
-     *****************************************************************/
-    public void setNextCurrentPlayer() {
-
-        currentPlayer = (currentPlayer + 1) % totalPlayer;
-        turnCount++;
-    }
-
-    /******************************************************************
-     * This method sets the next player based on index.
-     *
-     * @param pl Index of the next player in the sequence
-     *****************************************************************/
-    public void setNextCurrentPlayer(int pl){
-
-        currentPlayer = pl;
-    }
-
-    /******************************************************************
+    /*******************************************************************
      * This method gets the player based off the player list.
      *
      * @param playerNum THe index of the player.
      * @return The player based of the index.
-     *****************************************************************/
+     ******************************************************************/
     public Player getPlayerList(int playerNum) {
 
         return playerList[playerNum];
     }
 
-    /******************************************************************
+    /*******************************************************************
      * This method gets the player hand.
      *
      * @param playerNum The index of the player.
      * @return The players hand based off the players index.
-     *****************************************************************/
+     ******************************************************************/
     public ArrayList<Tile> getPlayerHand(int playerNum){
 
         if (playerNum < 0 || playerNum > 4){
@@ -1426,21 +1519,21 @@ public class Game {
         return playerList[playerNum].getHandTile();
     }
 
-    /******************************************************************
+    /*******************************************************************
      * This method gets the entire discard pile.
      *
      * @return The discard pile.
-     *****************************************************************/
+     ******************************************************************/
     public ArrayList<Tile> getDiscardPile() {
 
         return discardPile;
     }
 
-    /******************************************************************
+    /*******************************************************************
      * This method gets the most recently discarded tile.
      *
      * @return The most recently discarded tile.
-     *****************************************************************/
+     ******************************************************************/
     public Tile getRecentDiscard(){
 
         return discardPile.get(discardPile.size() - 1);
@@ -1456,13 +1549,70 @@ public class Game {
         return tiles;
     }
 
-    /*******************************************************************
-     * This method gets the total number of players.
-     *
-     * @return The total number of players.
+    /******************************************************************
+     * This method sets the next starting player.
      ******************************************************************/
-    public int getTotalPlayer() {
-        return totalPlayer;
+    public void setNextStartingPlayer() {
+
+        startingPlayer = (startingPlayer + 1) % TOTALPLAYER;
+    }
+
+    /*******************************************************************
+     * This method sets the next current player.
+     ******************************************************************/
+    public void setNextCurrentPlayer() {
+
+        currentPlayer = (currentPlayer + 1) % TOTALPLAYER;
+        turnCount++;
+    }
+
+    /*******************************************************************
+     * This method sets the next player based on index.
+     *
+     * @param pl Index of the next player in the sequence
+     ******************************************************************/
+    public void setNextCurrentPlayer(int pl){
+
+        currentPlayer = pl;
+    }
+
+    /*******************************************************************
+     * This method gets what game mode the game is currently in.
+     * @return The game mode
+     ******************************************************************/
+    public boolean getGameOptionSimple() {
+        return gameOptionSimple;
+    }
+
+    /*******************************************************************
+     * This method sets what type of style the game is played in.
+     * @param mode True for simple game mode, false for complicated or
+     *             more traditional format.
+     ******************************************************************/
+    public void setGameOptionSimple(boolean mode){
+
+        gameOptionSimple = mode;
+    }
+
+    /*******************************************************************
+     * This method sets the difficulty of the AI.
+     * @param difficulty Difficult of the AI.
+     * @param playerIndex Which AI.
+     ******************************************************************/
+    public void setAIDiff(int difficulty, int playerIndex) {
+
+        if (difficulty < Game.DUMB || difficulty > Game.ADVANCE) {
+
+            throw new IllegalArgumentException("Difficulty " +
+                    "setting not Excepted.");
+        }
+
+        if (playerIndex < 0 || playerIndex> AIDiff.length) {
+
+            throw new IllegalArgumentException("Index of Player is" +
+                    "not an AI");
+        }
+
+        AIDiff[playerIndex] = difficulty;
     }
 }
-
