@@ -616,6 +616,35 @@ public class Game {
             temp = autoSort(temp);
         }
 
+        // This section checks for any chi in the players hand
+        for (int i = 0; i < temp.size(); i++) {
+
+            outer:
+            for (int j = i + 1; j < temp.size(); j++) {
+
+                for (int k = j + 1; k < temp.size(); k++) {
+
+                    if (temp.get(i) instanceof Suit
+                            && temp.get(j) instanceof Suit
+                            && temp.get(j) instanceof Suit) {
+                        Suit tile1 = (Suit) temp.get(i);
+                        Suit tile2 = (Suit) temp.get(j);
+                        Suit tile3 = (Suit) temp.get(j);
+
+                        if (compareConsecutiveSuits(tile1, tile2,
+                                tile3)) {
+
+                            temp.remove(k);
+                            temp.remove(j);
+                            temp.remove(i);
+                            i--;
+                            break outer;
+                        }
+                    }
+                }
+            }
+        }
+
         // This section checks for any pongs in the Player's hand
         for (int i = 0; i < temp.size(); i++) {
 
@@ -646,34 +675,6 @@ public class Game {
             }
         }
 
-        // This section checks for any chi in the players hand
-        for (int i = 0; i < temp.size(); i++) {
-
-            outer:
-            for (int j = i + 1; j < temp.size(); j++) {
-
-                for (int k = j + 1; k < temp.size(); k++) {
-
-                    if (temp.get(i) instanceof Suit
-                        && temp.get(j) instanceof Suit
-                        && temp.get(j) instanceof Suit) {
-                        Suit tile1 = (Suit) temp.get(i);
-                        Suit tile2 = (Suit) temp.get(j);
-                        Suit tile3 = (Suit) temp.get(j);
-
-                        if (compareConsecutiveSuits(tile1, tile2,
-                                tile3)) {
-
-                            temp.remove(k);
-                            temp.remove(j);
-                            temp.remove(i);
-                            i--;
-                            break outer;
-                        }
-                    }
-                }
-            }
-        }
 
         // If a player has 2 tiles remaining and they are the same,
         // then they have mahjong.

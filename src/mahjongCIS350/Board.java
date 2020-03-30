@@ -54,6 +54,9 @@ public class Board extends JPanel {
     /** Displays the direction of the human Player. **/
     private JLabel p1Direction;
 
+    /** Displays the current score of the game. **/
+    private JLabel scoreBoard;
+
     /** Tile image of type Suit with Circle design. **/
     private ImageIcon circle1, circle2, circle3, circle4, circle5,
             circle6, circle7, circle8, circle9;
@@ -119,6 +122,8 @@ public class Board extends JPanel {
         // Set shade of rgb to default dark green color
         color = new Color(defaultR, defaultG, defaultB);
 
+        scoreBoard = new JLabel();
+
         // create piles and hands
         drawPile = new ArrayList<>();
         discardPile = new ArrayList<>();
@@ -181,6 +186,7 @@ public class Board extends JPanel {
         gameBoard.add(resetBtn);
         resetBtn.setEnabled(false);
 
+        add(scoreBoard, BorderLayout.NORTH);
         placeDrawPile();
         dealPlayerTiles();
         placePanels();
@@ -201,6 +207,7 @@ public class Board extends JPanel {
         // Ask if user wants to player more traditional game mode
         // Switch mode if applicable
         gameModeSwap();
+        updateScore();
         timer.start();
     }
 
@@ -247,6 +254,7 @@ public class Board extends JPanel {
                         enablePlayer1Hand(false);
                         timer.stop();
 
+                        updateScore();
                         if (game.getCurrentPlayerIndex()
                                 != game.getStartingPlayer()){
 
@@ -309,6 +317,7 @@ public class Board extends JPanel {
                                 JOptionPane.showMessageDialog(
                                         null, msgWin2);
                                 enablePlayer1Hand(false);
+                                updateScore();
                                 timer.stop();
 
                                 if (0 != game.getStartingPlayer()){
@@ -1197,6 +1206,7 @@ public class Board extends JPanel {
                         + "stalemate.");
         drawFlag = false;
         resetBtn.setEnabled(true);
+        game.setNextStartingPlayer();
         gameModeSwap();
     }
 
@@ -1597,6 +1607,19 @@ public class Board extends JPanel {
         game.setAIDiff(difficulty, playerIndex);
     }
 
+    private void updateScore() {
+
+        int p1score = game.getPlayerList(0).getPoint();
+        int p2score = game.getPlayerList(1).getPoint();
+        int p3score = game.getPlayerList(2).getPoint();
+        int p4score = game.getPlayerList(3).getPoint();
+
+        scoreBoard.setText("Player 1 Score: " + p1score + "     "
+            + "Player 2 Score: " + p2score + "     "
+            + "Player 3 Score: " + p3score + "     "
+            + "Player 4 Score: " + p4score);
+    }
+
     /*******************************************************************
      * A class within Board that handles action listeners of buttons.
      ******************************************************************/
@@ -1651,6 +1674,7 @@ public class Board extends JPanel {
                 game.reset();
                 resetBoard();
                 resetBtn.setEnabled(false);
+                updateScore();
             }
         }
     }
