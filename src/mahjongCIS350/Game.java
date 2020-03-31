@@ -1290,18 +1290,19 @@ public class Game {
      * an AI design to lose and allow the user to feel good. This
      * method tells the AI to discard a tile.
      *
-     * @param pl The player whose action will be determined by an AI.
+     * @param player The player whose action will be determined by
+     *               an AI.
      ******************************************************************/
-    public void dumbAIDiscard(Player pl) {
+    public void dumbAIDiscard(Player player) {
 
-        if (pl == null){
+        if (player == null){
 
             throw new IllegalArgumentException("Player can not be "
                     + "Null");
         }
 
         Random rand = new Random();
-        discard(pl, rand.nextInt(pl.getHandTile().size()));
+        discard(player, rand.nextInt(player.getHandTile().size()));
     }
 
 
@@ -1541,7 +1542,7 @@ public class Game {
 
     /*******************************************************************
      * This method gets the starting player.
-     * @return The starting player.
+     * @return The starting player index.
      ******************************************************************/
     public int getStartingPlayer() {
         return startingPlayer;
@@ -1572,7 +1573,7 @@ public class Game {
      ******************************************************************/
     public ArrayList<Tile> getPlayerHand(int playerNum){
 
-        if (playerNum < 0 || playerNum > 4){
+        if (playerNum < 0 || playerNum >= 4){
 
             throw new IndexOutOfBoundsException("Index is out of "
                     + "bounds. Must be from 0 - 3");
@@ -1637,11 +1638,15 @@ public class Game {
     /*******************************************************************
      * This method sets the next player based on index.
      *
-     * @param pl Index of the next player in the sequence
+     * @param player Index of the next player in the sequence
      ******************************************************************/
-    public void setNextCurrentPlayer(int pl){
+    public void setNextCurrentPlayer(int player){
 
-        currentPlayer = pl;
+        if (player >= TOTALPLAYER || player < 0){
+
+            throw new IllegalArgumentException("Invalid Player Index");
+        }
+        currentPlayer = player;
     }
 
     /*******************************************************************
@@ -1675,7 +1680,7 @@ public class Game {
                     "setting not Excepted.");
         }
 
-        if (playerIndex <= 0 || playerIndex > AIDiff.length + 1) {
+        if (playerIndex <= 0 || playerIndex > AIDiff.length) {
 
             throw new IllegalArgumentException("Index of Player is" +
                     "not an AI");
