@@ -257,11 +257,12 @@ public class Setting extends JPanel {
                 board.updateBgColor(redShade.getValue(),
                         greenShade.getValue(), blueShade.getValue());
 
-                for (int i = 0; i < Game.TOTALPLAYER - 1; i++) {
+                for (int i = 1; i < Game.TOTALPLAYER; i++) {
 
-                    board.setAIDiff(settingAI.get(i).getValue(),
+                    board.setAIDiff(settingAI.get(i - 1).getValue(),
                             i);
                 }
+
             } else if(event.getSource() == defaultSetting){
                 board.updateBgColor(defaultR, defaultG, defaultB);
                 bgColor.setBackground(new Color(defaultR, defaultG,
@@ -270,7 +271,7 @@ public class Setting extends JPanel {
                 for (int i = 1; i < Game.TOTALPLAYER ; i++) {
 
                     board.setAIDiff(Game.defaultAI, i);
-                    settingAI.get(i).setValue(Game.defaultAI);
+                    settingAI.get(i - 1).setValue(Game.defaultAI);
                 }
 
                 redShade.setValue(defaultR);

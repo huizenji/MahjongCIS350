@@ -1675,7 +1675,7 @@ public class Game {
                     "setting not Excepted.");
         }
 
-        if (playerIndex <= 0 || playerIndex > AIDiff.length) {
+        if (playerIndex <= 0 || playerIndex > AIDiff.length + 1) {
 
             throw new IllegalArgumentException("Index of Player is" +
                     "not an AI");
