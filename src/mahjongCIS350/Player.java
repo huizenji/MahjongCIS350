@@ -88,8 +88,8 @@ public class Player {
 
         if (tile == null) {
 
-            throw new NullPointerException("No such type of tile," +
-                    " can't be added");
+            throw new NullPointerException("No such type of tile,"
+                    + " can't be added");
         }
         setPile.add(tile);
     }
@@ -104,8 +104,8 @@ public class Player {
 
         if (index < 0 || index >= handTile.size()){
 
-            throw new IllegalArgumentException("Invalid position: " +
-                    index);
+            throw new IllegalArgumentException("Invalid position: "
+                    + index);
         }
 
         setPile.add(handTile.remove(index));
@@ -129,6 +129,11 @@ public class Player {
      ******************************************************************/
     public Tile getTileFromHand(final int index){
 
+        if (index < 0 || index >= handTile.size()){
+
+            throw new IllegalArgumentException("Invalid position: "
+                    + index);
+        }
         return handTile.get(index);
     }
 
@@ -162,7 +167,7 @@ public class Player {
     /*******************************************************************
      * This method gets a players entire set pile.
      *
-     * @return An arraylist containing the tiels in the players setpile.
+     * @return An arraylist containing the tiles in the players setpile.
      ******************************************************************/
     public ArrayList<Tile> getSetPile(){return setPile;}
 
@@ -174,6 +179,13 @@ public class Player {
      * @return The tile in the set pile at the specfic index.
      ******************************************************************/
     public Tile getSetTile(final int index){
+
+        if (index < 0 || index >= setPile.size()){
+
+            throw new IllegalArgumentException("Tile index does"
+                    + " not exist.");
+        }
+
         return setPile.get(index);
     }
 
@@ -183,6 +195,12 @@ public class Player {
      * @param point The number of points that player will have.
      ******************************************************************/
     public void setPoint(final int point) {
+
+        if (point <= 0 ){
+
+            throw new IllegalArgumentException("Point Value should "
+                    + "be greater than 0");
+        }
         this.point = point;
     }
 
