@@ -1304,6 +1304,61 @@ public class Game {
         discard(pl, rand.nextInt(pl.getHandTile().size()));
     }
 
+
+    /*******************************************************************
+     *
+     * @param pl
+     ******************************************************************/
+    public void beginnerAIDiscard(Player pl){
+
+    }
+
+    /*******************************************************************
+     *
+     * @param pl
+     ******************************************************************/
+    public void advancedAIDiscard(Player pl){
+
+
+        // check each Tile in hand one by one
+        for (int i = 0; i < getCurrentPlayer().getHandTile().size();
+             i++){
+
+            // ranked order of importance, current order does not reflect
+            // point differences in different kinds of sets
+
+            // assuming Dragon/Wind Tiles are not point-Tiles
+
+            // Tile can no longer be used due to previous discards
+                if (numInDiscard(getCurrentPlayer().getHandTile()
+                        .get(i)) == 3){
+                    discard(pl, i);
+                }
+
+            // Tile isn't part of an existing set, pair, or near-Chi
+                 //discard
+            // Tile is part of a near-Chi
+                 //discard
+            // Tile is part of a pair that can no longer pong
+                 //discard
+
+        }
+
+    }
+
+    private int numInDiscard(Tile tile){
+
+        int count = 0;
+
+        for (int i = 0; i < discardPile.size(); i++){
+            if (compareTile(discardPile.get(i), tile)){
+                count++;
+            }
+        }
+
+        return count;
+    }
+
     /******************************************************************
      * This method explains the rules of the game.
      *
