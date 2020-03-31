@@ -1518,6 +1518,7 @@ public class Game {
                 + "flower tiles to the set pile. This will allow "
                 + "for pongs to be made with dragon and wind tiles";
     }
+
     /*******************************************************************
      * This method gets the index of the current player.
      *
@@ -1553,6 +1554,12 @@ public class Game {
      * @return The player based of the index.
      ******************************************************************/
     public Player getPlayerList(int playerNum) {
+
+        if (playerNum < 0 || playerNum > 4){
+
+            throw new IndexOutOfBoundsException("Index is out of "
+                    + "bounds. Must be from 0 - 3");
+        }
 
         return playerList[playerNum];
     }
@@ -1590,6 +1597,12 @@ public class Game {
      * @return The most recently discarded tile.
      ******************************************************************/
     public Tile getRecentDiscard(){
+
+        if (discardPile.size() == 0){
+
+            throw new NullPointerException("There are "
+                    + "no tiles in the discard pile.");
+        }
 
         return discardPile.get(discardPile.size() - 1);
     }
@@ -1652,7 +1665,7 @@ public class Game {
     /*******************************************************************
      * This method sets the difficulty of the AI.
      * @param difficulty Difficult of the AI.
-     * @param playerIndex Which AI.
+     * @param playerIndex Which AI at the player index.
      ******************************************************************/
     public void setAIDiff(int difficulty, int playerIndex) {
 
@@ -1662,12 +1675,12 @@ public class Game {
                     "setting not Excepted.");
         }
 
-        if (playerIndex < 0 || playerIndex> AIDiff.length) {
+        if (playerIndex <= 0 || playerIndex > AIDiff.length) {
 
             throw new IllegalArgumentException("Index of Player is" +
                     "not an AI");
         }
 
-        AIDiff[playerIndex] = difficulty;
+        AIDiff[playerIndex - 1] = difficulty;
     }
 }

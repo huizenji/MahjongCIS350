@@ -1598,7 +1598,7 @@ public class Board extends JPanel {
                     "setting not Excepted.");
         }
 
-        if (playerIndex < 0 || playerIndex > Game.TOTALPLAYER - 1) {
+        if (playerIndex <= 0 || playerIndex > Game.TOTALPLAYER - 1) {
 
             throw new IllegalArgumentException("Index of Player is" +
                     "not an AI");

@@ -1,6 +1,8 @@
 package mahjongCIS350;
 
+import org.junit.Assert;
 import org.junit.Before;
+import org.junit.Test;
 
 public class TestingGameClass {
 
@@ -48,5 +50,65 @@ public class TestingGameClass {
         }
 
         game = new Game();
+    }
+
+    // Testing Getters and Setters
+    @Test
+    public void testGetterSetters() {
+
+        Assert.assertEquals("Should have no" +
+                "tiles in discard pile",
+                game.getDiscardPile().size(), 0);
+
+    }
+
+    // Error Test for get player list
+    @Test(expected = IndexOutOfBoundsException.class)
+    public void testGetterSetterErrorPlayerList(){
+
+        game.getPlayerList(-1);
+    }
+
+    @Test(expected = IndexOutOfBoundsException.class)
+    public void testGetterSetterErrorPlayerList2(){
+
+        game.getPlayerList(5);
+    }
+
+    @Test(expected = IndexOutOfBoundsException.class)
+    public void testGetterSetterErrorPlayerList3(){
+
+        game.getPlayerList(-20);
+    }
+
+    // Error Test for get player list
+    @Test(expected = IndexOutOfBoundsException.class)
+    public void testGetterSetterErrorPlayerHand(){
+
+        game.getPlayerHand(-1);
+    }
+
+    @Test(expected = IndexOutOfBoundsException.class)
+    public void testGetterSetterErrorPlayerHand2(){
+
+        game.getPlayerHand(5);
+    }
+
+    @Test(expected = IndexOutOfBoundsException.class)
+    public void testGetterSetterErrorPlayerHand3(){
+
+        game.getPlayerHand(-20);
+    }
+
+    @Test(expected = IndexOutOfBoundsException.class)
+    public void testGetterSetterErrorEmptyDiscard(){
+
+        game.getRecentDiscard();
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void testGetterSetterErrorAIDiff(){
+
+        game.setAIDiff(Game.DUMB - 1, 1);
     }
 }

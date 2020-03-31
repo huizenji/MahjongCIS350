@@ -267,7 +267,7 @@ public class Setting extends JPanel {
                 bgColor.setBackground(new Color(defaultR, defaultG,
                         defaultB));
 
-                for (int i = 0; i < Game.TOTALPLAYER - 1; i++) {
+                for (int i = 1; i < Game.TOTALPLAYER ; i++) {
 
                     board.setAIDiff(Game.defaultAI, i);
                     settingAI.get(i).setValue(Game.defaultAI);
