@@ -6,7 +6,7 @@ import org.junit.Test;
 
 import java.util.ArrayList;
 
-public class TestingMahjong {
+public class TestingBaseClasses {
 
     Dragon []dTile = new Dragon[3];
     Wind []wTile = new Wind[4];
