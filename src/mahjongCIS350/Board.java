@@ -1482,7 +1482,6 @@ public class Board extends JPanel {
 
                 // AI Action (ADD)
                 else {
-
                     ;
                 }
             }
