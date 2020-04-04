@@ -4,6 +4,9 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
+import java.lang.reflect.Array;
+import java.util.ArrayList;
+
 public class TestingGameClass {
 
     Dragon []dTile = new Dragon[3];
@@ -254,6 +257,257 @@ public class TestingGameClass {
     public void testGetterSetterErrorNextPlayerT2(){
 
         game.setNextCurrentPlayer(4);
+    }
+
+    @Test
+    public void testisChi() {
+
+        Player test = new Player();
+        ArrayList<Tile> hand = new ArrayList<>();
+
+        String noChi = "This should not be a chi";
+        String chi = "This should be a chi";
+
+        hand.add(wTile[0]);
+        hand.add(chTile[1]);
+        hand.add(chTile[2]);
+        hand.add(bTile[7]);
+        hand.add(bTile[8]);
+        hand.add(bTile[9]);
+        hand.add(cTile[3]);
+        hand.add(cTile[5]);
+        hand.add(chTile[3]);
+
+        // Make sure error does not occur if hand is empty
+        Assert.assertFalse("Error when player had is " +
+                "empty", game.isChi(test, wTile[2]));
+
+        test.setHandTile(hand);
+
+        Assert.assertFalse(noChi, game.isChi(test,
+                chTile[9]));
+        Assert.assertTrue(chi, game.isChi(test,
+                chTile[1]));
+        Assert.assertTrue(chi, game.isChi(test,
+                chTile[2]));
+        Assert.assertTrue(chi, game.isChi(test,
+                chTile[3]));
+        Assert.assertTrue(chi, game.isChi(test,
+                chTile[4]));
+        Assert.assertFalse(noChi, game.isChi(test,
+                chTile[7]));
+        Assert.assertFalse(noChi, game.isChi(test,
+                bTile[2]));
+        Assert.assertFalse(noChi, game.isChi(test,
+                cTile[2]));
+
+        Assert.assertFalse(noChi, game.isChi(test,
+                bTile[1]));
+        Assert.assertTrue(chi, game.isChi(test,
+                bTile[6]));
+        Assert.assertTrue(chi, game.isChi(test,
+                bTile[7]));
+        Assert.assertTrue(chi, game.isChi(test,
+                bTile[8]));
+        Assert.assertTrue(chi, game.isChi(test,
+                bTile[9]));
+        Assert.assertFalse(noChi, game.isChi(test,
+                bTile[4]));
+        Assert.assertFalse(noChi, game.isChi(test,
+                cTile[8]));
+
+        Assert.assertTrue(chi, game.isChi(test,
+                cTile[4]));
+        Assert.assertFalse(noChi, game.isChi(test,
+                cTile[2]));
+        Assert.assertFalse(noChi, game.isChi(test,
+                cTile[5]));
+        Assert.assertFalse(noChi, game.isChi(test,
+                cTile[9]));
+        Assert.assertFalse(noChi, game.isChi(test,
+                dTile[2]));
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void testIsChiError(){
+
+        Player test = new Player();
+        game.isChi(test, null);
+    }
+
+    @Test
+    public void testIsPongIsKong() {
+
+        ArrayList<Tile> hand = new ArrayList<>();
+
+        Assert.assertFalse("Should be false with" +
+                "empty hand", game.isPong(hand,dTile[1]));
+        Assert.assertFalse("Should be false with" +
+                "empty hand", game.isKong(hand,dTile[1]));
+
+        for (int i = 0; i < 3; i++){
+
+            hand.add(wTile[1]);
+            hand.add(dTile[2]);
+            hand.add(cTile[3]);
+            hand.add(chTile[3]);
+            hand.add(bTile[1]);
+        }
+
+        for (int i = 0; i < 2; i++){
+
+            hand.add(cTile[2]);
+            hand.add(bTile[5]);
+            hand.add(wTile[2]);
+            hand.add(dTile[1]);
+        }
+
+        hand.add(dTile[0]);
+        hand.add(wTile[0]);
+
+        // Testing for Pongs
+        Assert.assertTrue("Should have Pong",
+                game.isPong(hand, cTile[2]));
+        Assert.assertTrue("Should have Pong",
+                game.isPong(hand, bTile[5]));
+        Assert.assertTrue("Should have Pong",
+                game.isPong(hand, wTile[2]));
+        Assert.assertTrue("Should have Pong",
+                game.isPong(hand, dTile[1]));
+
+        // If there is a Kong, then there should be a Pong
+        Assert.assertTrue("Should have Pong",
+                game.isPong(hand, wTile[1]));
+        Assert.assertTrue("Should have Pong",
+                game.isPong(hand, dTile[2]));
+        Assert.assertTrue("Should have Pong",
+                game.isPong(hand, cTile[3]));
+        Assert.assertTrue("Should have Pong",
+                game.isPong(hand, chTile[3]));
+        Assert.assertTrue("Should have Pong",
+                game.isPong(hand, bTile[1]));
+
+        // No Pongs
+        Assert.assertFalse("No Pong",
+                game.isPong(hand, wTile[0]));
+        Assert.assertFalse("No Pong",
+                game.isPong(hand, dTile[0]));
+        Assert.assertFalse("No Pong",
+                game.isPong(hand,bTile[9]));
+        Assert.assertFalse("No Pong",
+                game.isPong(hand,cTile[7]));
+        Assert.assertFalse("No Pong",
+                game.isPong(hand,chTile[1]));
+
+        // Test for Kongs
+        Assert.assertTrue("Should have Kong",
+                game.isKong(hand, wTile[1]));
+        Assert.assertTrue("Should have Kong",
+                game.isKong(hand, dTile[2]));
+        Assert.assertTrue("Should have Kong",
+                game.isKong(hand, cTile[3]));
+        Assert.assertTrue("Should have Kong",
+                game.isKong(hand, chTile[3]));
+        Assert.assertTrue("Should have Kong",
+                game.isKong(hand, bTile[1]));
+
+        // Test for no Kongs
+        Assert.assertFalse("No Kong",
+                game.isKong(hand, cTile[2]));
+        Assert.assertFalse("No Kong",
+                game.isKong(hand, bTile[5]));
+        Assert.assertFalse("No Kong",
+                game.isKong(hand, wTile[2]));
+        Assert.assertFalse("No Kong",
+                game.isKong(hand, dTile[1]));
+        Assert.assertFalse("No Kong",
+                game.isKong(hand, wTile[2]));
+        Assert.assertFalse("No Kong",
+                game.isKong(hand, dTile[0]));
+        Assert.assertFalse("No Kong",
+                game.isKong(hand, wTile[2]));
+        Assert.assertFalse("No Kong",
+                game.isKong(hand, chTile[1]));
+        Assert.assertFalse("No Kong",
+                game.isKong(hand, cTile[8]));
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void testisPongError(){
+
+        ArrayList<Tile> hand = new ArrayList<>();
+
+        game.isPong(hand, null);
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void testisKongError(){
+
+        ArrayList<Tile> hand = new ArrayList<>();
+
+        game.isKong(hand, null);
+    }
+
+    @Test
+    public void testIsKongDraw() {
+
+        String noKong = "There should not be a Kong that" +
+                "can be formed with the tiles in the " +
+                "set pile";
+        String kong = "There should be a Kong";
+
+        Player pl = new Player();
+        ArrayList<Tile> hand = new ArrayList<>();
+
+        Assert.assertFalse("Should be false with" +
+                "empty hand", game.isPong(hand,dTile[1]));
+        Assert.assertFalse("Should be false with" +
+                "empty hand", game.isKong(hand,dTile[1]));
+
+        for (int i = 0; i < 3; i++){
+
+            pl.getSetPile().add(wTile[1]);
+            pl.getSetPile().add(dTile[2]);
+            pl.getSetPile().add(cTile[3]);
+            pl.getSetPile().add(chTile[3]);
+            pl.getSetPile().add(bTile[1]);
+        }
+
+        for (int i = 0; i < 2; i++){
+
+            pl.getSetPile().add(cTile[2]);
+        }
+
+        Assert.assertFalse(noKong, game.isKongDraw(pl));
+
+        pl.getHandTile().add(wTile[1]);
+        Assert.assertTrue(kong, game.isKongDraw(pl));
+        pl.getHandTile().add(wTile[2]);
+        Assert.assertFalse(noKong, game.isKongDraw(pl));
+
+        pl.getHandTile().add(dTile[2]);
+        Assert.assertTrue(kong, game.isKongDraw(pl));
+        pl.getHandTile().add(wTile[2]);
+        Assert.assertFalse(noKong, game.isKongDraw(pl));
+
+        pl.getHandTile().add(cTile[3]);
+        Assert.assertTrue(kong, game.isKongDraw(pl));
+        pl.getHandTile().add(cTile[5]);
+        Assert.assertFalse(noKong, game.isKongDraw(pl));
+
+        pl.getHandTile().add(chTile[3]);
+        Assert.assertTrue(kong, game.isKongDraw(pl));
+        pl.getHandTile().add(cTile[5]);
+        Assert.assertFalse(noKong, game.isKongDraw(pl));
+
+        pl.getHandTile().add(bTile[1]);
+        Assert.assertTrue(kong, game.isKongDraw(pl));
+        pl.getHandTile().add(cTile[2]);
+        Assert.assertFalse(noKong, game.isKongDraw(pl));
+
+        // Draw into the Kong of a different Tile
+        pl.getHandTile().add(cTile[3]);
+        Assert.assertTrue(noKong, game.isKongDraw(pl));
     }
 }
 

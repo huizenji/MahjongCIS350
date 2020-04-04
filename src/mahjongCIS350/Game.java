@@ -398,6 +398,12 @@ public class Game {
 
         ArrayList<Tile> plHand = pl.getHandTile();
 
+        if (check == null){
+
+            throw new IllegalArgumentException("Needs a tile"
+                    + " to check");
+        }
+
         if (!(check instanceof Suit)){
 
             return false;
@@ -439,6 +445,12 @@ public class Game {
 
         // Number of Tiles in Player hand that can used for a pong
         int matchTile = 0;
+
+        if (check == null){
+
+            throw new IllegalArgumentException("Tile that is checked "
+                    + "can not be null");
+        }
 
         // Scan through the hand and determine if there is a matching
         // Tile
@@ -534,6 +546,12 @@ public class Game {
 
         int numOfMatch = 0;
 
+        if (check == null){
+
+            throw new IllegalArgumentException("Tile that is checked "
+                    + "can not be null");
+        }
+
         //Loop through search looking for matching tiles
         for (int i = 0; i < search.size(); i++) {
 
@@ -572,12 +590,17 @@ public class Game {
         // same
         int totalTile = 0;
 
+        if (player.getHandTile().size() == 0){
+
+            return false;
+        }
+
         ArrayList<Tile> setPile = player.getSetPile();
 
-        for (int i = 0; i < setPile.size() - 1; i++) {
+        for (int i = 0; i < setPile.size(); i++) {
 
-            if(compareTile(setPile.get(i), setPile.get(
-                    setPile.size() - 1))) {
+            if(compareTile(setPile.get(i), player.getHandTile().get(
+                    player.getHandTile().size() - 1))) {
 
                 totalTile++;
             }
