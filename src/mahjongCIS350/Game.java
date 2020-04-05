@@ -639,33 +639,65 @@ public class Game {
             temp = autoSort(temp);
         }
 
-        // This section checks for any chi in the players hand
-        for (int i = 0; i < temp.size(); i++) {
+//        // This section checks for any chi in the players hand
+//        for (int i = 0; i < temp.size(); i++) {
+//
+//            outer:
+//            for (int j = i + 1; j < temp.size(); j++) {
+//
+//                for (int k = j + 1; k < temp.size(); k++) {
+//
+//                    if (temp.get(i) instanceof Suit
+//                            && temp.get(j) instanceof Suit
+//                            && temp.get(k) instanceof Suit) {
+//
+//                        Suit tile1 = (Suit) temp.get(i);
+//                        Suit tile2 = (Suit) temp.get(j);
+//                        Suit tile3 = (Suit) temp.get(k);
+//
+//                        if (compareConsecutiveSuits(tile1, tile2,
+//                                tile3)) {
+//
+//                            temp.remove(k);
+//                            temp.remove(j);
+//                            temp.remove(i);
+//                            i--;
+//                            break outer;
+//                        }
+//                    }
+//                }
+//            }
+//        }
+//
+//        temp = removeAllPong(temp);
+//
+//
+//        // If a player has 2 tiles remaining and they are the same,
+//        // then they have mahjong.
+//        if (temp.size() == 2 ){
+//            if (compareTile(temp.get(0), temp.get(1)))
+//            return true;
+//        }
 
-            outer:
-            for (int j = i + 1; j < temp.size(); j++) {
+        return isMahjongBacktrackAlg(handTile);
+    }
 
-                for (int k = j + 1; k < temp.size(); k++) {
 
-                    if (temp.get(i) instanceof Suit
-                            && temp.get(j) instanceof Suit
-                            && temp.get(j) instanceof Suit) {
-                        Suit tile1 = (Suit) temp.get(i);
-                        Suit tile2 = (Suit) temp.get(j);
-                        Suit tile3 = (Suit) temp.get(j);
 
-                        if (compareConsecutiveSuits(tile1, tile2,
-                                tile3)) {
+    /*******************************************************************
+     * This is a helper method that assist in the algorithm in
+     * determining mahjong.
+     * @param hand The hand of the player
+     * @return A hand where all pongs are removed
+     ******************************************************************/
+    private ArrayList<Tile> removeAllPong(ArrayList<Tile> hand){
 
-                            temp.remove(k);
-                            temp.remove(j);
-                            temp.remove(i);
-                            i--;
-                            break outer;
-                        }
-                    }
-                }
-            }
+        // Make a copy of what is in the Player's hand
+        ArrayList<Tile> temp = new ArrayList<>();
+
+        for (Tile t : hand) {
+
+            temp.add(t);
         }
 
         // This section checks for any pongs in the Player's hand
@@ -698,17 +730,114 @@ public class Game {
             }
         }
 
-
-        // If a player has 2 tiles remaining and they are the same,
-        // then they have mahjong.
-        if (temp.size() == 2 && compareTile(temp.get(0), temp.get(1))) {
-
-            return true;
-        }
-
-        return false;
+        return hand;
     }
 
+    /*******************************************************************
+     * This is an recursive Algorithm that determines if the user
+     * has a Mahjong. This uses a backtracking algorithm.
+     * @param hand The hand that is checked
+     * @return True if the hand has a Mahjong, false if not.
+     ******************************************************************/
+    private boolean isMahjongBacktrackAlg(ArrayList<Tile> hand){
+
+        // Make a copy of what is in the Player's hand
+        ArrayList<Tile> temp = new ArrayList<>();
+        ArrayList<Tile> copy = new ArrayList<>();
+
+        boolean win = false;
+
+        for (Tile t : hand) {
+
+            temp.add(t);
+            copy.add(t);
+        }
+
+        if (temp.size() == 2 ){
+            if (compareTile(temp.get(0), temp.get(1)))
+                return true;
+
+            else {
+
+                return false;
+            }
+        }
+
+        // Just in Case of an event occuring
+        else if (temp.size() % 3 != 2){
+
+            return false;
+        }
+
+        else {
+
+            // This section removes the first chi or pong in the players
+            // hand, then applies the algorithm
+            for (int i = 0; i < temp.size(); i++) {
+                for (int j = i + 1; j < temp.size(); j++) {
+                    for (int k = j + 1; k < temp.size(); k++) {
+
+                        if (compareTile(copy.get(i),
+                                copy.get(j)) && compareTile(
+                                        copy.get(i),
+                                copy.get(k))) {
+
+                            // If so, remove the pong from temp
+                            if (compareTile(copy.get(i),
+                                    copy.get(k))) {
+                                copy.remove(k);
+                                copy.remove(j);
+                                copy.remove(i);
+
+                                win =  isMahjongBacktrackAlg(copy);
+                            }
+                        }
+
+                        // Remove Chi
+                        else if (copy.get(i) instanceof Suit
+                                && copy.get(j) instanceof Suit
+                                && copy.get(k) instanceof Suit) {
+
+                            Suit tile1 = (Suit) copy.get(i);
+                            Suit tile2 = (Suit) copy.get(j);
+                            Suit tile3 = (Suit) copy.get(k);
+
+                            if (compareConsecutiveSuits(tile1, tile2,
+                                    tile3)) {
+
+                                copy.remove(k);
+                                copy.remove(j);
+                                copy.remove(i);
+
+                                win =  isMahjongBacktrackAlg(copy);
+
+                            }
+                        }
+
+
+                        // Backtracking Algorthim Determine win
+                        if (win){
+
+                            return win;
+                        }
+
+                        // Not a Winning Combination, So retry with a
+                        // different combination
+                        else{
+
+                            copy.clear();
+                            for (Tile t : temp) {
+
+                                copy.add(t);
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        return win;
+    }
 
     /*******************************************************************
      * This method finds the tiles the player can used to claim a chi

@@ -3,8 +3,6 @@ package mahjongCIS350;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
-
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 
 public class TestingGameClass {
