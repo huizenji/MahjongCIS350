@@ -1560,65 +1560,71 @@ public class Game {
     private void advancedAIDiscard(Player pl){
 
         // check each Tile in hand one by one
-        for (int tileIndex = 0; tileIndex < getCurrentPlayer()
+        for (int tileIndex = 0; tileIndex < pl
                 .getHandTile().size(); tileIndex++) {
 
-            // ranked order of importance, current order does not reflect
-            // point differences in different kinds of sets
+            // Tile can no longer be used due to previous discards
+            if (numInDiscard(pl.getHandTile()
+                    .get(tileIndex)) == 3) {
+                discard(pl, tileIndex);
+                System.out.println("AI discarded useless Tile");
+                return;
+            }
+        }
 
-            // assuming Dragon/Wind Tiles are not point-Tiles
+        for (int tileIndex = 0; tileIndex < pl
+                .getHandTile().size(); tileIndex++) {
 
+            // Tile isn't part of an existing set, pair, or
+            // almost-Chi
+            if (!isPong(pl.getHandTile(),
+                    pl.getTileFromHand(tileIndex))) {
 
-                // Tile can no longer be used due to previous discards
-                if (numInDiscard(getCurrentPlayer().getHandTile()
-                        .get(tileIndex)) == 3){
-                    discard(pl, tileIndex);
-                    System.out.println("AI discarded useless Tile");
-                    break;
-                }
+                if (!isChi(pl, pl.getTileFromHand(tileIndex))) {
 
-                // Tile isn't part of an existing set, pair, or
-                // almost-Chi
-                else if (!isPong(pl.getHandTile(),
-                        pl.getTileFromHand(tileIndex))) {
+                    if (!isPair(pl.getHandTile(),
+                            pl.getTileFromHand(tileIndex))) {
 
-                    if (!isChi(pl, pl.getTileFromHand(tileIndex))) {
+                        if (!isAlmostChi(pl, pl.getTileFromHand(
+                                tileIndex))) {
 
-                        if(!isPair(pl.getHandTile(),
-                                pl.getTileFromHand(tileIndex))) {
-
-                            if (!isAlmostChi(pl, pl.getTileFromHand(
-                                    tileIndex)))
-                            {
-
-                                discard(pl, tileIndex);
-                                System.out.println("AI discarded " +
-                                        "currently useless Tile");
-                                break;
-                            }
+                            discard(pl, tileIndex);
+                            System.out.println("AI discarded " +
+                                    "currently useless Tile");
+                            return;
                         }
                     }
                 }
-
-                // Tile is part of a near-Chi
-                else if (isAlmostChi(pl,
-                        pl.getTileFromHand(tileIndex))) {
-
-                    discard(pl, tileIndex);
-                    System.out.println("AI discarded almost-Chi Tile");
-                    break;
-                }
-
-                // Tile is part of a pair that can no longer pong
-                else if (isPair(pl.getHandTile(),
-                        pl.getTileFromHand(tileIndex)) && (numInDiscard
-                        (pl.getTileFromHand(tileIndex)) == 2)) {
-
-                    discard(pl, tileIndex);
-                    System.out.println("AI discarded pair Tile");
-                    break;
-                }
+            }
         }
+
+        for (int tileIndex = 0; tileIndex < pl
+                    .getHandTile().size(); tileIndex++) {
+
+            // Tile is part of a near-Chi
+            if (isAlmostChi(pl,
+                    pl.getTileFromHand(tileIndex))) {
+
+                discard(pl, tileIndex);
+                System.out.println("AI discarded almost-Chi Tile");
+                return;
+            }
+        }
+
+        for (int tileIndex = 0; tileIndex < pl
+                .getHandTile().size(); tileIndex++) {
+
+            // Tile is part of a pair that can no longer pong
+            if (isPair(pl.getHandTile(),
+                    pl.getTileFromHand(tileIndex)) && (numInDiscard
+                    (pl.getTileFromHand(tileIndex)) == 2)) {
+
+                discard(pl, tileIndex);
+                System.out.println("AI discarded pair Tile");
+                return;
+            }
+        }
+
     }
 
     /*******************************************************************
