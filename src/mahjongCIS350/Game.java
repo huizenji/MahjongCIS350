@@ -1540,6 +1540,14 @@ public class Game {
      ******************************************************************/
     private void beginnerAIDiscard(Player pl){
 
+        if (pl == null){
+
+            throw new IllegalArgumentException("Player can not be "
+                    + "Null");
+        }
+
+        Random rand = new Random();
+        discard(pl, rand.nextInt(pl.getHandTile().size()));
     }
 
     /*******************************************************************
@@ -1680,12 +1688,14 @@ public class Game {
      * @return the number of the indicated Tile that is in the 
      * discard pile
      ******************************************************************/
-    private int numInDiscard(Tile tile){
+    private int numInDiscard(Tile tile) {
 
         int count = 0;
 
-        for (int i = 0; i < discardPile.size(); i++){
-            if (compareTile(discardPile.get(i), tile)){
+        for (int i = 0; i < discardPile.size(); i++) {
+
+            if (compareTile(discardPile.get(i), tile)) {
+
                 count++;
             }
         }
