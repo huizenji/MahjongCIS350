@@ -1361,6 +1361,85 @@ public class Game {
     }
 
     /*******************************************************************
+     * Determines if a pair of specific Tiles exists in a player's hand.
+     * Returns false if the Tile is alone or already part of a pong.
+     * @param plHand the player's hand being searched
+     * @param tile the indicated Tile that might be part of a pair
+     * @return true if pair is found, otherwise false
+     ******************************************************************/
+    private boolean isPair(ArrayList<Tile> plHand, Tile tile){
+
+        int counter = 0;
+        for (int i = 0; i < plHand.size(); i++){
+
+            if (compareTile(plHand.get(i), tile)){
+
+                counter++;
+            }
+        }
+
+        if (counter == 2){
+            return true;
+        }
+        return false;
+    }
+
+    /*******************************************************************
+     * A function that indicates whether a Tile is part of an
+     * almost-Chi, or that it and another Tile in the indicated player's
+     * hand will be able to make a chi with another Tile that is
+     * still in the drawPile.
+     * @param pl the player whose hand is being searched.
+     * @param tile the Tile that may be part of an almost-Chi.
+     * @return true if the Tile is part of an almost-Chi.
+     ******************************************************************/
+    private boolean isAlmostChi(Player pl, Tile tile){
+
+        ArrayList<Tile> plHand = pl.getHandTile();
+
+        for (int check = 0; check < tiles.size(); check++) {
+
+            if (tiles.get(check) == null) {
+
+                throw new IllegalArgumentException("Needs a tile"
+                        + " to check");
+            }
+
+            if ((tiles.get(check) instanceof Suit)) {
+
+                for (int i = 0; i < plHand.size(); i++) {
+
+                    for (int j = i; j < plHand.size(); j++) {
+
+                        if (i != j) {
+
+                            if (plHand.get(i) instanceof Suit
+                                    && plHand.get(j) instanceof Suit) {
+
+                                Suit suit1 = (Suit) plHand.get(i);
+                                Suit suit2 = (Suit) plHand.get(j);
+
+                                if (compareConsecutiveSuits(suit1,
+                                        suit2, (Suit) tiles.get(check)))
+                                {
+                                    if (compareTile(suit1, tile) ||
+                                            compareTile(suit2, tile)){
+                                        return true;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+
+        }
+
+        return false;
+
+    }
+
+    /*******************************************************************
      * This method draws a tile from the main wall/tiles. It will then
      * draw another tile if the original tile draw is a point tile.
      *
@@ -1467,38 +1546,83 @@ public class Game {
     }
 
     /*******************************************************************
-     *
-     * @param pl
+     * The discard sequence for the advanced AI option. This takes
+     * into account advanced strategy, discarding Tiles that have the
+     * least amount of use to the AI player, and takes the discard
+     * pile into account.
+     * @param pl the AI player that needs to discard.
      ******************************************************************/
     public void advancedAIDiscard(Player pl){
 
-
         // check each Tile in hand one by one
-        for (int i = 0; i < getCurrentPlayer().getHandTile().size();
-             i++){
+        for (int tileIndex = 0; tileIndex < getCurrentPlayer()
+                .getHandTile().size(); tileIndex++) {
 
             // ranked order of importance, current order does not reflect
             // point differences in different kinds of sets
 
             // assuming Dragon/Wind Tiles are not point-Tiles
 
-            // Tile can no longer be used due to previous discards
+
+                // Tile can no longer be used due to previous discards
                 if (numInDiscard(getCurrentPlayer().getHandTile()
-                        .get(i)) == 3){
-                    discard(pl, i);
+                        .get(tileIndex)) == 3){
+                    discard(pl, tileIndex);
+                    System.out.println("AI discarded useless Tile");
+                    break;
                 }
 
-            // Tile isn't part of an existing set, pair, or near-Chi
-                 //discard
-            // Tile is part of a near-Chi
-                 //discard
-            // Tile is part of a pair that can no longer pong
-                 //discard
+                // Tile isn't part of an existing set, pair, or
+                // almost-Chi
+                else if (!isPong(pl.getHandTile(),
+                        pl.getTileFromHand(tileIndex))) {
 
+                    if (!isChi(pl, pl.getTileFromHand(tileIndex))) {
+
+                        if(!isPair(pl.getHandTile(),
+                                pl.getTileFromHand(tileIndex))) {
+
+                            if (!isAlmostChi(pl, pl.getTileFromHand(tileIndex)))
+                            {
+
+                                discard(pl, tileIndex);
+                                System.out.println("AI discarded " +
+                                        "currently useless Tile");
+                                break;
+                            }
+                        }
+                    }
+                }
+
+                // Tile is part of a near-Chi
+                else if (isAlmostChi(pl,
+                        pl.getTileFromHand(tileIndex))) {
+
+                    discard(pl, tileIndex);
+                    System.out.println("AI discarded almost-Chi Tile");
+                    break;
+                }
+
+                // Tile is part of a pair that can no longer pong
+                else if (isPair(pl.getHandTile(),
+                        pl.getTileFromHand(tileIndex)) && (numInDiscard
+                        (pl.getTileFromHand(tileIndex)) == 2)) {
+
+                    discard(pl, tileIndex);
+                    System.out.println("AI discarded pair Tile");
+                    break;
+                }
         }
 
     }
 
+    /*******************************************************************
+     * A helper method that finds how many of a certain type of Tile is
+     * in the discard pile.
+     * @param tile indicated Tile
+     * @return the number of the indicated Tile that is in the 
+     * discard pile
+     ******************************************************************/
     private int numInDiscard(Tile tile){
 
         int count = 0;
