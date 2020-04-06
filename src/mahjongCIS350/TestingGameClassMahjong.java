@@ -127,15 +127,15 @@ public class TestingGameClassMahjong {
 
         hand.add(chTile[1]);
         hand.add(chTile[1]);
-        hand.add(chTile[1]);
+        hand.add(chTile[2]);
         hand.add(chTile[2]);
         hand.add(chTile[3]);
-        hand.add(chTile[4]);
-        hand.add(chTile[5]);
-        hand.add(chTile[5]);
+        hand.add(chTile[3]);
+        hand.add(bTile[5]);
+        hand.add(bTile[5]);
 
         Assert.assertTrue("Should have Mahjong",
-                game.isMahjong(hand, null));
+                game.isMahjong(hand, bTile[5]));
     }
 }
 

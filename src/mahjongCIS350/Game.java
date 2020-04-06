@@ -671,7 +671,6 @@ public class Game {
 //
 //        temp = removeAllPong(temp);
 //
-//
 //        // If a player has 2 tiles remaining and they are the same,
 //        // then they have mahjong.
 //        if (temp.size() == 2 ){
@@ -1582,7 +1581,8 @@ public class Game {
                         if(!isPair(pl.getHandTile(),
                                 pl.getTileFromHand(tileIndex))) {
 
-                            if (!isAlmostChi(pl, pl.getTileFromHand(tileIndex)))
+                            if (!isAlmostChi(pl, pl.getTileFromHand(
+                                    tileIndex)))
                             {
 
                                 discard(pl, tileIndex);
@@ -1613,7 +1613,6 @@ public class Game {
                     break;
                 }
         }
-
     }
 
     /*******************************************************************
