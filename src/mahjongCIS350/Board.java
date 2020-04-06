@@ -271,7 +271,7 @@ public class Board extends JPanel {
                         // Add AI Action for discarding
                     else{
 
-                        game.dumbAIDiscard(game.getCurrentPlayer());
+                        game.generalAIDiscard(game.getCurrentPlayer());
                     }
 
                     // AI discards Tile

@@ -1431,11 +1431,9 @@ public class Game {
                     }
                 }
             }
-
         }
 
         return false;
-
     }
 
     /*******************************************************************
@@ -1523,7 +1521,7 @@ public class Game {
      * @param player The player whose action will be determined by
      *               an AI.
      ******************************************************************/
-    public void dumbAIDiscard(Player player) {
+    private void dumbAIDiscard(Player player) {
 
         if (player == null){
 
@@ -1540,7 +1538,7 @@ public class Game {
      *
      * @param pl
      ******************************************************************/
-    public void beginnerAIDiscard(Player pl){
+    private void beginnerAIDiscard(Player pl){
 
     }
 
@@ -1551,7 +1549,7 @@ public class Game {
      * pile into account.
      * @param pl the AI player that needs to discard.
      ******************************************************************/
-    public void advancedAIDiscard(Player pl){
+    private void advancedAIDiscard(Player pl){
 
         // check each Tile in hand one by one
         for (int tileIndex = 0; tileIndex < getCurrentPlayer()
@@ -1612,6 +1610,66 @@ public class Game {
                     System.out.println("AI discarded pair Tile");
                     break;
                 }
+        }
+    }
+
+    /*******************************************************************
+     * A general discard method that determines how an AI should
+     * choose a Tile discard based on the AI difficulty.
+     * @param pl player that is discarding
+     ******************************************************************/
+    public void generalAIDiscard(Player pl) {
+
+        if (pl.equals(playerList[1])) {
+
+            if (AIDiff[0] == DUMB) {
+
+                dumbAIDiscard(pl);
+
+            }else if (AIDiff[0] == BEGINNER) {
+
+                beginnerAIDiscard(pl);
+
+            }else {
+
+                advancedAIDiscard(pl);
+            }
+
+        }else if (pl.equals(playerList[2])) {
+
+            if (AIDiff[1] == DUMB) {
+
+                dumbAIDiscard(pl);
+
+            }else if (AIDiff[2] == BEGINNER) {
+
+                beginnerAIDiscard(pl);
+
+            }else {
+
+                advancedAIDiscard(pl);
+            }
+
+
+        }else if (pl.equals(playerList[3])) {
+
+            if (AIDiff[2] == DUMB) {
+
+                dumbAIDiscard(pl);
+
+            }else if (AIDiff[2] == BEGINNER) {
+
+                beginnerAIDiscard(pl);
+
+            }else {
+
+                advancedAIDiscard(pl);
+            }
+
+        } else {
+
+            throw new IllegalArgumentException("Player 1 is not an " +
+                    "AI, please choose a Tile to discard");
         }
     }
 
