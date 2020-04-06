@@ -249,6 +249,9 @@ public class Board extends JPanel {
                     if (game.isMahjong(game.getPlayerHand(game
                             .getCurrentPlayerIndex()), null)) {
 
+                        revealWinningAIHand(game
+                                .getCurrentPlayerIndex());
+
                         JOptionPane.showMessageDialog(
                                 null, msgAIMahjong);
                         enablePlayer1Hand(false);
@@ -510,6 +513,42 @@ public class Board extends JPanel {
             c.gridy = i;
             p4HandPanel.add(p4Hand.get(i), c);
         }
+    }
+
+    /*******************************************************************
+     * Helper method that reveals the winning player's hand.
+     * @param playerIndex index of winning player
+     ******************************************************************/
+    private void revealWinningAIHand(int playerIndex){
+
+         for (int i = 0; i < game.getCurrentPlayer().getHandTile().size(); i++) {
+
+             if (playerIndex == 1) {
+
+                 p2Hand.get(i).setIcon(updatedImage(game.getPlayerList(
+                         0).getTileFromHand(i)));
+                 p2Hand.get(i).setPreferredSize(new Dimension(
+                         50, 50));
+
+             }else if (playerIndex == 2) {
+
+                 p3Hand.get(i).setIcon(updatedImage(game.getPlayerList(
+                         0).getTileFromHand(i)));
+                 p3Hand.get(i).setPreferredSize(new Dimension(
+                         50, 50));
+             }else if (playerIndex == 3) {
+
+                 p4Hand.get(i).setIcon(updatedImage(game.getPlayerList(
+                         0).getTileFromHand(i)));
+                 p4Hand.get(i).setPreferredSize(new Dimension(
+                         50, 50));
+             } else {
+
+                 throw new IllegalArgumentException("Player 1 Hand " +
+                         "already revealed");
+             }
+         }
+
     }
 
     /*******************************************************************
