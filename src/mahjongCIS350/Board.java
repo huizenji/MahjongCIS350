@@ -243,6 +243,7 @@ public class Board extends JPanel {
 
                     // AI draws Tile
                     game.dumbAIDraw(game.getCurrentPlayer());
+                    drawFlag = true;
 
 
                     // Check if AI can declare Mahjong
@@ -899,6 +900,7 @@ public class Board extends JPanel {
 
         int p1HandSize = game.getPlayerList(
                 0).getHandTile().size();
+        
         int discardPileSize = game.getDiscardPile().size();
         int drawPileSize = game.getDrawPile().size();
 
@@ -1146,7 +1148,7 @@ public class Board extends JPanel {
     }
 
     /******************************************************************
-     * This method updates the players hand.
+     * This method updates the player's hand.
      *
      * @param p1HandSize The hand of the first player.
      *****************************************************************/
@@ -1204,6 +1206,8 @@ public class Board extends JPanel {
             resetBtn.setEnabled(false);
         }
     }
+    
+   
 
     /*******************************************************************
      * This method checks all the Players and returns a Player who has
@@ -1475,8 +1479,16 @@ public class Board extends JPanel {
                     kongSeq((Suit) game.getRecentDiscard());
 
                     // AI Action (ADD)
+                    // Goes through and claims a kong for the AI Player
                 } else {
-                    ;
+//                	int nextPlIndex = (game.getCurrentPlayerIndex() + 1) %
+//                            game.TOTALPLAYER;
+//                	
+//                	game.takeKong(game.getPlayerList(nextPlIndex), game
+//                            .getRecentDiscard());
+//                    displayBoard();
+//                    game.setNextCurrentPlayer(nextPlIndex);
+//                    drawFlag = false;
                 }
             }
         }
@@ -1497,9 +1509,16 @@ public class Board extends JPanel {
                     }
 
                     // AI Action (ADD)
+                    // Claims a pong for the AI player
                     else {
-
-
+//                    	int nextPlIndex = (game.getCurrentPlayerIndex() + 1) %
+//                                game.TOTALPLAYER;
+//
+//                              game.takePong(game.getPlayerList(nextPlIndex), game
+//                                      .getRecentDiscard());
+//                              displayBoard();
+//                              game.setNextCurrentPlayer(nextPlIndex);
+//                              drawFlag = false;
                     }
                 }
             }
@@ -1520,8 +1539,27 @@ public class Board extends JPanel {
                 }
 
                 // AI Action (ADD)
+                // Goes through and Claims a chi for the AI player
                 else {
-                    ;
+//                        ArrayList<Integer> options = game.getChiTile(
+//                        		game.getPlayerList(nextPlIndex),
+//                                game.getRecentDiscard());
+//
+//                        // Loop Through Options
+//                        while (options.size() > 0){
+//
+//                            Suit tile1 = (Suit) game.getPlayerList(nextPlIndex).
+//                                    getHandTile().get(options.get(0));
+//                            Suit tile2 = (Suit) game.getPlayerList(nextPlIndex).
+//                                    getHandTile().get(options.get(1));
+//
+//                                game.takeChi(game.getPlayerList(nextPlIndex),
+//                                        options.get(0), options.get(1));
+//                                displayBoard();
+//                                game.setNextCurrentPlayer(nextPlIndex);
+//                                drawFlag = false;
+//                                break;
+//                    }
                 }
             }
         }

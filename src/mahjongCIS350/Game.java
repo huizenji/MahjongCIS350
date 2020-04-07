@@ -364,6 +364,15 @@ public class Game {
             AIDiff[i] = BEGINNER;
         }
     }
+    
+    /*********************************************************************
+     * This method returns the array containing the difficulty of the AI
+     * @return int[] The Array containing the AI difficulty
+     *********************************************************************/
+    public int[] getAIDiff(){
+
+        return AIDiff;
+     }
 
     /*******************************************************************
      * Whenever Player draws a Tile, if it's a point Tile then score
