@@ -581,7 +581,7 @@ public class TestingGameClass {
 
         Assert.assertEquals(game.getChiTile(pl, wTile[2]).size(),
                 0);
-        Assert.assertEquals(game.getChiTile(pl, bTile[2]).size(),
+        Assert.assertEquals(game.getChiTile(pl, cTile[3]).size(),
                 0);
         Assert.assertEquals(game.getChiTile(pl, bTile[1]).size(),
                 0);
@@ -618,7 +618,7 @@ public class TestingGameClass {
 
         Assert.assertEquals(game.getChiTile(pl, fTile[5]).size(),
                 0);
-        Assert.assertEquals(game.getChiTile(pl, cTile[2]).size(),
+        Assert.assertEquals(game.getChiTile(pl, bTile[3]).size(),
                 0);
         Assert.assertEquals(game.getChiTile(pl, cTile[1]).size(),
                 0);
@@ -664,6 +664,157 @@ public class TestingGameClass {
                 6);
         Assert.assertEquals(game.getChiTile(pl, chTile[9]).size(),
                 2);
+    }
+
+    @Test
+    public void testgetChiTileT4(){
+
+        game.setGameOptionSimple(true);
+        Player pl = new Player();
+        ArrayList<Tile> hand = pl.getHandTile();
+
+        hand.clear();
+
+        hand.add(chTile[1]);
+        hand.add(chTile[2]);
+        hand.add(chTile[9]);
+        hand.add(chTile[9]);
+
+        hand.add(cTile[7]);
+        hand.add(bTile[3]);
+
+        Assert.assertEquals(game.getChiTile(pl, dTile[1]).size(),
+                0);
+        Assert.assertEquals(game.getChiTile(pl, chTile[2]).size(),
+                0);
+        Assert.assertEquals(game.getChiTile(pl, chTile[1]).size(),
+                0);
+        Assert.assertEquals(game.getChiTile(pl, chTile[3]).size(),
+                2);
+    }
+
+    @Test
+    public void testTakeChi(){
+        ;
+
+    }
+
+    @Test
+    public void testTakePong(){
+
+;
+    }
+
+    @Test
+    public void testTakeKong(){
+
+;
+    }
+
+    @Test
+    public void testTakeKongDraw(){
+
+        ;
+    }
+
+    @Test
+    public void testDraw() {
+
+        Player pl = new Player();
+        int drawSize = game.getDrawPile().size();
+        int handSize = pl.getHandTile().size();
+        int setSize = pl.getSetPile().size();
+
+        for (int i = 0; i < drawSize; i++){
+
+            game.draw(pl);
+            if (pl.getHandTile().size() >= handSize + 2){
+
+                Assert.fail("Drew Too many Tiles");
+            }
+
+
+            if (pl.getSetPile().size() < setSize){
+
+                Assert.fail("Set Size should not decrease");
+            }
+            handSize = pl.getHandTile().size();
+            setSize = pl.getSetPile().size();
+        }
+    }
+
+    @Test
+    public void testStalemateTest1() {
+
+        game.setGameOptionSimple(true);
+        ArrayList<Tile> deck = game.getDrawPile();
+        deck.clear();
+        Player pl = new Player();
+
+        Assert.assertTrue("Stalemate",
+                game.isStalemate());
+        deck.add(wTile[2]);
+        Assert.assertTrue("Stalemate",
+                game.isStalemate());
+        deck.add(wTile[1]);
+        Assert.assertTrue("Stalemate",
+                game.isStalemate());
+        deck.add(dTile[2]);
+        Assert.assertTrue("Stalemate",
+                game.isStalemate());
+        deck.add(wTile[2]);
+        Assert.assertTrue("Stalemate",
+                game.isStalemate());
+        deck.add(bTile[2]);
+        Assert.assertFalse("No Stalemate",
+                game.isStalemate());
+        game.draw(pl);
+        deck.add(cTile[2]);
+        Assert.assertFalse("No Stalemate",
+                game.isStalemate());
+        deck.add(wTile[2]);
+        Assert.assertFalse("No Stalemate",
+                game.isStalemate());
+    }
+
+    @Test
+    public void testStalemateTest2() {
+
+        game.setGameOptionSimple(false);
+        ArrayList<Tile> deck = game.getDrawPile();
+        deck.clear();
+        Player pl = new Player();
+
+        Assert.assertTrue("Stalemate",
+                game.isStalemate());
+        deck.add(fTile[2]);
+        Assert.assertTrue("Stalemate",
+                game.isStalemate());
+        deck.add(fTile[1]);
+        Assert.assertTrue("Stalemate",
+                game.isStalemate());
+        deck.add(dTile[2]);
+        Assert.assertFalse("Stalemate",
+                game.isStalemate());
+        game.draw(pl);
+        deck.add(wTile[2]);
+        Assert.assertFalse("Stalemate",
+                game.isStalemate());
+        game.draw(pl);
+        deck.add(bTile[2]);
+        Assert.assertFalse("No Stalemate",
+                game.isStalemate());
+        game.draw(pl);
+        deck.add(cTile[2]);
+        Assert.assertFalse("No Stalemate",
+                game.isStalemate());
+        game.draw(pl);
+        deck.add(wTile[2]);
+        Assert.assertFalse("No Stalemate",
+                game.isStalemate());
+        deck.add(fTile[2]);
+        Assert.assertFalse("No Stalemate",
+                game.isStalemate());
     }
 }
 
