@@ -53,6 +53,9 @@ public class Game {
     /** The constant for default setting for AI. **/
     public static final int defaultAI = BEGINNER;
 
+    /** The score to be calculated. **/
+    private int score;
+
     /*******************************************************************
      * This is the constructor for the Game class.
      ******************************************************************/
@@ -393,6 +396,73 @@ public class Game {
         }
 
         player.setPoint(player.getPoint() + point);
+    }
+    /**
+     * compare three tiles and determine if they all the same
+     * @param t1
+     * @param t2
+     * @param t3
+     * @return
+     */
+    private boolean compareThree(Tile t1, Tile t2, Tile t3){
+        if(compareTile(t1,t2)&&compareTile(t2,t3)){
+            return true;
+        }
+        return false;
+    }
+    /*******************************************************************
+     * A getter function for individual Tiles. All these score should be calculated after some player win the game.
+     *
+     * @param
+     * @return Tile at indicated index
+     ******************************************************************/
+    public int get_score() {
+        int count1 = 0;
+        int count2 = 0;
+        int count3 = 0;
+        //2^88 points, 3 conditions
+        //first condition: 4 pairs of Pong and they are all wind tiles
+        for (int i = 0; i < 4; ++i) {
+            for (int j = 0; j <= playerList[i].getHandTile().size() - 2; j++) {
+                if (compareThree(playerList[i].getHandTile().get(j), playerList[i].getHandTile().get(j + 1),
+                        playerList[i].getHandTile().get(j + 2)) && playerList[i].getHandTile().get(j).getType().equals("Wind")) {
+                    count1++;
+                }
+            }
+        }
+        if (count1 == 4) {
+            score = (int) Math.pow(2, 88);
+        }
+        //2^88 points
+        //second condition: 3 pairs of Pong and they are all dragon tiles
+        for (int i = 0; i < 4; ++i) {
+            for (int j = 0; j <= playerList[i].getHandTile().size() - 2; j++) {
+                if (compareThree(playerList[i].getHandTile().get(j), playerList[i].getHandTile().get(j + 1),
+                        playerList[i].getHandTile().get(j + 2)) && playerList[i].getHandTile().get(j).getType().equals("Dragon")) {
+                    count2++;
+                }
+                if (count2 == 3) {
+                    score = (int) Math.pow(2, 88);
+                }
+            }
+        }
+        //2^88 points
+        //third condition: 3 pairs of Pong
+        for (int i = 0; i < 4; ++i) {
+            for (int j = 0; j <= playerList[i].getHandTile().size() - 3; j++) {
+                if (compareThree(playerList[i].getHandTile().get(j), playerList[i].getHandTile().get(j + 1),
+                        playerList[i].getHandTile().get(j + 2)) && compareTile(playerList[i].getHandTile().get(j),playerList[i].getHandTile().get(j+3))) {
+                    count2++;
+                }
+                if (count3 == 3) {
+                    score = (int) Math.pow(2, 88);
+                }
+            }
+        }
+        //2^16
+        //2^4
+
+        return score;
     }
 
     /*******************************************************************
