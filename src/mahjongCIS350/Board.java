@@ -245,7 +245,6 @@ public class Board extends JPanel {
                     game.dumbAIDraw(game.getCurrentPlayer());
                     drawFlag = true;
 
-
                     // Check if AI can declare Mahjong
                     if (game.isMahjong(game.getPlayerHand(game
                             .getCurrentPlayerIndex()), null)) {
@@ -256,9 +255,15 @@ public class Board extends JPanel {
                         JOptionPane.showMessageDialog(
                                 null, msgAIMahjong);
                         enablePlayer1Hand(false);
-                        timer.stop();
 
-                        updateScore();
+                        enablePlayer1Hand(false);
+                        timer.stop();
+                        drawFlag = false;
+                        resetBtn.setEnabled(true);
+                        game.increaseScore(
+                                game.getCurrentPlayerIndex());
+                        gameModeSwap();
+
                         if (game.getCurrentPlayerIndex()
                                 != game.getStartingPlayer()){
 
@@ -320,9 +325,14 @@ public class Board extends JPanel {
 
                                 JOptionPane.showMessageDialog(
                                         null, msgWin2);
+
                                 enablePlayer1Hand(false);
-                                updateScore();
                                 timer.stop();
+                                drawFlag = false;
+                                resetBtn.setEnabled(true);
+                                game.increaseScore(
+                                        game.getCurrentPlayerIndex());
+                                gameModeSwap();
 
                                 if (0 != game.getStartingPlayer()){
 
@@ -1193,12 +1203,12 @@ public class Board extends JPanel {
 
             message2 = "Traditional Mode";
         }
-        int takeKong = JOptionPane.showConfirmDialog(
+        int swap = JOptionPane.showConfirmDialog(
                 null, message + message2,
                 "Mode Switch",
                 JOptionPane.YES_NO_OPTION);
 
-        if (takeKong == JOptionPane.YES_OPTION) {
+        if (swap == JOptionPane.YES_OPTION) {
 
             game.setGameOptionSimple(!game.getGameOptionSimple());
             game.reset();
@@ -1231,7 +1241,7 @@ public class Board extends JPanel {
             if (game.isMahjong(game.getPlayerHand((i %
                     game.TOTALPLAYER)), game.getRecentDiscard())) {
 
-                return i;
+                return i % game.TOTALPLAYER;
             }
         }
 
@@ -1243,15 +1253,18 @@ public class Board extends JPanel {
      ******************************************************************/
     private void stalemateSeq() {
 
-        enablePlayer1Hand(false);
-        timer.stop();
+
         JOptionPane.showMessageDialog(null,
                 "There are no possible ways to "
                         + "win, therefore the game is a "
                         + "stalemate.");
+
+        enablePlayer1Hand(false);
+        timer.stop();
         drawFlag = false;
         resetBtn.setEnabled(true);
-        game.setNextStartingPlayer();
+        game.increaseScore(
+                game.getCurrentPlayerIndex());
         gameModeSwap();
     }
 
@@ -1407,6 +1420,7 @@ public class Board extends JPanel {
     private void mahjongSeq() {
 
         int winner = isMahjongPlayerDiscard();
+
         // Player can claim Mahjong
         if (winner == 0) {
 
@@ -1423,6 +1437,7 @@ public class Board extends JPanel {
 
                 JOptionPane.showMessageDialog(
                         null, message2);
+
                 enablePlayer1Hand(false);
                 timer.stop();
                 drawFlag = false;
@@ -1433,9 +1448,10 @@ public class Board extends JPanel {
                     game.setNextStartingPlayer();
                 }
 
-                game.increaseScore(game.getCurrentPlayerIndex());
+                game.increaseScore(winner);
                 gameModeSwap();
             }
+
         } else {
 
             String message = "An opponent has declared Mahjong."
@@ -1451,7 +1467,7 @@ public class Board extends JPanel {
                 game.setNextStartingPlayer();
             }
 
-            game.increaseScore(game.getCurrentPlayerIndex());
+            game.increaseScore(winner);
             gameModeSwap();
         }
     }
@@ -1524,7 +1540,8 @@ public class Board extends JPanel {
                               game.setNextCurrentPlayer(
                                       i % game.TOTALPLAYER);
                               drawFlag = false;
-                        game.generalAIDiscard(game.getPlayerList(i));
+                        game.generalAIDiscard(game.getPlayerList(
+                                i % game.TOTALPLAYER));
                     }
                 }
             }
@@ -1693,6 +1710,9 @@ public class Board extends JPanel {
         game.setAIDiff(difficulty, playerIndex);
     }
 
+    /*******************************************************************
+     * This method updates the score of the player after a win.
+     ******************************************************************/
     private void updateScore() {
 
         int p1score = game.getPlayerList(0).getPoint();
@@ -1757,6 +1777,7 @@ public class Board extends JPanel {
             }
 
             if (event.getSource() == resetBtn){
+
                 game.reset();
                 resetBoard();
                 resetBtn.setEnabled(false);

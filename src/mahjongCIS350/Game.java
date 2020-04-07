@@ -212,7 +212,7 @@ public class Game {
      ******************************************************************/
     public void reset(){
 
-        for(int i =0; i <4; i++) {
+        for(int i = 0; i < 4; i++) {
 
             playerList[i].clearHandPile();
             playerList[i].clearSetPile();
@@ -221,7 +221,6 @@ public class Game {
         tiles.clear();
         discardPile.clear();
         createTile();
-        setupPlayer();
         shuffle();
         dealTile13();
         removeKongHand();
@@ -381,6 +380,7 @@ public class Game {
 
         if (plIndex < 0 || plIndex >= TOTALPLAYER) {
 
+
             throw new IllegalArgumentException("Player Index does not"
                     + " exist");
         }
@@ -399,9 +399,9 @@ public class Game {
      ******************************************************************/
     private void pileScore(final Player player) {
 
-        int point = 0;
+        int point = player.getPoint();
 
-        for(int i = 0; i <= player.getSetPile().size(); i++) {
+        for(int i = 0; i < player.getSetPile().size(); i++) {
 
             if (isPointTile(player.getSetTile(i))) {
 
@@ -409,7 +409,7 @@ public class Game {
             }
         }
 
-        player.setPoint(player.getPoint() + point);
+        player.setPoint(point);
     }
 
     /*******************************************************************

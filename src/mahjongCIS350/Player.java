@@ -192,16 +192,17 @@ public class Player {
     /*******************************************************************
      * This method sets the number of points for the player.
      *
-     * @param point The number of points that player will have.
+     * @param points The number of points that player will have.
      ******************************************************************/
-    public void setPoint(final int point) {
+    public void setPoint(int points) {
 
-        if (point <= 0 ){
+        if (points < 0 ){
 
             throw new IllegalArgumentException("Point Value should "
                     + "be greater than 0");
         }
-        this.point = point;
+
+        point = points;
     }
 
     /*******************************************************************
