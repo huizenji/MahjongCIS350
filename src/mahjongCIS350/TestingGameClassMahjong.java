@@ -41,9 +41,9 @@ public class TestingGameClassMahjong {
 
         for (int i = 1; i <= 9; i++){
 
-            bTile[i] = new Suit("bamboo", i);
-            chTile[i] = new Suit("character", i);
-            cTile[i] = new Suit("circle", i);
+            bTile[i] = new Suit("Bamboo", i);
+            chTile[i] = new Suit("Character", i);
+            cTile[i] = new Suit("Circle", i);
         }
 
         for (int i = 1; i <= 8; i++){
@@ -134,8 +134,26 @@ public class TestingGameClassMahjong {
         hand.add(bTile[5]);
         hand.add(bTile[5]);
 
-        Assert.assertTrue("Should have Mahjong",
+        Assert.assertFalse("Should have Mahjong",
                 game.isMahjong(hand, bTile[5]));
+    }
+
+    @Test
+    public void isMahjongTest6(){
+
+        ArrayList<Tile> hand = new ArrayList<>();
+
+        hand.add(chTile[1]);
+        hand.add(chTile[1]);
+        hand.add(chTile[2]);
+        hand.add(chTile[2]);
+        hand.add(chTile[3]);
+        hand.add(chTile[3]);
+        hand.add(bTile[5]);
+        hand.add(bTile[5]);
+
+        Assert.assertFalse("Should not have Mahjong",
+                game.isMahjong(hand, chTile[3]));
     }
 }
 

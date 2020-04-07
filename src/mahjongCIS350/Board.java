@@ -270,9 +270,9 @@ public class Board extends JPanel {
                     if (game.isKongDraw(game.getPlayerList(
                             game.getCurrentPlayerIndex()))) {
 
-                        ;
+                        game.takeKongDraw(game.getCurrentPlayer());
                     }
-                        // Add AI Action for discarding
+
                     else{
 
                         game.generalAIDiscard(game.getCurrentPlayer());
@@ -1224,10 +1224,12 @@ public class Board extends JPanel {
             return -1;
         }
 
-        for (int i = 0; i < 4; i++) {
+        for (int i = game.getCurrentPlayerIndex() + 1;
+             i < (game.getCurrentPlayerIndex() + game.TOTALPLAYER)
+                ; i++) {
 
-            if (game.isMahjong(game.getPlayerHand((i)), game
-                    .getRecentDiscard())) {
+            if (game.isMahjong(game.getPlayerHand((i %
+                    game.TOTALPLAYER)), game.getRecentDiscard())) {
 
                 return i;
             }
@@ -1431,6 +1433,7 @@ public class Board extends JPanel {
                     game.setNextStartingPlayer();
                 }
 
+                game.increaseScore(game.getCurrentPlayerIndex());
                 gameModeSwap();
             }
         } else {
@@ -1448,6 +1451,7 @@ public class Board extends JPanel {
                 game.setNextStartingPlayer();
             }
 
+            game.increaseScore(game.getCurrentPlayerIndex());
             gameModeSwap();
         }
     }
@@ -1478,17 +1482,18 @@ public class Board extends JPanel {
                 if (i % game.TOTALPLAYER == 0) {
                     kongSeq((Suit) game.getRecentDiscard());
 
-                    // AI Action (ADD)
-                    // Goes through and claims a kong for the AI Player
                 } else {
 //                	int nextPlIndex = (game.getCurrentPlayerIndex() + 1) %
 //                            game.TOTALPLAYER;
-//                	
-//                	game.takeKong(game.getPlayerList(nextPlIndex), game
-//                            .getRecentDiscard());
-//                    displayBoard();
-//                    game.setNextCurrentPlayer(nextPlIndex);
-//                    drawFlag = false;
+
+                	game.takeKong(game.getPlayerList(
+                	        i % game.TOTALPLAYER),
+                            game.getRecentDiscard());
+                    displayBoard();
+                    game.setNextCurrentPlayer(i % game.TOTALPLAYER);
+                    game.generalAIDiscard(game.getPlayerList(
+                            i % game.TOTALPLAYER));
+                    drawFlag = false;
                 }
             }
         }
@@ -1508,17 +1513,18 @@ public class Board extends JPanel {
                         pongSeq(game.getRecentDiscard());
                     }
 
-                    // AI Action (ADD)
-                    // Claims a pong for the AI player
                     else {
 //                    	int nextPlIndex = (game.getCurrentPlayerIndex() + 1) %
 //                                game.TOTALPLAYER;
-//
-//                              game.takePong(game.getPlayerList(nextPlIndex), game
-//                                      .getRecentDiscard());
-//                              displayBoard();
-//                              game.setNextCurrentPlayer(nextPlIndex);
-//                              drawFlag = false;
+
+                              game.takePong(game.getPlayerList(
+                                      i % game.TOTALPLAYER),
+                                      game.getRecentDiscard());
+                              displayBoard();
+                              game.setNextCurrentPlayer(
+                                      i % game.TOTALPLAYER);
+                              drawFlag = false;
+                        game.generalAIDiscard(game.getPlayerList(i));
                     }
                 }
             }
@@ -1538,28 +1544,30 @@ public class Board extends JPanel {
                     chiSeq((Suit) game.getRecentDiscard());
                 }
 
-                // AI Action (ADD)
                 // Goes through and Claims a chi for the AI player
                 else {
-//                        ArrayList<Integer> options = game.getChiTile(
-//                        		game.getPlayerList(nextPlIndex),
-//                                game.getRecentDiscard());
-//
-//                        // Loop Through Options
-//                        while (options.size() > 0){
-//
-//                            Suit tile1 = (Suit) game.getPlayerList(nextPlIndex).
+                        ArrayList<Integer> options = game.getChiTile(
+                        		game.getPlayerList(nextPlIndex),
+                                game.getRecentDiscard());
+
+                        // Loop Through Options
+                        while (options.size() > 0){
+
+//                            Suit tile1 = (Suit) game.getPlayerList(
+//                                    nextPlIndex).
 //                                    getHandTile().get(options.get(0));
-//                            Suit tile2 = (Suit) game.getPlayerList(nextPlIndex).
+//                            Suit tile2 = (Suit) game.getPlayerList(
+//                                    nextPlIndex).
 //                                    getHandTile().get(options.get(1));
-//
-//                                game.takeChi(game.getPlayerList(nextPlIndex),
-//                                        options.get(0), options.get(1));
-//                                displayBoard();
-//                                game.setNextCurrentPlayer(nextPlIndex);
-//                                drawFlag = false;
-//                                break;
-//                    }
+
+                                game.takeChi(game.getPlayerList(
+                                        nextPlIndex),
+                                        options.get(0), options.get(1));
+                                displayBoard();
+                                game.setNextCurrentPlayer(nextPlIndex);
+                                drawFlag = false;
+                                break;
+                    }
                 }
             }
         }
@@ -1594,7 +1602,9 @@ public class Board extends JPanel {
         // Reset Flags, Counters and Start Timer
         displayBoard();
         removeImage = true;
+        drawFlag = true;
         pileNum = drawPile.size();
+        game.setNextCurrentPlayer(game.getStartingPlayer());
         timer.start();
     }
 
