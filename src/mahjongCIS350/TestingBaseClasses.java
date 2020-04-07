@@ -385,7 +385,7 @@ public class TestingBaseClasses {
     public void testPlayerClassIllegalArgErrorsPoint2() {
 
         // Testing for adding to set
-        player.setPoint(0);
+        player.setPoint(-2);
     }
 
     @Test(expected = IllegalArgumentException.class)

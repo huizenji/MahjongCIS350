@@ -366,15 +366,6 @@ public class Game {
             AIDiff[i] = BEGINNER;
         }
     }
-    
-    /*********************************************************************
-     * This method returns the array containing the difficulty of the AI
-     * @return int[] The Array containing the AI difficulty
-     *********************************************************************/
-    public int[] getAIDiff(){
-
-        return AIDiff;
-     }
 
      public void increaseScore(int plIndex) {
 
@@ -941,9 +932,9 @@ public class Game {
                     }
                 }
             }
-        }
 
-        return win;
+            return win;
+        }
     }
 
     /*******************************************************************
@@ -955,7 +946,14 @@ public class Game {
      public ArrayList<Integer> getChiTile(Player pl, Tile discard) {
 
         ArrayList<Tile> desired = new ArrayList<>();
-        ArrayList<Integer> loc;
+        ArrayList<Integer> loc = new ArrayList<>();
+
+
+        // Return Empty Array if discard is not a Suit Tile
+        if (!(discard instanceof Suit)) {
+
+            return loc;
+        }
 
         for (int i = 0; i < pl.getHandTile().size(); i++) {
 
@@ -980,12 +978,12 @@ public class Game {
             }
         }
 
-        loc = findTileVer2(pl.getHandTile(), desired);
+        loc = findTile(pl.getHandTile(), desired);
 
         // Remove Repeating Tiles/Indexes
         for (int i = 0; i < loc.size() - 2; i += 2) {
 
-            if (i + 3 > loc.size() || i + 2 > loc.size()) {
+            if (i + 3 >= loc.size() || i + 2 >= loc.size()) {
 
                 break;
             }
@@ -1104,39 +1102,6 @@ public class Game {
                         index_loc.add(hand_index);
                         break search;
                     }
-                }
-            }
-        }
-
-        return index_loc;
-    }
-
-    /*******************************************************************
-     * This method finds the desired Tiles of an ArrayList and returns
-     * the index from the Player's hand that they are located at. This
-     * version of find tiles will take duplicate locations.
-     *
-     * @param playerHand The player's hand that is being searched.
-     * @param desired The tiles that are searched in the players hand
-     *                as an arraylist.
-     * @return The index where the searched tiles are found.
-     ******************************************************************/
-    private ArrayList<Integer> findTileVer2(ArrayList<Tile> playerHand,
-                                        ArrayList<Tile> desired) {
-
-        ArrayList<Integer> index_loc = new ArrayList();
-
-        for (int i = 0; i < desired.size(); i++) {
-
-            search:
-            for (int hand_index = 0; hand_index < playerHand.size();
-                 hand_index++) {
-
-                if (compareTile(desired.get(i),
-                        playerHand.get(hand_index))) {
-
-                        index_loc.add(hand_index);
-                        break search;
                 }
             }
         }

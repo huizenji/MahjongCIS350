@@ -507,5 +507,163 @@ public class TestingGameClass {
         pl.getHandTile().add(cTile[3]);
         Assert.assertTrue(noKong, game.isKongDraw(pl));
     }
+
+    @Test
+    public void getScoreSimple (){
+
+        game.setGameOptionSimple(true);
+        ArrayList<Tile> pile = game.getPlayerList(
+                0).getSetPile();
+
+        pile.clear();
+
+        pile.add(wTile[0]);
+        pile.add(dTile[0]);
+        pile.add(fTile[1]);
+        pile.add(dTile[2]);
+        pile.add(dTile[1]);
+        pile.add(wTile[3]);
+        pile.add(bTile[3]);
+        pile.add(cTile[5]);
+        pile.add(chTile[1]);
+        pile.add(dTile[0]);
+        pile.add(fTile[1]);
+
+        game.increaseScore(0);
+        Assert.assertEquals("Scoring is incorrect",
+                game.getPlayerList(0).getPoint(), 8);
+        game.increaseScore(0);
+        Assert.assertEquals("Scoring is incorrect",
+                game.getPlayerList(0).getPoint(), 16);
+
+        pile.add(dTile[0]);
+        pile.add(fTile[1]);
+        game.increaseScore(0);
+        Assert.assertEquals("Scoring is incorrect",
+                game.getPlayerList(0).getPoint(), 26);
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void scoreErrorT1(){
+
+        game.increaseScore(-1);
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void scoreErrorT2(){
+
+        game.increaseScore(4);
+    }
+
+    @Test
+    public void testgetChiTileT1(){
+
+        game.setGameOptionSimple(true);
+        Player pl = new Player();
+        ArrayList<Tile> hand = pl.getHandTile();
+
+        hand.clear();
+
+        hand.add(bTile[1]);
+        hand.add(bTile[1]);
+        hand.add(bTile[2]);
+        hand.add(bTile[4]);
+        hand.add(bTile[5]);
+        hand.add(bTile[9]);
+        hand.add(bTile[9]);
+        hand.add(bTile[6]);
+        hand.add(bTile[7]);
+        hand.add(bTile[7]);
+        hand.add(bTile[8]);
+
+        hand.add(chTile[7]);
+        hand.add(cTile[3]);
+
+        Assert.assertEquals(game.getChiTile(pl, wTile[2]).size(),
+                0);
+        Assert.assertEquals(game.getChiTile(pl, bTile[2]).size(),
+                0);
+        Assert.assertEquals(game.getChiTile(pl, bTile[1]).size(),
+                0);
+        Assert.assertEquals(6,
+                game.getChiTile(pl, bTile[3]).size());
+        Assert.assertEquals(6,
+                game.getChiTile(pl, bTile[6]).size());
+        Assert.assertEquals(2,
+                game.getChiTile(pl, bTile[9]).size());
+    }
+
+    @Test
+    public void testgetChiTileT2(){
+
+        game.setGameOptionSimple(true);
+        Player pl = new Player();
+        ArrayList<Tile> hand = pl.getHandTile();
+
+        hand.clear();
+
+        hand.add(cTile[1]);
+        hand.add(cTile[2]);
+        hand.add(cTile[1]);
+        hand.add(cTile[4]);
+        hand.add(cTile[5]);
+        hand.add(cTile[9]);
+        hand.add(cTile[9]);
+        hand.add(cTile[6]);
+        hand.add(cTile[7]);
+        hand.add(cTile[8]);
+
+        hand.add(chTile[7]);
+        hand.add(bTile[3]);
+
+        Assert.assertEquals(game.getChiTile(pl, fTile[5]).size(),
+                0);
+        Assert.assertEquals(game.getChiTile(pl, cTile[2]).size(),
+                0);
+        Assert.assertEquals(game.getChiTile(pl, cTile[1]).size(),
+                0);
+        Assert.assertEquals(6,
+                game.getChiTile(pl, cTile[3]).size());
+        Assert.assertEquals(6,
+                game.getChiTile(pl, cTile[6]).size());
+        Assert.assertEquals(game.getChiTile(pl, cTile[9]).size(),
+                2);
+    }
+    @Test
+    public void testgetChiTileT3(){
+
+        game.setGameOptionSimple(true);
+        Player pl = new Player();
+        ArrayList<Tile> hand = pl.getHandTile();
+
+        hand.clear();
+
+        hand.add(chTile[1]);
+        hand.add(chTile[2]);
+        hand.add(chTile[1]);
+        hand.add(chTile[4]);
+        hand.add(chTile[5]);
+        hand.add(chTile[9]);
+        hand.add(chTile[9]);
+        hand.add(chTile[6]);
+        hand.add(chTile[7]);
+        hand.add(chTile[8]);
+
+        hand.add(cTile[7]);
+        hand.add(bTile[3]);
+
+        Assert.assertEquals(game.getChiTile(pl, dTile[1]).size(),
+                0);
+        Assert.assertEquals(game.getChiTile(pl, chTile[2]).size(),
+                0);
+        Assert.assertEquals(game.getChiTile(pl, chTile[1]).size(),
+                0);
+        Assert.assertEquals(game.getChiTile(pl, chTile[3]).size(),
+                6);
+        Assert.assertEquals(game.getChiTile(pl, chTile[6]).size(),
+                6);
+        Assert.assertEquals(game.getChiTile(pl, chTile[9]).size(),
+                2);
+    }
 }
 

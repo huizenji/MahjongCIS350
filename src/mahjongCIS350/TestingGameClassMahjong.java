@@ -155,5 +155,23 @@ public class TestingGameClassMahjong {
         Assert.assertFalse("Should not have Mahjong",
                 game.isMahjong(hand, chTile[3]));
     }
+
+    @Test
+    public void isMahjongTest7(){
+
+        ArrayList<Tile> hand = new ArrayList<>();
+
+        hand.add(chTile[1]);
+        hand.add(chTile[1]);
+        hand.add(chTile[7]);
+        hand.add(chTile[2]);
+        hand.add(chTile[3]);
+        hand.add(chTile[3]);
+        hand.add(bTile[5]);
+        hand.add(bTile[5]);
+
+        Assert.assertFalse("Should not have Mahjong",
+                game.isMahjong(hand, null));
+    }
 }
 
