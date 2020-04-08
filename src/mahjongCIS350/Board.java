@@ -11,7 +11,7 @@ import java.util.*;
  * that interact with the GUI class.
  *
  * @Authors: Wayne Chen, Jillian Huizenga, Chris Paul, Xianghe Zhao
- * @Version: 3/24/2020
+ * @Version: 4/08/2020
  **********************************************************************/
 public class Board extends JPanel {
 
@@ -173,7 +173,7 @@ public class Board extends JPanel {
         discardPilePanel.setBorder(BorderFactory.
                 createBevelBorder(1));
         discardPilePanel.setPreferredSize(
-                new Dimension(325, 200));
+                new Dimension(350, 225));
 
         createIcons();
 
@@ -260,6 +260,10 @@ public class Board extends JPanel {
                         timer.stop();
                         drawFlag = false;
                         resetBtn.setEnabled(true);
+
+                        revealWinningAIHand(game
+                                .getCurrentPlayerIndex());
+
                         game.increaseScore(
                                 game.getCurrentPlayerIndex());
                         gameModeSwap();
@@ -910,6 +914,12 @@ public class Board extends JPanel {
 
         int p1HandSize = game.getPlayerList(
                 0).getHandTile().size();
+        int p2HandSize = game.getPlayerList(
+                1).getHandTile().size();
+        int p3HandSize = game.getPlayerList(
+                2).getHandTile().size();
+        int p4HandSize = game.getPlayerList(
+                3).getHandTile().size();
         
         int discardPileSize = game.getDiscardPile().size();
         int drawPileSize = game.getDrawPile().size();
@@ -924,6 +934,9 @@ public class Board extends JPanel {
                 3).getSetPile().size();
 
         updateP1Hand(p1HandSize);
+//        updateP2Hand(p2HandSize);
+//        updateP3Hand(p3HandSize);
+//        updateP4Hand(p4HandSize);
 
         updateP1SetPile(p1SetSize);
         updateP2SetPile(p2SetSize);
@@ -939,6 +952,28 @@ public class Board extends JPanel {
                 .getDirection() + "'s Turn");
         p1Direction.setText(game.getPlayerList(
                 0).getDirection());
+
+        // highlight current Player
+        if (game.getCurrentPlayerIndex() == 0) {
+
+            p1HandPanel.setBackground(Color.GREEN);
+            p4HandPanel.setBackground(color);
+
+        }else if (game.getCurrentPlayerIndex() == 1) {
+
+            p2HandPanel.setBackground(Color.GREEN);
+            p1HandPanel.setBackground(color);
+
+        }else if (game.getCurrentPlayerIndex() == 2) {
+
+            p3HandPanel.setBackground(Color.GREEN);
+            p2HandPanel.setBackground(color);
+
+        }else if (game.getCurrentPlayerIndex() == 3) {
+
+            p4HandPanel.setBackground(Color.GREEN);
+            p3HandPanel.setBackground(color);
+        }
 
         // display all of the updates
         repaint();
@@ -1191,17 +1226,86 @@ public class Board extends JPanel {
         }
     }
 
+//    /******************************************************************
+//     * This method updates the player's hand.
+//     *
+//     * @param p2HandSize The hand of the second player.
+//     *****************************************************************/
+//    private void updateP2Hand(final int p2HandSize) {
+//
+//        while (p2Hand.size() < p2HandSize) {
+//
+//            JButton temp = new JButton();
+//            temp.setPreferredSize(new Dimension(25, 25));
+//            p2Hand.add(temp);
+//            p2HandPanel.add(p2Hand.get(p2Hand.size() - 1));
+//
+//        }
+//
+//        while (p2Hand.size() > p2HandSize) {
+//
+//            p2HandPanel.remove(p2Hand.size() - 1);
+//            p2Hand.remove(p2Hand.size() - 1);
+//        }
+//    }
+//
+//    /******************************************************************
+//     * This method updates the player's hand.
+//     *
+//     * @param p3HandSize The hand of the third player.
+//     *****************************************************************/
+//    private void updateP3Hand(final int p3HandSize) {
+//
+//        while (p3Hand.size() < p3HandSize) {
+//
+//            JButton temp = new JButton();
+//            temp.setPreferredSize(new Dimension(25, 25));
+//            p3Hand.add(temp);
+//            p3HandPanel.add(p3Hand.get(p3Hand.size() - 1));
+//
+//        }
+//
+//        while (p3Hand.size() > p3HandSize) {
+//
+//            p3HandPanel.remove(p3Hand.size() - 1);
+//            p3Hand.remove(p3Hand.size() - 1);
+//        }
+//    }
+//
+//    /******************************************************************
+//     * This method updates the player's hand.
+//     *
+//     * @param p4HandSize The hand size of the fourth player.
+//     *****************************************************************/
+//    private void updateP4Hand(final int p4HandSize) {
+//
+//        while (p4Hand.size() < p4HandSize) {
+//
+//            JButton temp = new JButton();
+//            temp.setPreferredSize(new Dimension(25, 25));
+//            p4Hand.add(temp);
+//            p4HandPanel.add(p4Hand.get(p4Hand.size() - 1));
+//
+//        }
+//
+//        while (p4Hand.size() > p4HandSize) {
+//
+//            p4HandPanel.remove(p4Hand.size() - 1);
+//            p4Hand.remove(p4Hand.size() - 1);
+//        }
+//    }
+
     private void gameModeSwap() {
 
-        String message = "Would you like to switch the game mode to ";
+        String message = "Would you like to play ";
         String message2;
 
         if (!game.getGameOptionSimple()){
 
-            message2 = "Simple Mode";
+            message2 = "Simple Mode?";
         } else {
 
-            message2 = "Traditional Mode";
+            message2 = "Traditional Mode?";
         }
         int swap = JOptionPane.showConfirmDialog(
                 null, message + message2,
@@ -1695,7 +1799,7 @@ public class Board extends JPanel {
      ******************************************************************/
     public void setAIDiff (int difficulty, int playerIndex) {
 
-        if (difficulty < Game.DUMB || difficulty > Game.ADVANCE) {
+        if (difficulty < Game.DUMB || difficulty > Game.ADVANCED) {
 
             throw new IllegalArgumentException("Difficulty " +
                     "setting not Excepted.");
@@ -1786,6 +1890,5 @@ public class Board extends JPanel {
         }
     }
 }
-
 
 
