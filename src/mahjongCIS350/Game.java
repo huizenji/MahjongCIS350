@@ -7,7 +7,7 @@ import java.util.*;
  * Mahjong. It is displayed by the Board and GUI classes.
  *
  * @Authors: Wayne Chen, Jillian Huizenga, Chris Paul, Xianghe Zhao
- * @Version: 2/28/2020
+ * @Version: 4/08/2020
  **********************************************************************/
 public class Game {
 
@@ -48,7 +48,7 @@ public class Game {
     public static final int BEGINNER = 2;
 
     /** The constant for an advance level AI. **/
-    public static final int ADVANCE = 3;
+    public static final int ADVANCED = 3;
 
     /** The constant for default setting for AI. **/
     public static final int defaultAI = BEGINNER;
@@ -1554,7 +1554,11 @@ public class Game {
         }
 
         pl.getHandTile().add(drawn);
-        removeKongHand();
+
+        if (isKongHand(pl) != null) {
+
+            removeKongHand();
+        }
     }
 
     /*******************************************************************
@@ -1659,6 +1663,12 @@ public class Game {
      * @param pl the AI player that needs to discard.
      ******************************************************************/
     private void advancedAIDiscard(Player pl){
+
+        if (pl == null){
+
+            throw new IllegalArgumentException("Player can not be "
+                    + "Null");
+        }
 
         // check each Tile in hand one by one
         for (int tileIndex = 0; tileIndex < pl
@@ -1817,8 +1827,8 @@ public class Game {
      *****************************************************************/
     public String ruleBook() {
 
-        return starting() + setRule() + claimChiRule()
-                + claimPongRule() + claimKongRule() + declareMahjong()
+        return starting() + declareMahjong() + setRule() +
+                claimChiRule() + claimPongRule() + claimKongRule()
                 + scoring() + gameMode();
     }
 
@@ -1830,15 +1840,31 @@ public class Game {
     private String starting() {
 
         return "General Rules: \n"
-                + "Players start with 13 tiles each. Each player "
-                + "is assigned a wind (East-South-West-North). "
+                + "The objective of the game is to collect tiles in "
+                + "order to form a specific kind of hand, called "
+                + "mahjong. Tiles resemble cards, and have "
+                + "five "
+                + "different suits (Circle, Character, Bamboo, Wind, "
+                + "and Dragon). \nAn additional suit, called Flower, " +
+                "gives a player a point when the tile is drawn."
+                + "\nPlayers start with 13 tiles each. Each player "
+                + "is assigned a wind direction"
+                + " (East-South-West-North). "
                 + "East starts the game by picking a tile from the "
                 + "wall and discarding a tile.\nPlayers then take"
                 + " clockwise turns picking a tile from "
-                + "the wall and then discarding one tile from the hand."
-                + " It is also possible to claim a tile discarded by "
-                + "another player\n under certain circumstances. "
-                + "In such cases, the player to the left of the "
+                + "the wall and then discarding one tile from their " +
+                "hand."
+                + "\nIt is also possible to start your turn by " +
+                "claiming" +
+                " a tile " +
+                "discarded by "
+                + "another player under certain circumstances. "
+                + "In such cases, the player who claimed the " +
+                "discarded tile now takes their turn, \nand the " +
+                "player " +
+                "to the " +
+                "left of the "
                 + "claiming player becomes next in turn. So some "
                 + "players may lose their turn in a go-around.\n\n";
     }
@@ -1851,21 +1877,26 @@ public class Game {
     private String setRule() {
 
         return "Rules on Sets: \n"
-                + "A set of tiles consist of 3 tiles. This 3 tiles "
-                + "may all be the same, thus forming a 3 of a kind or "
-                + "they all form a 3 tile straight of the same "
-                + "suit.\nAll sets that are formed in the hand by "
-                + "drawing do not have to be revealed to the opposing "
-                + "players. However, any set or kong that are claimed "
-                + "must be revealed\nto all opposing players."
-                + "It is important to know that a kong is consider as"
-                + "1 set. Once a player "
-                + "declares that they can from a set, they move the "
-                + "tiles that they used\nto from a set along with the "
+                + "A set of tiles consists of 3 tiles. These 3 tiles "
+                + "may all be the same, thus forming a 3 of a kind "
+                + "(pong) or they all form a 3 tile straight of the "
+                + "same suit (chi). You can also form a 4 of a kind "
+                + "(kong). \nAll sets that are formed in the hand "
+                + "by drawing do not have to be revealed to the "
+                + "opposing players. \nHowever, any set that is " +
+                "claimed "
+                + "from the discard pile must be revealed and " +
+                "placed in your set pile, directly above your " +
+                "hand.\nIt is important to know that a "
+                + "kong is considered as 1 set. Once a player "
+                + "declares that they can form a set, they move the "
+                + "tiles that they used\nto form a set along with the "
                 + "recently discarded tile to the set pile. Then, the "
                 + "player who claimed the set discards a tile. \nThe"
-                + "next player turn is the player that is next in "
-                + "rotation of the player that discarded the tile.\n\n";
+                + " next player's turn is the player that is next in "
+                + "rotation of the player that discarded the tile (to" +
+                " their left)" +
+                ".\n\n";
     }
 
     /*******************************************************************
@@ -1877,12 +1908,12 @@ public class Game {
 
         String msg = "Claiming Chi:\n"
                 + "A chi can only be claimed when the opposing "
-                + "player directly to right discards a "
+                + "player directly to your right discards a "
                 + "tile. In addition, the discarded the tile must be "
-                + " able to use to form a 3 tile straight\n in the "
+                + "able to use to form a 3 tile straight\nin the "
                 + "players hand using the same suit. Also, the straight"
-                + "can not extend from 9 to 1 or vise versa and"
-                + " can not be done with dragon or wind tiles.\n\n";
+                + " cannot extend from 9 to 1 or vise versa and"
+                + " cannot be done with Dragon or Wind tiles.\n\n";
 
         return msg;
     }
@@ -1908,17 +1939,19 @@ public class Game {
      ******************************************************************/
     private String claimKongRule() {
 
-        return  "A kong can be claimed when any opposing player"
+        return  "Claiming Kong:\n" +
+                "A kong can be claimed when any " +
+                "opposing player"
                 + " discards a tile and you have a 3 tiles in your hand"
                 + " that can be used to form a 4 of a kind with the "
-                + "discarded tile.\nIn addition, the player must draw a "
+                + "discarded tile.\nThe player must draw a "
                 + "new tile from the main wall before discarding a"
                 + " tile. In addition, a kong can not remain in "
                 + "the hand.\nInstead the kong that forms by drawing "
                 + "must be moved to the"
-                + "set pile or discard a tile to break up the kong. "
-                + "A special rule with Kong is that you can form a\n"
-                + "kong with a pong in your set pile.\n\n";
+                + " set pile or discard a tile to break up the kong. "
+                + "A special rule with kong is that you can form a\n"
+                + "kong with a pong already in your set pile.\n\n";
     }
 
     /*******************************************************************
@@ -1929,11 +1962,13 @@ public class Game {
     private String declareMahjong() {
 
         return  "Declaring Mahjong: \n"
-                + "A mahjong can be claimed when a player has "
-                + "all sets(chi,pong,kong), any point tiles and a "
-                + "single pair in their hand or set pile combined. "
-                + "\nIn addition, there can not be a kong that "
-                + "in the declared players hand. At this point, the "
+                + "A Mahjong can be declared when a player's hand " +
+                "consists entirely of sets (chi, pong, kong), point " +
+                "tiles, and a "
+                + "single pair in their hand. "
+                + "\nIn addition, any kongs must be "
+                + "in the declared player's set pile. At this point, " +
+                "the "
                 + "player that declares Mahjong wins and their score\n"
                 + "will be calculated based on the scoring rules.\n\n";
     }
@@ -1946,12 +1981,15 @@ public class Game {
     private String scoring() {
 
         return "Scoring: \n"
-                + "Once a player has declared mahjong, they win. "
-                + "The winning player will receive of a score of 1 "
-                + "point and 1 additional point for every dragon, wind"
-                + " and flower tile\nthat is in the set pile for"
-                + "game option 1. Game option 2 sets scores based"
-                + "on the players hand and set pile when the "
+                + "Once a player has declared Mahjong, they win. "
+                + "In Simple mode, the winning player will receive of" +
+                " a score of 1 "
+                + "point and 1 additional point for every Dragon, Wind"
+                + " and Flower tile\nthat is in the set pile. " +
+                "Traditional mode sets " +
+                "scores based"
+                + " on the composition of the player's hand and set " +
+                "pile when they "
                 + "declare Mahjong.";
     }
 
@@ -1962,12 +2000,13 @@ public class Game {
      ******************************************************************/
     private String gameMode() {
 
-        return  "Game Mode: \n"
-                + "The simple game mode automatically moves all non"
-                + "suit tiles to the set pile and is treated as a "
-                + "point.\nThe more traditional game mode only moves"
-                + "flower tiles to the set pile. This will allow "
-                + "for pongs to be made with dragon and wind tiles";
+        return  "\n\nGame Mode: \n"
+                + "The Simple game mode automatically moves all " +
+                "Flower, Dragon, and Wind" +
+                " tiles to the set pile and they are treated as a "
+                + "point.\nTraditional game mode only moves"
+                + " Flower tiles to the set pile. This will allow "
+                + "for pongs to be made with Dragon and Wind tiles.";
     }
 
     /*******************************************************************
@@ -2124,7 +2163,7 @@ public class Game {
      ******************************************************************/
     public void setAIDiff(int difficulty, int playerIndex) {
 
-        if (difficulty < Game.DUMB || difficulty > Game.ADVANCE) {
+        if (difficulty < Game.DUMB || difficulty > Game.ADVANCED) {
 
             throw new IllegalArgumentException("Difficulty " +
                     "setting not Excepted.");
