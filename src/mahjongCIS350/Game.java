@@ -1736,6 +1736,9 @@ public class Game {
             }
         }
 
+        Random rand = new Random();
+        discard(pl, rand.nextInt(pl.getHandTile().size()));
+        System.out.println("AI randomly discarded a Tile");
     }
 
     /*******************************************************************
@@ -2090,8 +2093,7 @@ public class Game {
 
         if (discardPile.size() == 0){
 
-            throw new NullPointerException("There are "
-                    + "no tiles in the discard pile.");
+            return null;
         }
 
         return discardPile.get(discardPile.size() - 1);
