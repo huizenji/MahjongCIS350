@@ -15,7 +15,7 @@ import java.util.Hashtable;
  * This class allows the user to change the settings in the game.
  * Such as AI difficulty or color.
  * @Authors: Wayne Chen, Jillian Huizenga, Chris Paul, Aron Zhao
- * @Version: 3/26/2020
+ * @Version: 4/08/2020
  **********************************************************************/
 public class Setting extends JPanel {
 
@@ -176,13 +176,13 @@ public class Setting extends JPanel {
         final Hashtable label = new Hashtable();
         label.put(Game.DUMB, new JLabel("Dumb"));
         label.put(Game.BEGINNER, new JLabel("Beginner"));
-        label.put(Game.ADVANCE, new JLabel("Advance"));
+        label.put(Game.ADVANCED, new JLabel("Advanced"));
 
         for (int i = 0; i < Game.TOTALPLAYER - 1; i++){
 
             // Set up Temp Slider
             JSlider temp = new JSlider(JSlider.HORIZONTAL, Game.DUMB,
-                    Game.ADVANCE, Game.defaultAI);
+                    Game.ADVANCED, Game.defaultAI);
             temp.setMajorTickSpacing(1);
             temp.setPaintTicks(true);
             temp.setLabelTable(label);
@@ -299,4 +299,5 @@ public class Setting extends JPanel {
         }
     }
 }
+
 
