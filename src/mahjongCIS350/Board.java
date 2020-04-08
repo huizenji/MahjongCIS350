@@ -1850,7 +1850,12 @@ public class Board extends JPanel {
                     // are you sure you want to discard?
                     int discard = JOptionPane.showConfirmDialog(
                             null,
-                            "Discard Tile?", "Discard",
+                            new JLabel("Discard tile?",
+                                    updatedImage(game
+                                            .getPlayerList(0)
+                                            .getTileFromHand(i)),
+                                    SwingConstants.LEFT),
+                            "Discard",
                             JOptionPane.YES_NO_OPTION);
 
                     if (discard == JOptionPane.YES_OPTION) {
