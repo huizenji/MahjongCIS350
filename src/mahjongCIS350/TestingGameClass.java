@@ -236,7 +236,7 @@ public class TestingGameClass {
     @Test(expected = IllegalArgumentException.class)
     public void testGetterSetterErrorAIDiff4(){
 
-        game.setAIDiff(Game.ADVANCE + 1, 0);
+        game.setAIDiff(Game.ADVANCED + 1, 0);
     }
 
     @Test(expected = IllegalArgumentException.class)
@@ -817,4 +817,5 @@ public class TestingGameClass {
                 game.isStalemate());
     }
 }
+
 
