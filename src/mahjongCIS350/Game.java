@@ -367,7 +367,13 @@ public class Game {
         }
     }
 
-     public void increaseScore(int plIndex) {
+    /*******************************************************************
+     * This method increases the score of a player based on the mode
+     * the game is set in.
+     * @param plIndex The player index who score is increased.
+     * @param discard True if the player has won off a discard.
+     ******************************************************************/
+     public void increaseScore(int plIndex , boolean discard) {
 
         if (plIndex < 0 || plIndex >= TOTALPLAYER) {
 
@@ -378,17 +384,22 @@ public class Game {
 
         if (gameOptionSimple){
 
-            pileScore(playerList[plIndex]);
+            scoreSimple(playerList[plIndex]);
+
+        }
+
+        else {
+
+            scoreTrad(playerList[plIndex], discard);
         }
      }
 
     /*******************************************************************
-     * Whenever Player draws a Tile, if it's a point Tile then score
-     * increase by 1. If there's a point Tile in hand, also increase
-     * the score by 1.
-     * @param player The player.
+     * This methods increases a players score based on the number of
+     * point tiles the player has.
+     * @param player The player who score is increased.
      ******************************************************************/
-    private void pileScore(final Player player) {
+    private void scoreSimple(final Player player) {
 
         int point = player.getPoint();
 
@@ -401,6 +412,376 @@ public class Game {
         }
 
         player.setPoint(point);
+    }
+
+    /*******************************************************************
+     * This methods increase the players score based on the set of chi
+     * , pongs, and kongs in their hand and set pile.
+     * @param player The player who score is increased.
+     * @param discard True if the player has won off a discard.
+     ******************************************************************/
+    private void scoreTrad (final Player player, boolean discard) {
+
+        int point = player.getPoint();
+
+        player.setPoint(point + scoreSet(player.getSetPile())
+            + scoreHand(player.getHandTile(), discard));
+
+        // Double Score of Player if they meet Conditions
+        // Did no win off of discard
+        if (!discard) {
+
+            player.setPoint(player.getPoint() * 2);
+        }
+
+        if (allSame(player.getHandTile(), player.getSetPile(),
+                discard)) {
+
+            player.setPoint(player.getPoint() * 2);
+        }
+    }
+
+    /*******************************************************************
+     * The methods scores the set pile.
+     * @param setPile The score of the set pile
+     * @return The score of the set pile
+     ******************************************************************/
+    private int scoreSet (ArrayList<Tile> setPile){
+
+        int point = 0;
+
+        // Scan Through Set Pile First
+        for (int i = setPile.size() - 1; i >= 0; i--){
+
+            // Remove Flower Tile and add 1 Point
+            if (setPile.get(i) instanceof Flower) {
+
+                setPile.remove(i);
+                point++;
+            }
+        }
+
+        // Check for Any Kongs and Removes them and adds Score
+        for (int i = 0; i < setPile.size() - 3; i++){
+
+            if (compareTile(setPile.get(i), setPile.get(i + 1))
+                && compareTile(setPile.get(i), setPile.get(i + 2))
+                && compareTile(setPile.get(i), setPile.get(i + 3))){
+
+                if (setPile.get(i) instanceof Suit) {
+
+                    point = point + 2;
+                }
+
+                else {
+
+                    point = point + 4;
+                }
+
+                // Remove Tiles
+                setPile.remove(i + 3);
+                setPile.remove(i + 2);
+                setPile.remove(i + 1);
+                setPile.remove(i);
+                i--;
+            }
+        }
+
+        return point + scoreChiPong(setPile);
+    }
+
+    /*******************************************************************
+     * This method finds the score of the player.
+     * @param hand The hand of the player.
+     * @param discard True if the player has won off a discard.
+     * @return The score of the player hand.
+     ******************************************************************/
+    private int scoreHand(ArrayList<Tile> hand, boolean discard){
+
+        ArrayList<Tile> temp = new ArrayList<>();
+
+        // The combination that got the player a Mahjong
+        for (int index = 0; index < hand.size(); index++){
+
+            temp.add(hand.get(index));
+        }
+
+        // Add the most recent Discard if won off of discard
+        if (discard){
+
+            temp.add(getRecentDiscard());
+        }
+
+        return scoreChiPong(findHandComb(temp));
+    }
+
+    /*******************************************************************
+     * This methods finds the hand combination that gets the player the
+     * mahjong.
+     * @param hand Hand of the Player
+     * @return The Tile in order of the Combination
+     ******************************************************************/
+    private ArrayList<Tile> findHandComb(ArrayList<Tile> hand){
+
+        ArrayList<Tile> temp = new ArrayList<>();
+        ArrayList<Tile> handComb = new ArrayList<>();
+
+        // Copy of Hand
+        for (int index = 0; index < hand.size(); index++){
+
+            temp.add(hand.get(index));
+        }
+
+        // Go until there is only 1 pair
+
+        for (int i = 0; i < temp.size(); i++){
+            for (int j = i + 1; j < temp.size(); j++) {
+                for (int k = j + 1; k < temp.size(); k++) {
+
+                    // Remove Tiles and see if it still is a Mahjong
+                    handComb.add(temp.remove(k));
+                    handComb.add(temp.remove(j));
+                    handComb.add(temp.remove(i));
+
+                    // Make sure it is still a Mahjong
+                    if (isMahjong(temp, null)){
+
+                        // reset Counters
+                        i = 0;
+                        j = i + 1;
+                        k = j + 1;
+                    }
+                    // Wrong Combination
+                    else {
+
+                        // Return the most recently added
+                        temp.add(handComb.remove(
+                                hand.size() - 1));
+                        temp.add(handComb.remove(
+                                hand.size() - 1));
+                        temp.add(handComb.remove(
+                                hand.size() - 1));
+
+                        temp = autoSort(temp);
+                    }
+                }
+            }
+        }
+
+        return handComb;
+    }
+
+    /*******************************************************************
+     * This method finds the score of all chi and pongs.
+     * @param tile The hand or set pile that is scored.
+     * @return The score that consist of only chi and pongs.
+     ******************************************************************/
+    private int scoreChiPong (ArrayList<Tile> tile){
+
+        int point = 0;
+
+        // Scan Through and Total for Each chi and Pong
+        for (int i = 0; i < tile.size(); i+= 3){
+
+            Tile tile1 = tile.get(i);
+            Tile tile2 = tile.get(i + 1);
+            Tile tile3 = tile.get(i + 2);
+
+            // Check for Pong and add points
+            if (compareTile(tile1, tile2)
+                    && compareTile(tile1, tile3)) {
+
+                if (tile1 instanceof Suit) {
+
+                    point++;
+                }
+
+                else {
+
+                    point = point + 2;
+                }
+            }
+
+            // Add points if it is a Chi
+            else if (tile1 instanceof Suit
+                    && tile2 instanceof Suit && tile3 instanceof Suit) {
+
+                if (compareConsecutiveSuits( (Suit)(tile1),
+                        (Suit)(tile2), (Suit)(tile3))) {
+
+                    if (((Suit) tile1).getValue() == 1
+                            || ((Suit) tile2).getValue() == 1
+                            || ((Suit) tile3).getValue() == 1) {
+
+                        point = point + 2;
+                    }
+
+                    else if (((Suit) tile1).getValue() == 9
+                            || ((Suit) tile2).getValue() == 9
+                            || ((Suit) tile3).getValue() == 9) {
+
+                        point = point + 2;
+                    }
+
+                    else {
+
+                        point++;
+                    }
+                }
+            }
+        }
+
+        return point;
+    }
+
+    /*******************************************************************
+     * This method determines if the user won with all pongs, chi, and
+     * kongs.
+     * @param hand The hand of the player.
+     * @param set The set pile of the player
+     * @param discard True if the player has won off a discard.
+     * @return True if won with one of these conditions.
+     ******************************************************************/
+    private boolean allSame(ArrayList<Tile> hand, ArrayList<Tile> set,
+                            boolean discard) {
+
+        // All Kongs and Flowers are removed due to previous call other
+        // other methods
+
+        ArrayList<Tile> copy = new ArrayList<>();
+        ArrayList<Tile> temp = new ArrayList<>();
+
+        if (discard) {
+
+            copy.add(getRecentDiscard());
+            copy.add(getRecentDiscard());
+        }
+
+        for (Tile tile : hand) {
+
+            copy.add(tile);
+            temp.add(tile);
+        }
+
+        // Check if All Pongs
+        for (int i = 0; i < temp.size(); i++) {
+            for (int j = i + 1; j < temp.size(); j++) {
+                for (int k = j + 1; k < temp.size(); k++) {
+
+                    // Remove Pong
+                    if (compareTile(copy.get(i),
+                            copy.get(j)) && compareTile(
+                            copy.get(i), copy.get(k))) {
+
+                        // If so, remove the pong from temp
+                        if (compareTile(copy.get(i), copy.get(k))) {
+                            copy.remove(k);
+                            copy.remove(j);
+                            copy.remove(i);
+
+                            // Reset check Tiles
+                            i = 0;
+                            j = i + 1;
+                            k = j + 1;
+                        }
+                    }
+                }
+            }
+        }
+
+        // If 2 Tiles left, then all pongs
+        if (copy.size() == 2) {
+
+            return true;
+        }
+
+        // If not redo and check for all Kongs
+        copy.clear();
+        for (Tile tile : temp) {
+
+            copy.add(tile);
+        }
+
+        // Check if All Kongs
+        for (int i = 0; i < temp.size(); i++) {
+            for (int j = i + 1; j < temp.size(); j++) {
+                for (int k = j + 1; k < temp.size(); k++) {
+                    for (int l = k + 1; l < temp.size(); l++)
+                        // Remove Pong
+                        if (compareTile(copy.get(i),
+                                copy.get(j)) && compareTile(
+                                copy.get(i), copy.get(k))
+                                && compareTile(copy.get(i), copy.get(l))) {
+
+                            // If so, remove the pong from temp
+                            if (compareTile(copy.get(i),
+                                    copy.get(k))) {
+                                copy.remove(l);
+                                copy.remove(k);
+                                copy.remove(j);
+                                copy.remove(i);
+
+                                // Reset check Tiles
+                                i = 0;
+                                j = i + 1;
+                                k = j + 1;
+                                l = k + 1;
+                            }
+                        }
+                }
+            }
+        }
+
+        // If 2 Tiles left, then all Kongs
+        if (copy.size() == 2) {
+
+            return true;
+        }
+
+        // If not redo and check for all chi
+        copy.clear();
+        for (Tile tile : temp) {
+
+            copy.add(tile);
+        }
+
+        for (int i = 0; i < temp.size(); i++) {
+            for (int j = i + 1; j < temp.size(); j++) {
+                for (int k = j + 1; k < temp.size(); k++) {
+
+                    // Remove Chi
+                    if (copy.get(i) instanceof Suit
+                            && copy.get(j) instanceof Suit
+                            && copy.get(k) instanceof Suit) {
+
+                        Suit tile1 = (Suit) copy.get(i);
+                        Suit tile2 = (Suit) copy.get(j);
+                        Suit tile3 = (Suit) copy.get(k);
+
+                        if (compareConsecutiveSuits(tile1, tile2,
+                                tile3)) {
+
+                            copy.remove(k);
+                            copy.remove(j);
+                            copy.remove(i);
+
+                            // Reset check Tiles
+                            i = 0;
+                            j = i + 1;
+                            k = j + 1;
+                        }
+                    }
+                }
+            }
+        }
+
+        // If 2 Tiles left, then all Chi
+        if (copy.size() == 2){
+
+            return true;
+        }
+
+        return false;
     }
 
     /*******************************************************************
@@ -741,95 +1122,7 @@ public class Game {
             temp = autoSort(temp);
         }
 
-//        // This section checks for any chi in the players hand
-//        for (int i = 0; i < temp.size(); i++) {
-//
-//            outer:
-//            for (int j = i + 1; j < temp.size(); j++) {
-//
-//                for (int k = j + 1; k < temp.size(); k++) {
-//
-//                    if (temp.get(i) instanceof Suit
-//                            && temp.get(j) instanceof Suit
-//                            && temp.get(k) instanceof Suit) {
-//
-//                        Suit tile1 = (Suit) temp.get(i);
-//                        Suit tile2 = (Suit) temp.get(j);
-//                        Suit tile3 = (Suit) temp.get(k);
-//
-//                        if (compareConsecutiveSuits(tile1, tile2,
-//                                tile3)) {
-//
-//                            temp.remove(k);
-//                            temp.remove(j);
-//                            temp.remove(i);
-//                            i--;
-//                            break outer;
-//                        }
-//                    }
-//                }
-//            }
-//        }
-//
-//        temp = removeAllPong(temp);
-//
-//        // If a player has 2 tiles remaining and they are the same,
-//        // then they have mahjong.
-//        if (temp.size() == 2 ){
-//            if (compareTile(temp.get(0), temp.get(1)))
-//            return true;
-//        }
-
         return isMahjongBacktrackAlg(temp);
-    }
-
-    /*******************************************************************
-     * This is a helper method that assist in the algorithm in
-     * determining mahjong.
-     * @param hand The hand of the player
-     * @return A hand where all pongs are removed
-     ******************************************************************/
-    private ArrayList<Tile> removeAllPong(ArrayList<Tile> hand){
-
-        // Make a copy of what is in the Player's hand
-        ArrayList<Tile> temp = new ArrayList<>();
-
-        for (Tile t : hand) {
-
-            temp.add(t);
-        }
-
-        // This section checks for any pongs in the Player's hand
-        for (int i = 0; i < temp.size(); i++) {
-
-            outer:
-            for (int j = i + 1; j < temp.size(); j++) {
-
-                // Check to see if the following Tile is the same as
-                // the current Tile
-                if (compareTile(temp.get(i), temp.get(j))) {
-
-                    // Check to see if the Tile two away is the same as
-                    // the current Tile
-                    for (int k = j + 1; k < temp.size(); k++) {
-
-                        // If so, remove the pong from temp
-                        if (compareTile(temp.get(i), temp.get(k))) {
-                            temp.remove(k);
-                            temp.remove(j);
-                            temp.remove(i);
-
-                            // Counteract the increment as we need to
-                            // start at the beginning of the ArrayList
-                            i--;
-                            break outer;
-                        }
-                    }
-                }
-            }
-        }
-
-        return hand;
     }
 
     /*******************************************************************
@@ -876,6 +1169,7 @@ public class Game {
                 for (int j = i + 1; j < temp.size(); j++) {
                     for (int k = j + 1; k < temp.size(); k++) {
 
+                        // Remove Pong
                         if (compareTile(copy.get(i),
                                 copy.get(j)) && compareTile(
                                         copy.get(i),

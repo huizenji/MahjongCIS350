@@ -529,16 +529,16 @@ public class TestingGameClass {
         pile.add(dTile[0]);
         pile.add(fTile[1]);
 
-        game.increaseScore(0);
+        game.increaseScore(0, false);
         Assert.assertEquals("Scoring is incorrect",
                 game.getPlayerList(0).getPoint(), 8);
-        game.increaseScore(0);
+        game.increaseScore(0, true);
         Assert.assertEquals("Scoring is incorrect",
                 game.getPlayerList(0).getPoint(), 16);
 
         pile.add(dTile[0]);
         pile.add(fTile[1]);
-        game.increaseScore(0);
+        game.increaseScore(0,false);
         Assert.assertEquals("Scoring is incorrect",
                 game.getPlayerList(0).getPoint(), 26);
     }
@@ -546,13 +546,13 @@ public class TestingGameClass {
     @Test(expected = IllegalArgumentException.class)
     public void scoreErrorT1(){
 
-        game.increaseScore(-1);
+        game.increaseScore(-1, false);
     }
 
     @Test(expected = IllegalArgumentException.class)
     public void scoreErrorT2(){
 
-        game.increaseScore(4);
+        game.increaseScore(4, false);
     }
 
     @Test

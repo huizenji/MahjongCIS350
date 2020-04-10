@@ -265,7 +265,7 @@ public class Board extends JPanel {
                                 .getCurrentPlayerIndex());
 
                         game.increaseScore(
-                                game.getCurrentPlayerIndex());
+                                game.getCurrentPlayerIndex(), false);
                         gameModeSwap();
 
                         if (game.getCurrentPlayerIndex()
@@ -335,7 +335,8 @@ public class Board extends JPanel {
                                 drawFlag = false;
                                 resetBtn.setEnabled(true);
                                 game.increaseScore(
-                                        game.getCurrentPlayerIndex());
+                                        game.getCurrentPlayerIndex(),
+                                        false);
                                 gameModeSwap();
 
                                 if (0 != game.getStartingPlayer()){
@@ -1367,8 +1368,6 @@ public class Board extends JPanel {
         timer.stop();
         drawFlag = false;
         resetBtn.setEnabled(true);
-        game.increaseScore(
-                game.getCurrentPlayerIndex());
         gameModeSwap();
     }
 
@@ -1552,7 +1551,7 @@ public class Board extends JPanel {
                     game.setNextStartingPlayer();
                 }
 
-                game.increaseScore(winner);
+                game.increaseScore(winner, true);
                 gameModeSwap();
             }
 
@@ -1571,7 +1570,7 @@ public class Board extends JPanel {
                 game.setNextStartingPlayer();
             }
 
-            game.increaseScore(winner);
+            game.increaseScore(winner, true);
             gameModeSwap();
         }
     }
