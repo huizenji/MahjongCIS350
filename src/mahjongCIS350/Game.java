@@ -311,7 +311,6 @@ public class Game {
 
                     draw(playerList[i]);
                     autoSort(playerList[i]);
-
                 }
 
                 // reset till
@@ -1553,11 +1552,15 @@ public class Game {
             drawn = tiles.remove(0);
         }
 
-        pl.getHandTile().add(drawn);
+        if (isKong(pl.getHandTile(), drawn)) {
 
-        if (isKongHand(pl) != null) {
-
+            pl.getHandTile().add(drawn);
             removeKongHand();
+        }
+
+        else {
+
+            pl.getHandTile().add(drawn);
         }
     }
 

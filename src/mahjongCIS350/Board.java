@@ -1590,6 +1590,7 @@ public class Board extends JPanel {
             mahjongSeq();
         }
 
+
         // Checking for Kong upon discard
         for (int i = game.getCurrentPlayerIndex() + 1;
              i < (game.getCurrentPlayerIndex() + game.TOTALPLAYER)
