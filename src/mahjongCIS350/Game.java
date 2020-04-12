@@ -427,21 +427,47 @@ public class Game {
 
         int point = player.getPoint();
 
-        player.setPoint(point + scoreSet(player.getSetPile())
-            + scoreHand(player.getHandTile(), discard));
+        ArrayList<Tile> handCopy = new ArrayList<>();
+        ArrayList<Tile> setCopy = new ArrayList<>();
+
+        // Making Copies of Hand and Set Pile
+        for (Tile t: player.getHandTile()){
+
+            handCopy.add(t);
+        }
+
+        for (Tile t: player.getSetPile()){
+
+            setCopy.add(t);
+        }
+
+
+        int score = scoreSet(player.getSetPile())
+                + scoreHand(player.getHandTile() , discard);
+
 
         // Double Score of Player if they meet Conditions
         // Did no win off of discard
         if (!discard) {
 
-            player.setPoint(player.getPoint() * 2);
+            score = score * 2;
         }
 
-        if (allSame(player.getHandTile(), player.getSetPile(),
-                discard)) {
+        // Remove all Flower tiles from the set pile
+        for (int i = setCopy.size() - 1; i >= 0; i--){
 
-            player.setPoint(player.getPoint() * 2);
+            if (setCopy.get(i) instanceof Flower){
+
+                setCopy.remove(i);
+            }
         }
+
+        if (allSame(handCopy ,setCopy, discard)) {
+
+            score = score * 2;
+        }
+
+        player.setPoint(point + score);
     }
 
     /*******************************************************************
@@ -529,47 +555,78 @@ public class Game {
         ArrayList<Tile> temp = new ArrayList<>();
         ArrayList<Tile> handComb = new ArrayList<>();
 
+        Boolean validComb = false;
+
         // Copy of Hand
         for (int index = 0; index < hand.size(); index++){
 
             temp.add(hand.get(index));
         }
 
-        // Go until there is only 1 pair
+        if (hand.size() == 2){
 
+            return temp;
+        }
+
+        // Go until there is only 1 pair
         for (int i = 0; i < temp.size(); i++){
             for (int j = i + 1; j < temp.size(); j++) {
                 for (int k = j + 1; k < temp.size(); k++) {
 
                     // Remove Tiles and see if it still is a Mahjong
-                    handComb.add(temp.remove(k));
-                    handComb.add(temp.remove(j));
-                    handComb.add(temp.remove(i));
+                    Tile tile1 = temp.remove(k);
+                    Tile tile2 = temp.remove(j);
+                    Tile tile3 = temp.remove(i);
+
+                    handComb.add(tile1);
+                    handComb.add(tile2);
+                    handComb.add(tile3);
+
+                    // The combination Picked should be chi or pong
+                    if ( (compareTile(tile1, tile2) &&
+                            compareTile(tile1, tile3))){
+
+                        validComb = true;
+                    }
+
+                    if (tile1 instanceof Suit && tile2 instanceof Suit
+                        && tile3 instanceof Suit) {
+
+                        if (compareConsecutiveSuits((Suit) tile1,
+                                (Suit) tile2, (Suit) tile3)){
+
+                            validComb = true;
+                        }
+                    }
 
                     // Make sure it is still a Mahjong
-                    if (isMahjong(temp, null)){
+                    if (isMahjong(temp, null) && validComb){
 
                         // reset Counters
                         i = 0;
                         j = i + 1;
-                        k = j + 1;
+                        k = j; // No Plus 1 to negate extra k
                     }
+
                     // Wrong Combination
                     else {
 
                         // Return the most recently added
                         temp.add(handComb.remove(
-                                hand.size() - 1));
+                                handComb.size() - 1));
                         temp.add(handComb.remove(
-                                hand.size() - 1));
+                                handComb.size() - 1));
                         temp.add(handComb.remove(
-                                hand.size() - 1));
+                                handComb.size() - 1));
 
                         temp = autoSort(temp);
                     }
+
+                    validComb = false;
                 }
             }
         }
+
 
         return handComb;
     }
@@ -582,6 +639,11 @@ public class Game {
     private int scoreChiPong (ArrayList<Tile> tile){
 
         int point = 0;
+
+        if (tile.size() <= 2){
+
+            return 0;
+        }
 
         // Scan Through and Total for Each chi and Pong
         for (int i = 0; i < tile.size(); i+= 3){
@@ -657,7 +719,7 @@ public class Game {
         if (discard) {
 
             copy.add(getRecentDiscard());
-            copy.add(getRecentDiscard());
+            temp.add(getRecentDiscard());
         }
 
         for (Tile tile : hand) {
@@ -673,9 +735,9 @@ public class Game {
         }
 
         // Check if All Pongs
-        for (int i = 0; i < temp.size(); i++) {
-            for (int j = i + 1; j < temp.size(); j++) {
-                for (int k = j + 1; k < temp.size(); k++) {
+        for (int i = 0; i < copy.size(); i++) {
+            for (int j = i + 1; j < copy.size(); j++) {
+                for (int k = j + 1; k < copy.size(); k++) {
 
                     // Remove Pong
                     if (compareTile(copy.get(i),
@@ -712,10 +774,10 @@ public class Game {
         }
 
         // Check if All Kongs
-        for (int i = 0; i < temp.size(); i++) {
-            for (int j = i + 1; j < temp.size(); j++) {
-                for (int k = j + 1; k < temp.size(); k++) {
-                    for (int l = k + 1; l < temp.size(); l++) {
+        for (int i = 0; i < copy.size(); i++) {
+            for (int j = i + 1; j < copy.size(); j++) {
+                for (int k = j + 1; k < copy.size(); k++) {
+                    for (int l = k + 1; l < copy.size(); l++) {
                         // Remove Kong
                         if (compareTile(copy.get(i),
                                 copy.get(j)) && compareTile(
@@ -756,9 +818,9 @@ public class Game {
             copy.add(tile);
         }
 
-        for (int i = 0; i < temp.size(); i++) {
-            for (int j = i + 1; j < temp.size(); j++) {
-                for (int k = j + 1; k < temp.size(); k++) {
+        for (int i = 0; i < copy.size(); i++) {
+            for (int j = i + 1; j < copy.size(); j++) {
+                for (int k = j + 1; k < copy.size(); k++) {
 
                     // Remove Chi
                     if (copy.get(i) instanceof Suit

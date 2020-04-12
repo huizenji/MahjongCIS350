@@ -532,6 +532,380 @@ public class TestingGameClass {
                 game.getPlayerList(0).getPoint(), 26);
     }
 
+    @Test
+    public void testScoreTradAllKongDraw() {
+
+        game.setGameOptionSimple(false);
+        Player pl = game.getPlayerList(0);
+        pl.getHandTile().clear();
+        pl.getSetPile().clear();
+
+        for (int i = 0; i < 4; i++) {
+
+            pl.getSetPile().add(dTile[1]);
+        }
+        for (int i = 0; i < 4; i++) {
+
+            pl.getSetPile().add(wTile[2]);
+        }
+
+        for (int i = 0; i < 4; i++) {
+
+            pl.getSetPile().add(bTile[5]);
+        }
+
+        for (int i = 0; i < 2; i++) {
+
+            pl.getHandTile().add(chTile[9]);
+        }
+
+        game.increaseScore(0, false);
+        Assert.assertEquals("Incorrect Score", 40,
+                pl.getPoint());
+    }
+
+    @Test
+    public void testScoreTradAllKongDiscard() {
+
+        game.setGameOptionSimple(false);
+        Player pl = game.getPlayerList(0);
+        pl.getHandTile().clear();
+        pl.getSetPile().clear();
+
+        for (int i = 0; i < 4; i++) {
+
+            pl.getSetPile().add(dTile[1]);
+        }
+        for (int i = 0; i < 4; i++) {
+
+            pl.getSetPile().add(wTile[2]);
+        }
+
+        for (int i = 0; i < 4; i++) {
+
+            pl.getSetPile().add(bTile[5]);
+        }
+
+        for (int i = 0; i < 2; i++) {
+
+            pl.getHandTile().add(chTile[9]);
+        }
+
+        pl.getSetPile().add(fTile[3]);
+        pl.getHandTile().remove(0);
+        game.getDiscardPile().clear();
+        game.getDiscardPile().add(chTile[9]);
+        game.increaseScore(0, true);
+        Assert.assertEquals("Incorrect Score", 22,
+                pl.getPoint());
+    }
+
+    // Test with all Pongs in Set Pile
+    @Test
+    public void testScoreTradAllPongDrawT1(){
+
+        game.setGameOptionSimple(false);
+        Player pl = game.getPlayerList(0);
+        pl.getHandTile().clear();
+        pl.getSetPile().clear();
+
+        for (int i = 0; i < 3; i++) {
+
+            pl.getSetPile().add(dTile[1]);
+        }
+        for (int i = 0; i < 3; i++) {
+
+            pl.getSetPile().add(wTile[2]);
+        }
+
+        for (int i = 0; i < 3; i++) {
+
+            pl.getSetPile().add(bTile[5]);
+        }
+
+        for (int i = 0; i < 2; i++) {
+
+            pl.getHandTile().add(chTile[9]);
+        }
+
+        game.increaseScore(0, false);
+        Assert.assertEquals("Incorrect Score", 20,
+                pl.getPoint());
+    }
+
+    // Test with All pongs mix between hand and discard
+    @Test
+    public void testScoreTradAllPongDiscardT2(){
+
+        game.setGameOptionSimple(false);
+        Player pl = game.getPlayerList(0);
+        pl.getHandTile().clear();
+        pl.getSetPile().clear();
+
+        for (int i = 0; i < 3; i++) {
+
+            pl.getSetPile().add(dTile[1]);
+        }
+        for (int i = 0; i < 3; i++) {
+
+            pl.getSetPile().add(wTile[2]);
+        }
+
+        for (int i = 0; i < 3; i++) {
+
+            pl.getHandTile().add(bTile[5]);
+        }
+
+        for (int i = 0; i < 2; i++) {
+
+            pl.getHandTile().add(chTile[9]);
+        }
+
+        pl.getSetPile().add(fTile[3]);
+        pl.getHandTile().remove(0);
+        game.getDiscardPile().clear();
+        game.getDiscardPile().add(chTile[9]);
+        game.increaseScore(0, true);
+        Assert.assertEquals("Incorrect Score", 12,
+                pl.getPoint());
+    }
+
+    @Test
+    public void testScoreTradAllChiDrawT1(){
+
+        game.setGameOptionSimple(false);
+        Player pl = game.getPlayerList(0);
+        pl.getHandTile().clear();
+        pl.getSetPile().clear();
+
+        for (int i = 0; i < 2; i++) {
+
+            pl.getSetPile().add(cTile[1]);
+            pl.getSetPile().add(cTile[2]);
+            pl.getSetPile().add(cTile[3]);
+        }
+
+        for (int i = 0; i < 2; i++) {
+
+            pl.getHandTile().add(cTile[9]);
+        }
+
+        game.increaseScore(0, false);
+        Assert.assertEquals("Incorrect Score", 16,
+                pl.getPoint());
+    }
+
+    @Test
+    public void testScoreTradAllChiDrawT2(){
+
+        game.setGameOptionSimple(false);
+        Player pl = game.getPlayerList(0);
+        pl.getHandTile().clear();
+        pl.getSetPile().clear();
+
+        for (int i = 0; i < 2; i++) {
+
+            pl.getSetPile().add(cTile[4]);
+            pl.getSetPile().add(cTile[2]);
+            pl.getSetPile().add(cTile[3]);
+        }
+
+        for (int i = 0; i < 2; i++) {
+
+            pl.getHandTile().add(cTile[9]);
+        }
+
+        game.increaseScore(0, false);
+        Assert.assertEquals("Incorrect Score", 8,
+                pl.getPoint());
+    }
+
+    @Test
+    public void testScoreTradAllChiDrawT3(){
+
+        game.setGameOptionSimple(false);
+        Player pl = game.getPlayerList(0);
+        pl.getHandTile().clear();
+        pl.getSetPile().clear();
+
+        for (int i = 0; i < 2; i++) {
+            pl.getSetPile().add(cTile[7]);
+            pl.getSetPile().add(cTile[9]);
+            pl.getSetPile().add(cTile[8]);
+        }
+
+        for (int i = 0; i < 2; i++) {
+
+            pl.getHandTile().add(bTile[9]);
+        }
+
+        game.increaseScore(0, false);
+        Assert.assertEquals("Incorrect Score", 16,
+                pl.getPoint());
+    }
+    // Test with All Chi mix between hand and discard
+    @Test
+    public void testScoreTradAllChiDiscardT1(){
+
+        game.setGameOptionSimple(false);
+        Player pl = game.getPlayerList(0);
+        pl.getHandTile().clear();
+        pl.getSetPile().clear();
+
+        for (int i = 0; i < 3; i++) {
+            pl.getSetPile().add(bTile[2]);
+            pl.getSetPile().add(bTile[1]);
+            pl.getSetPile().add(bTile[3]);
+        }
+
+        for (int i = 0; i < 3; i++) {
+            pl.getHandTile().add(chTile[2]);
+            pl.getHandTile().add(chTile[4]);
+            pl.getHandTile().add(chTile[3]);
+        }
+
+        for (int i = 0; i < 2; i++) {
+
+            pl.getHandTile().add(chTile[9]);
+        }
+
+        pl.getSetPile().add(fTile[3]);
+        pl.getHandTile().remove(0);
+        game.getDiscardPile().clear();
+        game.getDiscardPile().add(chTile[9]);
+        game.increaseScore(0, true);
+        Assert.assertEquals("Incorrect Score", 20,
+                pl.getPoint());
+    }
+
+    // Mixing Pongs and Chi in set and Hand
+    @Test
+    public void testScoreTradMixT1(){
+
+        game.setGameOptionSimple(false);
+        Player pl = game.getPlayerList(0);
+        pl.getHandTile().clear();
+        pl.getSetPile().clear();
+
+        pl.getSetPile().add(fTile[1]);
+        pl.getSetPile().add(fTile[4]);
+
+        for (int i = 0; i < 4; i++){
+
+            pl.getSetPile().add(bTile[1]);
+        }
+
+        pl.getHandTile().add(bTile[2]);
+        pl.getHandTile().add(bTile[3]);
+        pl.getHandTile().add(bTile[4]);
+
+        for (int i = 0; i < 3; i++){
+
+            pl.getSetPile().add(wTile[3]);
+            pl.getHandTile().add(chTile[6]);
+        }
+
+        for (int i = 0; i < 2; i++) {
+
+            pl.getHandTile().add(dTile[0]);
+        }
+
+        game.increaseScore(0, false);
+        Assert.assertEquals("Incorrect Score", 16,
+                pl.getPoint());
+    }
+
+    @Test
+    public void testScoreTradMixT2(){
+
+        game.setGameOptionSimple(false);
+        Player pl = game.getPlayerList(0);
+        pl.getHandTile().clear();
+        pl.getSetPile().clear();
+
+        pl.getSetPile().add(fTile[1]); // 1 Point
+
+        for (int i = 0; i < 4; i++){ // 4 Point
+
+            pl.getSetPile().add(wTile[1]);
+        }
+
+        pl.getSetPile().add(fTile[1]); // 1 Point
+        pl.getSetPile().add(cTile[9]); // 2 Point
+        pl.getSetPile().add(cTile[8]);
+        pl.getSetPile().add(cTile[7]);
+
+        pl.getHandTile().add(cTile[1]); // 2 Point
+        pl.getHandTile().add(cTile[2]);
+        pl.getHandTile().add(cTile[3]);
+
+
+        for (int i = 0; i < 3; i++){
+
+            pl.getSetPile().add(dTile[2]); // 2 Point
+            pl.getHandTile().add(bTile[8]); // 1 Point
+        }
+
+        for (int i = 0; i < 2; i++) {
+
+            pl.getHandTile().add(wTile[0]);
+        }
+
+
+        game.increaseScore(0, false);
+        Assert.assertEquals("Incorrect Score", 26,
+                pl.getPoint());
+    }
+
+    @Test
+    public void testScoreTradMixT3(){
+
+        game.setGameOptionSimple(false);
+        Player pl = game.getPlayerList(0);
+        pl.getHandTile().clear();
+        pl.getSetPile().clear();
+
+        for (int i = 0; i < 3; i++){ // 1 Point
+
+            pl.getHandTile().add(chTile[3]);
+        }
+
+        pl.getHandTile().add(chTile[5]); // 1 Point
+        pl.getHandTile().add(chTile[6]);
+        pl.getHandTile().add(chTile[7]);
+
+        for (int i = 0; i < 3; i++){
+
+            pl.getHandTile().add(chTile[9]); // 1 Point
+        }
+
+        for (int i = 0; i < 3; i++){
+
+            pl.getHandTile().add(wTile[2]); // 2 Point
+        }
+
+        pl.getSetPile().add(cTile[1]); // 2 Point
+        pl.getSetPile().add(cTile[2]);
+        pl.getSetPile().add(cTile[3]);
+        for (int i = 0; i < 3; i++){ // 2 Point
+
+            pl.getSetPile().add(dTile[2]);
+        }
+        pl.getSetPile().add(cTile[9]); // 2 Point
+        pl.getSetPile().add(cTile[8]);
+        pl.getSetPile().add(cTile[7]);
+
+        for (int i = 0; i < 2; i++) {
+
+            pl.getHandTile().add(dTile[0]);
+        }
+
+        game.increaseScore(0, false);
+        Assert.assertEquals("Incorrect Score", 22,
+                pl.getPoint());
+    }
+
+
     @Test(expected = IllegalArgumentException.class)
     public void scoreErrorT1(){
 
