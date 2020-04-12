@@ -303,17 +303,23 @@ public class Game {
             kongTile = isKongHand(playerList[i]);
             while (kongTile != null) {
 
+                // Remove the Entire Kong in Hand
                 for (int k = playerList[i].getHandTile().size() - 1;
                      k >= 0 ; k--) {
 
                     if (compareTile(playerList[i].getHandTile().get(k),
-                            kongTile))
+                            kongTile)){
 
-                    draw(playerList[i]);
-                    autoSort(playerList[i]);
+                        playerList[i].removeTileSet(k);
+                    }
                 }
 
-                // reset till
+                // reset till there is no more kongs
+                // Draw 1 after Removal and autosort
+                draw(playerList[i]);
+                autoSort(playerList[i]);
+
+                // Check to see if there is another Kong
                 kongTile = isKongHand(playerList[i]);
             }
         }
@@ -328,27 +334,24 @@ public class Game {
     private Tile isKongHand(Player player) {
 
         ArrayList<Tile> hand = player.getHandTile();
-        int totalCopy = 4;
-        int count = 0;
         Tile kong = null;
 
-        for (int i = 0; i < hand.size() - totalCopy; i++) {
-            for (int k = i + 1; k < hand.size(); k++) {
+        for (int i = 0; i < hand.size(); i++) {
+            for (int j = i + 1; j < hand.size(); j++) {
+                for (int k = j + 1; k < hand.size(); k++) {
+                    for (int l = k + 1; l < hand.size(); l++) {
 
-                if ((compareTile((hand.get(i)), (hand.get(k))))) {
+                        if (compareTile(hand.get(i),
+                                hand.get(j)) && compareTile(
+                                hand.get(i), hand.get(k))
+                                && compareTile(hand.get(i),
+                                hand.get(l))) {
 
-                    count++;
+                           kong = hand.get(i);
+                        }
+                    }
                 }
             }
-
-            // Checking if there is a kong
-            if (count == totalCopy) {
-
-                kong = hand.get(i);
-            }
-
-            // reset counter
-            count = 0;
         }
 
         return kong;
@@ -663,6 +666,12 @@ public class Game {
             temp.add(tile);
         }
 
+        for (Tile tile : set) {
+
+            copy.add(tile);
+            temp.add(tile);
+        }
+
         // Check if All Pongs
         for (int i = 0; i < temp.size(); i++) {
             for (int j = i + 1; j < temp.size(); j++) {
@@ -706,14 +715,15 @@ public class Game {
         for (int i = 0; i < temp.size(); i++) {
             for (int j = i + 1; j < temp.size(); j++) {
                 for (int k = j + 1; k < temp.size(); k++) {
-                    for (int l = k + 1; l < temp.size(); l++)
-                        // Remove Pong
+                    for (int l = k + 1; l < temp.size(); l++) {
+                        // Remove Kong
                         if (compareTile(copy.get(i),
                                 copy.get(j)) && compareTile(
                                 copy.get(i), copy.get(k))
-                                && compareTile(copy.get(i), copy.get(l))) {
+                                && compareTile(copy.get(i),
+                                copy.get(l))) {
 
-                            // If so, remove the pong from temp
+                            // If so, remove the Kong from temp
                             if (compareTile(copy.get(i),
                                     copy.get(k))) {
                                 copy.remove(l);
@@ -728,6 +738,7 @@ public class Game {
                                 l = k + 1;
                             }
                         }
+                    }
                 }
             }
         }
@@ -883,8 +894,7 @@ public class Game {
 
         if (check == null){
 
-            throw new IllegalArgumentException("Needs a tile"
-                    + " to check");
+            return false;
         }
 
         if (!(check instanceof Suit)){
@@ -931,8 +941,7 @@ public class Game {
 
         if (check == null){
 
-            throw new IllegalArgumentException("Tile that is checked "
-                    + "can not be null");
+            return false;
         }
 
         // Scan through the hand and determine if there is a matching
@@ -1031,8 +1040,7 @@ public class Game {
 
         if (check == null){
 
-            throw new IllegalArgumentException("Tile that is checked "
-                    + "can not be null");
+            return false;
         }
 
         //Loop through search looking for matching tiles
@@ -1298,8 +1306,22 @@ public class Game {
         return loc;
     }
 
-
+    /*******************************************************************
+     * This method allows the player to claim a chi. Note that the index
+     * of tile2 must be higher than the index at tile 1.
+     * @param player The player who claims the chi.
+     * @param tile1 The tile index of the first tile that is used to
+     *              the chi.
+     * @param tile2 The tile index of the second tile that is used to
+     *              claim the chi.
+     ******************************************************************/
     public void takeChi(Player player, int tile1, int tile2){
+
+        if (tile1 == tile2){
+
+            throw new IllegalArgumentException("Can not discard"
+                    + " same tile");
+        }
 
         player.removeTileSet(tile2);
         player.removeTileSet(tile1);
@@ -1333,18 +1355,25 @@ public class Game {
     /*******************************************************************
      * This method allows the player to claim a kong.
      *
-     * @param player The player that is claiming the kong.
+     * @param pl The player that is claiming the kong.
      * @param tile The tile that is being used to claim the kong.
      ******************************************************************/
-    public void takeKong(Player player, Tile tile){
+    public void takeKong(Player pl, Tile tile){
 
-        // Add Tile and remove Kong
-        player.getHandTile().add(tile);
-        removeKongHand();
+        ArrayList<Tile> desired = new ArrayList<>();
+        desired.add(tile);
+        desired.add(tile);
+        desired.add(tile);
 
-        // draw Tile and remove any Kong
-        draw(player);
-        removeKongHand();
+        ArrayList<Integer> loc = findTile(pl.getHandTile(), desired);
+
+        for (int i = loc.size() - 1; i >= 0; i--) {
+
+            pl.removeTileSet(loc.get(i));
+        }
+
+        pl.addTileSet(discardPile.remove(discardPile.size() - 1));
+        draw(pl);
     }
 
     /*******************************************************************
@@ -1360,7 +1389,6 @@ public class Game {
         player.getSetPile().add(player.getHandTile().remove(lastLoc));
 
         draw(player);
-        removeKongHand();
     }
 
     /*******************************************************************
@@ -1885,7 +1913,7 @@ public class Game {
 
         for (int i = 0; i < tiles.size(); i++){
 
-            if (tiles.get(i) instanceof Suit){
+            if (!isPointTile(tiles.get(i))){
 
                 return false;
             }

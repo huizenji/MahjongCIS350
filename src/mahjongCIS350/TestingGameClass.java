@@ -4,6 +4,7 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import java.util.ArrayList;
+import java.util.Random;
 
 public class TestingGameClass {
 
@@ -40,9 +41,9 @@ public class TestingGameClass {
 
         for (int i = 1; i <= 9; i++){
 
-            bTile[i] = new Suit("bamboo", i);
-            chTile[i] = new Suit("character", i);
-            cTile[i] = new Suit("circle", i);
+            bTile[i] = new Suit("Bamboo", i);
+            chTile[i] = new Suit("Character", i);
+            cTile[i] = new Suit("Circle", i);
         }
 
         for (int i = 1; i <= 8; i++){
@@ -57,14 +58,31 @@ public class TestingGameClass {
     @Test
     public void testGetterSettersDrawDiscard() {
 
+        Random rand = new Random();
         Assert.assertEquals("Should have no" +
                 "tiles in discard pile",
                 game.getDiscardPile().size(), 0);
         Assert.assertNotEquals("Should not have 144 tiles",
                 game.getDrawPile().size(), 144);
 
-        game.discard(game.getPlayerList(0),0);
+        game.discard(game.getPlayerList(0),
+                rand.nextInt(game.getPlayerList(0).
+                        getHandTile().size()));
         Assert.assertNotNull(game.getRecentDiscard());
+    }
+
+    @Test(expected = IndexOutOfBoundsException.class)
+    public void testDiscardError(){
+
+        Player pl = game.getPlayerList(0);
+        game.discard(pl, -1);
+    }
+
+    @Test(expected = IndexOutOfBoundsException.class)
+    public void testDiscardError2(){
+
+        Player pl = game.getPlayerList(0);
+        game.discard(pl, pl.getHandTile().size());
     }
 
     // Testing Getters and Setters for Current and Starting Player
@@ -209,12 +227,6 @@ public class TestingGameClass {
         game.getPlayerHand(-20);
     }
 
-    @Test(expected = NullPointerException.class)
-    public void testGetterSetterErrorEmptyDiscard(){
-
-        game.getRecentDiscard();
-    }
-
     @Test(expected = IllegalArgumentException.class)
     public void testGetterSetterErrorAIDiff(){
 
@@ -326,13 +338,6 @@ public class TestingGameClass {
                 dTile[2]));
     }
 
-    @Test(expected = IllegalArgumentException.class)
-    public void testIsChiError(){
-
-        Player test = new Player();
-        game.isChi(test, null);
-    }
-
     @Test
     public void testIsPongIsKong() {
 
@@ -428,22 +433,6 @@ public class TestingGameClass {
                 game.isKong(hand, chTile[1]));
         Assert.assertFalse("No Kong",
                 game.isKong(hand, cTile[8]));
-    }
-
-    @Test(expected = IllegalArgumentException.class)
-    public void testisPongError(){
-
-        ArrayList<Tile> hand = new ArrayList<>();
-
-        game.isPong(hand, null);
-    }
-
-    @Test(expected = IllegalArgumentException.class)
-    public void testisKongError(){
-
-        ArrayList<Tile> hand = new ArrayList<>();
-
-        game.isKong(hand, null);
     }
 
     @Test
@@ -695,26 +684,318 @@ public class TestingGameClass {
 
     @Test
     public void testTakeChi(){
-        ;
 
+        Player pl = new Player();
+
+        ArrayList<Tile> hand = new ArrayList<>();
+        hand.add(bTile[1]);
+        hand.add(bTile[2]);
+        hand.add(cTile[3]);
+        pl.setHandTile(hand);
+
+        game.getDiscardPile().clear();
+        game.getDiscardPile().add(bTile[3]);
+        game.takeChi(pl, 0, 1);
+
+        Assert.assertEquals("Incorrect Size for Player Hand",
+                1, pl.getHandTile().size());
+        Assert.assertEquals("Incorrect size for Player set",
+                3, pl.getSetPile().size());
+        Assert.assertEquals("Wrong Tile 1", bTile[2],
+                pl.getSetPile().get(0));
+        Assert.assertEquals("Wrong Tile 2", bTile[1],
+                pl.getSetPile().get(1));
+        Assert.assertEquals("Wrong Tile 3", bTile[3],
+                pl.getSetPile().get(2));
+    }
+
+    @Test
+    public void testTakeChi2(){
+
+        Player pl = new Player();
+
+        ArrayList<Tile> hand = new ArrayList<>();
+        hand.add(bTile[1]);
+        hand.add(cTile[2]);
+        hand.add(cTile[3]);
+        pl.setHandTile(hand);
+
+        game.getDiscardPile().clear();
+        game.getDiscardPile().add(cTile[4]);
+        game.takeChi(pl, 1, 2);
+
+        Assert.assertEquals("Incorrect Size for Player Hand",
+                1, pl.getHandTile().size());
+        Assert.assertEquals("Incorrect size for Player set",
+                3, pl.getSetPile().size());
+        Assert.assertEquals("Wrong Tile 1", cTile[3],
+                pl.getSetPile().get(0));
+        Assert.assertEquals("Wrong Tile 2", cTile[2],
+                pl.getSetPile().get(1));
+        Assert.assertEquals("Wrong Tile 3", cTile[4],
+                pl.getSetPile().get(2));
+    }
+
+    @Test
+    public void testTakeChi3(){
+
+        Player pl = new Player();
+
+        ArrayList<Tile> hand = new ArrayList<>();
+        hand.add(bTile[1]);
+        hand.add(chTile[2]);
+        hand.add(chTile[3]);
+        hand.add(cTile[4]);
+        pl.setHandTile(hand);
+
+        game.getDiscardPile().clear();
+        game.getDiscardPile().add(chTile[4]);
+        game.takeChi(pl, 1, 2);
+
+        Assert.assertEquals("Incorrect Size for Player Hand",
+                2, pl.getHandTile().size());
+        Assert.assertEquals("Incorrect size for Player set",
+                3, pl.getSetPile().size());
+        Assert.assertEquals("Wrong Tile 1", chTile[3],
+                pl.getSetPile().get(0));
+        Assert.assertEquals("Wrong Tile 2", chTile[2],
+                pl.getSetPile().get(1));
+        Assert.assertEquals("Wrong Tile 3", chTile[4],
+                pl.getSetPile().get(2));
+    }
+
+    @Test
+    public void testNoDiscardIsMethods(){
+
+        String msg = "no tiles in discard pile so there should be " +
+                "no tile that can be used for chi, pong, or kong";
+
+        Player pl = game.getPlayerList(0);
+        game.getDiscardPile().clear();
+        Tile tile = game.getRecentDiscard();
+
+        Assert.assertFalse(game.isChi(pl, tile));
+        Assert.assertFalse(game.isPong(pl.getHandTile(), tile));
+        Assert.assertFalse(game.isKong(pl.getHandTile(), tile));
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void testTakeChiError() {
+
+        game.takeChi(game.getPlayerList(0), 1 ,1);
     }
 
     @Test
     public void testTakePong(){
 
-;
+        Player pl = new Player();
+        Tile[] tile = new Tile[5];
+
+        Random rand = new Random();
+        int r1 = rand.nextInt(9) + 1;
+        int r2 = rand.nextInt(9) + 1;
+        int r3 = rand.nextInt(9) + 1;
+        int r4 = rand.nextInt(4);
+        int r5 = rand.nextInt(3);
+
+        for (int i = 0; i < 2; i++){
+
+            pl.getHandTile().add(bTile[r1]);
+            pl.getHandTile().add(cTile[r2]);
+            pl.getHandTile().add(wTile[r4]);
+            pl.getHandTile().add(dTile[r5]);
+            pl.getHandTile().add(chTile[r3]);
+        }
+
+        tile[4] = bTile[r1];
+        tile[3] = cTile[r2];
+        tile[2] = wTile[r4];
+        tile[1] = dTile[r5];
+        tile[0] = chTile[r3];
+
+        game.getDiscardPile().add(bTile[r1]);
+        game.getDiscardPile().add(cTile[r2]);
+        game.getDiscardPile().add(wTile[r4]);
+        game.getDiscardPile().add(dTile[r5]);
+        game.getDiscardPile().add(chTile[r3]);
+
+        for (int i = 0; i < tile.length; i++) {
+            // Error when claiming Pong Test Start
+            game.takePong(pl, tile[i]);
+            Assert.assertEquals("Incorrect Hand size",
+                    (((tile.length * 2) - (i * 2)) - 2),
+                    pl.getHandTile().size());
+            for (int k = 0; k < pl.getHandTile().size(); k++) {
+
+                Assert.assertNotEquals("Should not have " +
+                                "the tile that was used to take a Pong",
+                        tile[i], pl.getHandTile().get(k));
+            }
+            Assert.assertEquals("Incorrect Set Size",
+                    i * 3 + 3, pl.getSetPile().size());
+            Assert.assertEquals("Incorrect Tile removed 1",
+                    tile[i], pl.getSetPile().get(i * 3));
+            Assert.assertEquals("Incorrect Tile removed 2",
+                    tile[i], pl.getSetPile().get(i * 3 + 1));
+            Assert.assertEquals("Incorrect Tile removed 3",
+                    tile[i], pl.getSetPile().get(i * 3 + 2));
+        }
     }
 
     @Test
     public void testTakeKong(){
 
-;
+        game.setGameOptionSimple(false);
+        Player pl = game.getPlayerList(0);
+        Tile[] tile = new Tile[5];
+
+        int r1 = 1;
+        int r2 = 2;
+        int r3 = 3;
+        int r4 = 2;
+        int r5 = 1;
+        int extraTile = r1;
+
+        pl.getHandTile().clear();
+        pl.getSetPile().clear();
+
+        for (int i = 0; i < 3; i++){
+
+            pl.getHandTile().add(bTile[r1]);
+            pl.getHandTile().add(cTile[r2]);
+            pl.getHandTile().add(wTile[r3]);
+            pl.getHandTile().add(dTile[r4]);
+            pl.getHandTile().add(chTile[r5]);
+        }
+
+
+        tile[4] = bTile[r1];
+        tile[3] = cTile[r2];
+        tile[2] = wTile[r3];
+        tile[1] = dTile[r4];
+        tile[0] = chTile[r5];
+
+        game.getDiscardPile().clear();
+        game.getDiscardPile().add(tile[4]);
+        game.getDiscardPile().add(tile[3]);
+        game.getDiscardPile().add(tile[2]);
+        game.getDiscardPile().add(tile[1]);
+        game.getDiscardPile().add(tile[0]);
+
+        game.getDrawPile().clear();
+        game.getDrawPile().add(chTile[4]);
+        game.getDrawPile().add(bTile[r1]);
+        game.getDrawPile().add(fTile[2]);
+        game.getDrawPile().add(dTile[0]);
+        game.getDrawPile().add(bTile[9]);
+        game.getDrawPile().add(bTile[9]);
+
+        // Error when claiming Kong Test Start
+        game.takeKong(pl, tile[0]);
+        Assert.assertEquals("Incorrect Hand size", (13),
+                pl.getHandTile().size());
+
+        for (int k = 0; k < pl.getHandTile().size(); k++) {
+
+            Assert.assertNotEquals("Should not have " +
+                            "the tile that was used to take a Pong",
+                    tile[0], pl.getHandTile().get(k));
+        }
+
+        Assert.assertEquals("Incorrect Set Size",
+                4, pl.getSetPile().size());
+        Assert.assertEquals("Incorrect Tile removed 1",
+                tile[0], pl.getSetPile().get(0));
+        Assert.assertEquals("Incorrect Tile removed 2",
+                tile[0], pl.getSetPile().get(1));
+        Assert.assertEquals("Incorrect Tile removed 3",
+                tile[0], pl.getSetPile().get(2));
+        Assert.assertEquals("Incorrect Tile removed 4",
+                tile[0], pl.getSetPile().get(3));
+
+        // Drawing into a Kong after claiming a Kong
+        game.takeKong(pl, tile[1]);
+        Assert.assertEquals("Incorrect Hand size", (8),
+                pl.getHandTile().size());
+
+        for (int k = 0; k < pl.getHandTile().size(); k++) {
+
+            Assert.assertNotEquals("Should not have " +
+                            "the tile that was used to take a Pong",
+                    tile[1], pl.getHandTile().get(k));
+            Assert.assertNotEquals("Should not have " +
+                            "the tile that was used to take a Pong",
+                    chTile[extraTile], pl.getHandTile().get(k));
+        }
+
+        Assert.assertEquals("Incorrect Set Size",
+                13, pl.getSetPile().size());
+
+        int tile1Count = 0; // Number of Tile 1
+        int tileExtraCount = 0; // Number of Tile Extra that makes extra
+                                // kong
+        for (int i = 0; i < pl.getSetPile().size();i++){
+
+            if (tile[1].equals(pl.getSetPile().get(i))) {
+                tile1Count++;
+            }
+
+            if (tile[extraTile].equals(pl.getSetPile().get(i))) {
+                tileExtraCount++;
+            }
+        }
+
+        Assert.assertEquals("Should have 4 tiles from " +
+                "the kong", 4, tile1Count);
+        Assert.assertEquals("Should have 4 tiles from " +
+                "kong that was formed a draw", 4,
+                tileExtraCount);
     }
+
+
 
     @Test
     public void testTakeKongDraw(){
 
-        ;
+        Player pl = new Player();
+
+        pl.getHandTile().add(bTile[1]);
+        pl.getHandTile().add(bTile[1]);
+        pl.getHandTile().add(bTile[1]);
+        pl.getHandTile().add(bTile[2]);
+
+        game.getDrawPile().clear();
+        game.getDrawPile().add(cTile[2]);
+
+        game.takeKongDraw(pl);
+        Assert.assertEquals("Hand size should not have" +
+                " changed", 4, pl.getHandTile().size());
+        Assert.assertEquals("Set pile size should increase" +
+                " in size", 1, pl.getSetPile().size());
+    }
+
+    @Test
+    public void testTakeKongDraw2(){
+
+        Player pl = game.getPlayerList(0);
+
+        pl.getHandTile().clear();
+        pl.getSetPile().clear();
+        pl.getHandTile().add(chTile[1]);
+        pl.getHandTile().add(chTile[1]);
+        pl.getHandTile().add(chTile[1]);
+        pl.getHandTile().add(chTile[2]);
+
+        game.getDrawPile().clear();
+        game.getDrawPile().add(chTile[1]);
+        game.getDrawPile().add(cTile[2]);
+
+        game.takeKongDraw(pl);
+        Assert.assertEquals("Hand size should be 1 due to " +
+                        "kong removal" , 1,
+                pl.getHandTile().size());
+        Assert.assertEquals("Set pile size should increase" +
+                " in size", 5, pl.getSetPile().size());
     }
 
     @Test
@@ -725,7 +1006,7 @@ public class TestingGameClass {
         int handSize = pl.getHandTile().size();
         int setSize = pl.getSetPile().size();
 
-        for (int i = 0; i < drawSize; i++){
+        for (int i = 0; i < drawSize && !game.isStalemate(); i++){
 
             game.draw(pl);
             if (pl.getHandTile().size() >= handSize + 2){
