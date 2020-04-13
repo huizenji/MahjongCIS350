@@ -1731,14 +1731,9 @@ public class Game {
 
                 isPoint = false;
 
-            } else if (tile instanceof Dragon || tile instanceof Wind ||
-                    tile instanceof Flower) {
-
-                isPoint = true;
-
             } else {
 
-                isPoint = false;
+                isPoint = true;
             }
 
         } else {
@@ -2122,6 +2117,29 @@ public class Game {
         return count;
     }
 
+    /*******************************************************************
+     * This method copies the winning player index and moves it into the
+     * discard pile. This essitenally displays the winning players hand
+     * in the discard pile.
+     * @param plIndex The winning player index.
+     ******************************************************************/
+    public void showWinningHand(int plIndex) {
+
+        if (plIndex < 0 || plIndex >= playerList.length){
+
+            throw new IllegalArgumentException("Not a valid index");
+        }
+
+        ArrayList<Tile> hand = playerList[plIndex].getHandTile();
+
+        discardPile.clear();
+        for (int i = 0; i < hand.size(); i++){
+
+            discardPile.add(hand.get(i));
+        }
+
+    }
+
     /******************************************************************
      * This method explains the rules of the game.
      *
@@ -2317,7 +2335,7 @@ public class Game {
      ******************************************************************/
     private String scoreTraditional() {
 
-        return "Scoring Traditional Mode: "
+        return "Scoring Traditional Mode: \n"
                 + " The player is awarded the following points: "
                 + "Chi: 1 Point for every Chi, 1 Additional Point if"
                 + " the chi contains a tile with a 1 or 9\n"

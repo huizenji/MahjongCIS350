@@ -209,8 +209,6 @@ public class Board extends JPanel {
         gameModeSwap();
         updateScore();
         timer.start();
-
-        resetBtn.setEnabled(true);
     }
 
 
@@ -251,14 +249,13 @@ public class Board extends JPanel {
                     if (game.isMahjong(game.getPlayerHand(game
                             .getCurrentPlayerIndex()), null)) {
 
-                        revealWinningAIHand(game
-                                .getCurrentPlayerIndex());
-
                         JOptionPane.showMessageDialog(
                                 null, msgAIMahjong);
                         enablePlayer1Hand(false);
 
                         enablePlayer1Hand(false);
+                        displayWinningHand(
+                                game.getCurrentPlayerIndex());
                         timer.stop();
                         drawFlag = false;
                         resetBtn.setEnabled(true);
@@ -334,6 +331,7 @@ public class Board extends JPanel {
                                         null, msgWin2);
 
                                 enablePlayer1Hand(false);
+                                displayWinningHand(0);
                                 timer.stop();
                                 drawFlag = false;
                                 resetBtn.setEnabled(true);
@@ -1548,6 +1546,7 @@ public class Board extends JPanel {
                         null, message2);
 
                 enablePlayer1Hand(false);
+                displayWinningHand(winner);
                 timer.stop();
                 drawFlag = false;
                 resetBtn.setEnabled(true);
@@ -1567,6 +1566,7 @@ public class Board extends JPanel {
                     + " Sorry, you lose.";
             JOptionPane.showMessageDialog(null, message);
             enablePlayer1Hand(false);
+            displayWinningHand(winner);
             timer.stop();
             drawFlag = false;
             resetBtn.setEnabled(true);
@@ -1822,6 +1822,30 @@ public class Board extends JPanel {
             + "Player 2 Score: " + p2score + "     "
             + "Player 3 Score: " + p3score + "     "
             + "Player 4 Score: " + p4score);
+    }
+
+    /*******************************************************************
+     * This method displays the winning player index in the discard
+     * pile.
+     * @param plIndex The winning player index.
+     ******************************************************************/
+    private void displayWinningHand(int plIndex) {
+
+        int index = 0;
+        updateDiscardPile(0);
+        game.showWinningHand(index);
+
+        while (discardPile.size() < game.getDiscardPile().size()) {
+
+            JButton temp = new JButton();
+            temp.setPreferredSize(new Dimension(30, 35));
+            discardPile.add(temp);
+            discardPile.get(discardPile.size() - 1).setIcon(
+                    updatedImage(game.getDiscardPile().get(index)));
+            discardPilePanel.add(temp);
+
+            index++;
+        }
     }
 
     /*******************************************************************

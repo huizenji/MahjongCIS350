@@ -1471,6 +1471,86 @@ public class TestingGameClass {
         Assert.assertFalse("No Stalemate",
                 game.isStalemate());
     }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void testShowWinningPlayerHandErrorT1() {
+
+        game.showWinningHand(-1);
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void testShowWinningPlayerHandErrorT2() {
+
+        game.showWinningHand(game.TOTALPLAYER);
+    }
+
+    @Test
+    public void testShowWinningPlayerHandT1() {
+
+        Player pl = game.getPlayerList(0);
+
+        pl.getHandTile().clear();
+        game.getDiscardPile().clear();
+        pl.getHandTile().add(bTile[2]);
+        pl.getHandTile().add(bTile[2]);
+        pl.getHandTile().add(bTile[2]);
+        pl.getHandTile().add(bTile[3]);
+        pl.getHandTile().add(bTile[4]);
+        pl.getHandTile().add(wTile[2]);
+        pl.getHandTile().add(wTile[2]);
+        pl.getHandTile().add(wTile[2]);
+
+        game.showWinningHand(0);
+        Assert.assertEquals("Incorrect Size", 8,
+                game.getDiscardPile().size());
+        Assert.assertEquals("Incorrect Tile", bTile[2],
+                game.getDiscardPile().get(0));
+        Assert.assertEquals("Incorrect Tile", bTile[2],
+                game.getDiscardPile().get(1));
+        Assert.assertEquals("Incorrect Tile", bTile[2],
+                game.getDiscardPile().get(2));
+        Assert.assertEquals("Incorrect Tile", bTile[3],
+                game.getDiscardPile().get(3));
+        Assert.assertEquals("Incorrect Tile", bTile[4],
+                game.getDiscardPile().get(4));
+        Assert.assertEquals("Incorrect Tile", wTile[2],
+                game.getDiscardPile().get(5));
+        Assert.assertEquals("Incorrect Tile", wTile[2],
+                game.getDiscardPile().get(6));
+        Assert.assertEquals("Incorrect Tile", wTile[2],
+                game.getDiscardPile().get(6));
+    }
+
+    @Test
+    public void testShowWinningPlayerHandT2() {
+
+        Player pl = game.getPlayerList(0);
+
+        pl.getHandTile().clear();
+        game.getDiscardPile().clear();
+        pl.getHandTile().add(bTile[2]);
+        pl.getHandTile().add(bTile[2]);
+        game.getDiscardPile().add(bTile[2]);
+        game.getDiscardPile().add(bTile[3]);
+        game.getDiscardPile().add(bTile[4]);
+        pl.getHandTile().add(wTile[2]);
+        pl.getHandTile().add(wTile[2]);
+        pl.getHandTile().add(wTile[2]);
+
+        game.showWinningHand(0);
+        Assert.assertEquals("Incorrect Size", 5,
+                game.getDiscardPile().size());
+        Assert.assertEquals("Incorrect Tile", bTile[2],
+                game.getDiscardPile().get(0));
+        Assert.assertEquals("Incorrect Tile", bTile[2],
+                game.getDiscardPile().get(1));
+        Assert.assertEquals("Incorrect Tile", wTile[2],
+                game.getDiscardPile().get(2));
+        Assert.assertEquals("Incorrect Tile", wTile[2],
+                game.getDiscardPile().get(3));
+        Assert.assertEquals("Incorrect Tile", wTile[2],
+                game.getDiscardPile().get(4));
+    }
 }
 
 
