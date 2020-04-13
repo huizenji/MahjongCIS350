@@ -327,5 +327,31 @@ public class TestingGameClassMahjong {
         Assert.assertTrue("Should have Mahjong",
                 game.isMahjong(hand, bTile[6]));
     }
+
+    //4 pongs + 1 Pair
+    @Test
+    public void isMahjongTest16(){
+
+        ArrayList<Tile> hand = new ArrayList<>();
+
+
+        hand.add(wTile[1]);
+        hand.add(wTile[1]);
+        hand.add(wTile[1]);
+        hand.add(bTile[5]);
+        hand.add(dTile[2]);
+        hand.add(dTile[2]);
+        hand.add(dTile[2]);
+        hand.add(chTile[6]);
+        hand.add(chTile[6]);
+        hand.add(chTile[6]);
+        hand.add(chTile[8]);
+        hand.add(chTile[8]);
+        hand.add(chTile[8]);
+
+
+        Assert.assertTrue("Should have Mahjong",
+                game.isMahjong(hand, bTile[5]));
+    }
 }
 
