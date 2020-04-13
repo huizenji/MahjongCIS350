@@ -209,6 +209,8 @@ public class Board extends JPanel {
         gameModeSwap();
         updateScore();
         timer.start();
+
+        resetBtn.setEnabled(true);
     }
 
 
@@ -257,6 +259,8 @@ public class Board extends JPanel {
                         enablePlayer1Hand(false);
 
                         enablePlayer1Hand(false);
+                        updateDiscardPile(
+                                game.getCurrentPlayerIndex());
                         timer.stop();
                         drawFlag = false;
                         resetBtn.setEnabled(true);
@@ -331,6 +335,8 @@ public class Board extends JPanel {
                                         null, msgWin2);
 
                                 enablePlayer1Hand(false);
+                                updateDiscardPile(
+                                        game.getCurrentPlayerIndex());
                                 timer.stop();
                                 drawFlag = false;
                                 resetBtn.setEnabled(true);
@@ -1296,6 +1302,9 @@ public class Board extends JPanel {
 //        }
 //    }
 
+    /*******************************************************************
+     * This method ask the user if they want to switch game modes.
+     ******************************************************************/
     private void gameModeSwap() {
 
         String message = "Would you like to play ";
@@ -1321,8 +1330,8 @@ public class Board extends JPanel {
             resetBtn.setEnabled(false);
         }
     }
-    
-   
+
+
 
     /*******************************************************************
      * This method checks all the Players and returns a Player who has
@@ -1542,6 +1551,7 @@ public class Board extends JPanel {
                         null, message2);
 
                 enablePlayer1Hand(false);
+                updateDiscardPile(winner);
                 timer.stop();
                 drawFlag = false;
                 resetBtn.setEnabled(true);
@@ -1561,6 +1571,7 @@ public class Board extends JPanel {
                     + " Sorry, you lose.";
             JOptionPane.showMessageDialog(null, message);
             enablePlayer1Hand(false);
+            updateDiscardPile(winner);
             timer.stop();
             drawFlag = false;
             resetBtn.setEnabled(true);
@@ -1603,8 +1614,6 @@ public class Board extends JPanel {
                     kongSeq((Suit) game.getRecentDiscard());
 
                 } else {
-//                	int nextPlIndex = (game.getCurrentPlayerIndex() + 1) %
-//                            game.TOTALPLAYER;
 
                 	game.takeKong(game.getPlayerList(
                 	        i % game.TOTALPLAYER),
@@ -1634,9 +1643,6 @@ public class Board extends JPanel {
                     }
 
                     else {
-//                    	int nextPlIndex = (game.getCurrentPlayerIndex() + 1) %
-//                                game.TOTALPLAYER;
-
                               game.takePong(game.getPlayerList(
                                       i % game.TOTALPLAYER),
                                       game.getRecentDiscard());
@@ -1673,13 +1679,6 @@ public class Board extends JPanel {
 
                         // Loop Through Options
                         while (options.size() > 0){
-
-//                            Suit tile1 = (Suit) game.getPlayerList(
-//                                    nextPlIndex).
-//                                    getHandTile().get(options.get(0));
-//                            Suit tile2 = (Suit) game.getPlayerList(
-//                                    nextPlIndex).
-//                                    getHandTile().get(options.get(1));
 
                                 game.takeChi(game.getPlayerList(
                                         nextPlIndex),

@@ -53,9 +53,6 @@ public class Game {
     /** The constant for default setting for AI. **/
     public static final int defaultAI = BEGINNER;
 
-    /** The score to be calculated. **/
-    private int score;
-
     /*******************************************************************
      * This is the constructor for the Game class.
      ******************************************************************/
@@ -855,91 +852,6 @@ public class Game {
         }
 
         return false;
-    }
-
-    /*******************************************************************
-     * compare three tiles and determine if they all the same
-     * @param t1
-     * @param t2
-     * @param t3
-     * @return
-     ******************************************************************/
-    private boolean compareThree(Tile t1, Tile t2, Tile t3){
-        if(compareTile(t1,t2)&&compareTile(t2,t3)){
-            return true;
-        }
-        return false;
-    }
-
-    /*******************************************************************
-     * A getter function for individual Tiles. All these score should be
-     * calculated after some player win the game.
-     *
-     * @param
-     * @return Tile at indicated index
-     ******************************************************************/
-    public int getScore() {
-        int count1 = 0;
-        int count2 = 0;
-        int count3 = 0;
-        //2^88 points, 3 conditions
-        //first condition: 4 pairs of Pong and they are all wind tiles
-        for (int i = 0; i < 4; ++i) {
-            for (int j = 0; j <= playerList[i].getHandTile().size() - 2;
-                 j++) {
-                if (compareThree(playerList[i].getHandTile().get(j),
-                        playerList[i].getHandTile().get(j + 1),
-                        playerList[i].getHandTile().get(j + 2))
-                        && playerList[i].getHandTile().get(j).
-                        getType().equals("Wind")) {
-                    count1++;
-                }
-            }
-        }
-
-        if (count1 == 4) {
-            score = (int) Math.pow(2, 88);
-        }
-
-        //2^88 points
-        //second condition: 3 pairs of Pong and they are all dragon tiles
-        for (int i = 0; i < 4; ++i) {
-            for (int j = 0; j <= playerList[i].getHandTile().size() - 2;
-                 j++) {
-                if (compareThree(playerList[i].getHandTile().get(j),
-                        playerList[i].getHandTile().get(j + 1),
-                        playerList[i].getHandTile().get(j + 2))
-                        && playerList[i].getHandTile().get(j).
-                        getType().equals("Dragon")) {
-                    count2++;
-                }
-                if (count2 == 3) {
-                    score = (int) Math.pow(2, 88);
-                }
-            }
-        }
-
-        //2^88 points
-        //third condition: 3 pairs of Pong
-        for (int i = 0; i < 4; ++i) {
-            for (int j = 0; j <= playerList[i].getHandTile().size() - 3;
-                 j++) {
-                if (compareThree(playerList[i].getHandTile().get(j),
-                        playerList[i].getHandTile().get(j + 1),
-                        playerList[i].getHandTile().get(j + 2)) &&
-                        compareTile(playerList[i].getHandTile().get(j),
-                                playerList[i].getHandTile().get(j+3))) {
-                    count2++;
-                }
-                if (count3 == 3) {
-                    score = (int) Math.pow(2, 88);
-                }
-            }
-        }
-        //2^16
-        //2^4
-
-        return score;
     }
 
     /*******************************************************************
@@ -2380,7 +2292,7 @@ public class Game {
                 "scores based"
                 + " on the composition of the player's hand and set " +
                 "pile when they "
-                + "declare Mahjong.";
+                + "declare Mahjong.\n\n" + scoreTraditional();
     }
 
     /*******************************************************************
@@ -2396,7 +2308,28 @@ public class Game {
                 " tiles to the set pile and they are treated as a "
                 + "point.\nTraditional game mode only moves"
                 + " Flower tiles to the set pile. This will allow "
-                + "for pongs to be made with Dragon and Wind tiles.";
+                + "for pongs to be made with Dragon and Wind tiles.\n";
+    }
+
+    /*******************************************************************
+     * This method displays the scoring on the traditional mode.
+     * @return The rules about traditional mode.
+     ******************************************************************/
+    private String scoreTraditional() {
+
+        return "Scoring Traditional Mode: "
+                + " The player is awarded the following points: "
+                + "Chi: 1 Point for every Chi, 1 Additional Point if"
+                + " the chi contains a tile with a 1 or 9\n"
+                + "Pong: 1 Point for every pong and 2 points if the "
+                + "Pong uses of a dragon or wind tiles\n"
+                + "Kong: 2 Point for every pong and 4 points if the "
+                + "Kong uses of a dragon or wind tiles\n"
+                + "Flower: 1 Point for each Flower tile\n"
+                + "Double points if you draw into Mahjong or your"
+                + "hand and set piles consist of only chis, pongs,"
+                + " or kongs. The pair and flower tiles"
+                + " do not effect this";
     }
 
     /*******************************************************************
