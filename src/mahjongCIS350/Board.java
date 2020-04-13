@@ -259,8 +259,6 @@ public class Board extends JPanel {
                         enablePlayer1Hand(false);
 
                         enablePlayer1Hand(false);
-                        updateDiscardPile(
-                                game.getCurrentPlayerIndex());
                         timer.stop();
                         drawFlag = false;
                         resetBtn.setEnabled(true);
@@ -269,7 +267,8 @@ public class Board extends JPanel {
                                 .getCurrentPlayerIndex());
 
                         game.increaseScore(
-                                game.getCurrentPlayerIndex(), false);
+                                game.getCurrentPlayerIndex(),
+                                false);
                         gameModeSwap();
 
                         if (game.getCurrentPlayerIndex()
@@ -335,8 +334,6 @@ public class Board extends JPanel {
                                         null, msgWin2);
 
                                 enablePlayer1Hand(false);
-                                updateDiscardPile(
-                                        game.getCurrentPlayerIndex());
                                 timer.stop();
                                 drawFlag = false;
                                 resetBtn.setEnabled(true);
@@ -1551,7 +1548,6 @@ public class Board extends JPanel {
                         null, message2);
 
                 enablePlayer1Hand(false);
-                updateDiscardPile(winner);
                 timer.stop();
                 drawFlag = false;
                 resetBtn.setEnabled(true);
@@ -1571,7 +1567,6 @@ public class Board extends JPanel {
                     + " Sorry, you lose.";
             JOptionPane.showMessageDialog(null, message);
             enablePlayer1Hand(false);
-            updateDiscardPile(winner);
             timer.stop();
             drawFlag = false;
             resetBtn.setEnabled(true);
