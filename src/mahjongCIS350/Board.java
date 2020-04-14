@@ -174,6 +174,8 @@ public class Board extends JPanel {
                 createBevelBorder(1));
         discardPilePanel.setPreferredSize(
                 new Dimension(350, 225));
+        gameBoard.setBorder(BorderFactory.createLineBorder(Color.BLACK,
+                2));
 
         createIcons();
 
@@ -1228,74 +1230,74 @@ public class Board extends JPanel {
         }
     }
 
-//    /******************************************************************
-//     * This method updates the player's hand.
-//     *
-//     * @param p2HandSize The hand of the second player.
-//     *****************************************************************/
-//    private void updateP2Hand(final int p2HandSize) {
-//
-//        while (p2Hand.size() < p2HandSize) {
-//
-//            JButton temp = new JButton();
-//            temp.setPreferredSize(new Dimension(25, 25));
-//            p2Hand.add(temp);
-//            p2HandPanel.add(p2Hand.get(p2Hand.size() - 1));
-//
-//        }
-//
-//        while (p2Hand.size() > p2HandSize) {
-//
-//            p2HandPanel.remove(p2Hand.size() - 1);
-//            p2Hand.remove(p2Hand.size() - 1);
-//        }
-//    }
-//
-//    /******************************************************************
-//     * This method updates the player's hand.
-//     *
-//     * @param p3HandSize The hand of the third player.
-//     *****************************************************************/
-//    private void updateP3Hand(final int p3HandSize) {
-//
-//        while (p3Hand.size() < p3HandSize) {
-//
-//            JButton temp = new JButton();
-//            temp.setPreferredSize(new Dimension(25, 25));
-//            p3Hand.add(temp);
-//            p3HandPanel.add(p3Hand.get(p3Hand.size() - 1));
-//
-//        }
-//
-//        while (p3Hand.size() > p3HandSize) {
-//
-//            p3HandPanel.remove(p3Hand.size() - 1);
-//            p3Hand.remove(p3Hand.size() - 1);
-//        }
-//    }
-//
-//    /******************************************************************
-//     * This method updates the player's hand.
-//     *
-//     * @param p4HandSize The hand size of the fourth player.
-//     *****************************************************************/
-//    private void updateP4Hand(final int p4HandSize) {
-//
-//        while (p4Hand.size() < p4HandSize) {
-//
-//            JButton temp = new JButton();
-//            temp.setPreferredSize(new Dimension(25, 25));
-//            p4Hand.add(temp);
-//            p4HandPanel.add(p4Hand.get(p4Hand.size() - 1));
-//
-//        }
-//
-//        while (p4Hand.size() > p4HandSize) {
-//
-//            p4HandPanel.remove(p4Hand.size() - 1);
-//            p4Hand.remove(p4Hand.size() - 1);
-//        }
-//    }
+    /******************************************************************
+     * This method updates the player's hand.
+     *
+     * @param p2HandSize The hand of the second player.
+     *****************************************************************/
+    private void updateP2Hand(final int p2HandSize) {
+
+        while (p2Hand.size() < p2HandSize) {
+
+            JButton temp = new JButton();
+            temp.setPreferredSize(new Dimension(25, 25));
+            p2Hand.add(temp);
+            p2HandPanel.add(p2Hand.get(p2Hand.size() - 1));
+
+        }
+
+        while (p2Hand.size() > p2HandSize) {
+
+            p2HandPanel.remove(p2Hand.size() - 1);
+            p2Hand.remove(p2Hand.size() - 1);
+        }
+    }
+
+    /******************************************************************
+     * This method updates the player's hand.
+     *
+     * @param p3HandSize The hand of the third player.
+     *****************************************************************/
+    private void updateP3Hand(final int p3HandSize) {
+
+        while (p3Hand.size() < p3HandSize) {
+
+            JButton temp = new JButton();
+            temp.setPreferredSize(new Dimension(25, 25));
+            p3Hand.add(temp);
+            p3HandPanel.add(p3Hand.get(p3Hand.size() - 1));
+
+        }
+
+        while (p3Hand.size() > p3HandSize) {
+
+            p3HandPanel.remove(p3Hand.size() - 1);
+            p3Hand.remove(p3Hand.size() - 1);
+        }
+    }
+
+    /******************************************************************
+     * This method updates the player's hand.
+     *
+     * @param p4HandSize The hand size of the fourth player.
+     *****************************************************************/
+    private void updateP4Hand(final int p4HandSize) {
+
+        while (p4Hand.size() < p4HandSize) {
+
+            JButton temp = new JButton();
+            temp.setPreferredSize(new Dimension(25, 25));
+            p4Hand.add(temp);
+            p4HandPanel.add(p4Hand.get(p4Hand.size() - 1));
+
+        }
+
+        while (p4Hand.size() > p4HandSize) {
+
+            p4HandPanel.remove(p4Hand.size() - 1);
+            p4Hand.remove(p4Hand.size() - 1);
+        }
+    }
 
     /*******************************************************************
      * This method ask the user if they want to switch game modes.

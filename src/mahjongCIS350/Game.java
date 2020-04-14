@@ -334,8 +334,11 @@ public class Game {
         Tile kong = null;
 
         for (int i = 0; i < hand.size(); i++) {
+
             for (int j = i + 1; j < hand.size(); j++) {
+
                 for (int k = j + 1; k < hand.size(); k++) {
+
                     for (int l = k + 1; l < hand.size(); l++) {
 
                         if (compareTile(hand.get(i),
@@ -377,7 +380,6 @@ public class Game {
 
         if (plIndex < 0 || plIndex >= TOTALPLAYER) {
 
-
             throw new IllegalArgumentException("Player Index does not"
                     + " exist");
         }
@@ -385,7 +387,6 @@ public class Game {
         if (gameOptionSimple){
 
             scoreSimple(playerList[plIndex]);
-
         }
 
         else {
@@ -451,9 +452,9 @@ public class Game {
         }
 
         // Remove all Flower tiles from the set pile
-        for (int i = setCopy.size() - 1; i >= 0; i--){
+        for (int i = setCopy.size() - 1; i >= 0; i--) {
 
-            if (setCopy.get(i) instanceof Flower){
+            if (setCopy.get(i) instanceof Flower) {
 
                 setCopy.remove(i);
             }
@@ -472,12 +473,12 @@ public class Game {
      * @param setPile The score of the set pile
      * @return The score of the set pile
      ******************************************************************/
-    private int scoreSet (ArrayList<Tile> setPile){
+    private int scoreSet (ArrayList<Tile> setPile) {
 
         int point = 0;
 
         // Scan Through Set Pile First
-        for (int i = setPile.size() - 1; i >= 0; i--){
+        for (int i = setPile.size() - 1; i >= 0; i--) {
 
             // Remove Flower Tile and add 1 Point
             if (setPile.get(i) instanceof Flower) {
@@ -488,11 +489,11 @@ public class Game {
         }
 
         // Check for Any Kongs and Removes them and adds Score
-        for (int i = 0; i < setPile.size() - 3; i++){
+        for (int i = 0; i < setPile.size() - 3; i++) {
 
             if (compareTile(setPile.get(i), setPile.get(i + 1))
                 && compareTile(setPile.get(i), setPile.get(i + 2))
-                && compareTile(setPile.get(i), setPile.get(i + 3))){
+                && compareTile(setPile.get(i), setPile.get(i + 3))) {
 
                 if (setPile.get(i) instanceof Suit) {
 
@@ -522,18 +523,18 @@ public class Game {
      * @param discard True if the player has won off a discard.
      * @return The score of the player hand.
      ******************************************************************/
-    private int scoreHand(ArrayList<Tile> hand, boolean discard){
+    private int scoreHand(ArrayList<Tile> hand, boolean discard) {
 
         ArrayList<Tile> temp = new ArrayList<>();
 
         // The combination that got the player a Mahjong
-        for (int index = 0; index < hand.size(); index++){
+        for (int index = 0; index < hand.size(); index++) {
 
             temp.add(hand.get(index));
         }
 
         // Add the most recent Discard if won off of discard
-        if (discard){
+        if (discard) {
 
             temp.add(getRecentDiscard());
         }
@@ -547,7 +548,7 @@ public class Game {
      * @param hand Hand of the Player
      * @return The Tile in order of the Combination
      ******************************************************************/
-    private ArrayList<Tile> findHandComb(ArrayList<Tile> hand){
+    private ArrayList<Tile> findHandComb(ArrayList<Tile> hand) {
 
         ArrayList<Tile> temp = new ArrayList<>();
         ArrayList<Tile> handComb = new ArrayList<>();
@@ -555,19 +556,21 @@ public class Game {
         Boolean validComb = false;
 
         // Copy of Hand
-        for (int index = 0; index < hand.size(); index++){
+        for (int index = 0; index < hand.size(); index++) {
 
             temp.add(hand.get(index));
         }
 
-        if (hand.size() == 2){
+        if (hand.size() == 2) {
 
             return temp;
         }
 
         // Go until there is only 1 pair
-        for (int i = 0; i < temp.size(); i++){
+        for (int i = 0; i < temp.size(); i++) {
+
             for (int j = i + 1; j < temp.size(); j++) {
+
                 for (int k = j + 1; k < temp.size(); k++) {
 
                     // Remove Tiles and see if it still is a Mahjong
@@ -579,9 +582,9 @@ public class Game {
                     handComb.add(tile2);
                     handComb.add(tile3);
 
-                    // The combination Picked should be chi or pong
+                    // The combination picked should be chi or pong
                     if ( (compareTile(tile1, tile2) &&
-                            compareTile(tile1, tile3))){
+                            compareTile(tile1, tile3))) {
 
                         validComb = true;
                     }
@@ -590,14 +593,14 @@ public class Game {
                         && tile3 instanceof Suit) {
 
                         if (compareConsecutiveSuits((Suit) tile1,
-                                (Suit) tile2, (Suit) tile3)){
+                                (Suit) tile2, (Suit) tile3)) {
 
                             validComb = true;
                         }
                     }
 
                     // Make sure it is still a Mahjong
-                    if (isMahjong(temp, null) && validComb){
+                    if (isMahjong(temp, null) && validComb) {
 
                         // reset Counters
                         i = 0;
@@ -624,7 +627,6 @@ public class Game {
             }
         }
 
-
         return handComb;
     }
 
@@ -633,17 +635,17 @@ public class Game {
      * @param tile The hand or set pile that is scored.
      * @return The score that consist of only chi and pongs.
      ******************************************************************/
-    private int scoreChiPong (ArrayList<Tile> tile){
+    private int scoreChiPong (ArrayList<Tile> tile) {
 
         int point = 0;
 
-        if (tile.size() <= 2){
+        if (tile.size() <= 2) {
 
             return 0;
         }
 
         // Scan Through and Total for Each chi and Pong
-        for (int i = 0; i < tile.size(); i+= 3){
+        for (int i = 0; i < tile.size(); i+= 3) {
 
             Tile tile1 = tile.get(i);
             Tile tile2 = tile.get(i + 1);
@@ -733,7 +735,9 @@ public class Game {
 
         // Check if All Pongs
         for (int i = 0; i < copy.size(); i++) {
+
             for (int j = i + 1; j < copy.size(); j++) {
+
                 for (int k = j + 1; k < copy.size(); k++) {
 
                     // Remove Pong
@@ -743,6 +747,7 @@ public class Game {
 
                         // If so, remove the pong from temp
                         if (compareTile(copy.get(i), copy.get(k))) {
+
                             copy.remove(k);
                             copy.remove(j);
                             copy.remove(i);
@@ -772,9 +777,13 @@ public class Game {
 
         // Check if All Kongs
         for (int i = 0; i < copy.size(); i++) {
+
             for (int j = i + 1; j < copy.size(); j++) {
+
                 for (int k = j + 1; k < copy.size(); k++) {
+
                     for (int l = k + 1; l < copy.size(); l++) {
+
                         // Remove Kong
                         if (compareTile(copy.get(i),
                                 copy.get(j)) && compareTile(
@@ -785,6 +794,7 @@ public class Game {
                             // If so, remove the Kong from temp
                             if (compareTile(copy.get(i),
                                     copy.get(k))) {
+
                                 copy.remove(l);
                                 copy.remove(k);
                                 copy.remove(j);
@@ -816,7 +826,9 @@ public class Game {
         }
 
         for (int i = 0; i < copy.size(); i++) {
+
             for (int j = i + 1; j < copy.size(); j++) {
+
                 for (int k = j + 1; k < copy.size(); k++) {
 
                     // Remove Chi
@@ -846,7 +858,7 @@ public class Game {
         }
 
         // If 2 Tiles left, then all Chi
-        if (copy.size() == 2){
+        if (copy.size() == 2) {
 
             return true;
         }
@@ -866,21 +878,21 @@ public class Game {
 
         ArrayList<Tile> plHand = pl.getHandTile();
 
-        if (check == null){
+        if (check == null) {
 
             return false;
         }
 
-        if (!(check instanceof Suit)){
+        if (!(check instanceof Suit)) {
 
             return false;
         }
 
-        for (int i = 0; i < plHand.size(); i++){
+        for (int i = 0; i < plHand.size(); i++) {
 
-            for (int j = i; j < plHand.size(); j++){
+            for (int j = i; j < plHand.size(); j++) {
 
-                if (i != j){
+                if (i != j) {
 
                     if (plHand.get(i) instanceof Suit
                         && plHand.get(j) instanceof Suit) {
@@ -913,7 +925,7 @@ public class Game {
         // Number of Tiles in Player hand that can used for a pong
         int matchTile = 0;
 
-        if (check == null){
+        if (check == null) {
 
             return false;
         }
@@ -1021,6 +1033,7 @@ public class Game {
         for (int i = 0; i < search.size(); i++) {
 
             if (compareTile(search.get(i), check)) {
+
                 numOfMatch++;
             }
         }
@@ -1055,7 +1068,7 @@ public class Game {
         // same
         int totalTile = 0;
 
-        if (player.getHandTile().size() == 0){
+        if (player.getHandTile().size() == 0) {
 
             return false;
         }
@@ -1072,6 +1085,7 @@ public class Game {
         }
 
         if (totalTile == 3) {
+
             kong = true;
         }
 
@@ -1113,7 +1127,7 @@ public class Game {
      * @param hand The hand that is checked
      * @return True if the hand has a Mahjong, false if not.
      ******************************************************************/
-    private boolean isMahjongBacktrackAlg(ArrayList<Tile> hand){
+    private boolean isMahjongBacktrackAlg(ArrayList<Tile> hand) {
 
         // Make a copy of what is in the Player's hand
         ArrayList<Tile> temp = new ArrayList<>();
@@ -1127,9 +1141,12 @@ public class Game {
             copy.add(t);
         }
 
-        if (temp.size() == 2 ){
-            if (compareTile(temp.get(0), temp.get(1)))
+        if (temp.size() == 2 ) {
+
+            if (compareTile(temp.get(0), temp.get(1))) {
+
                 return true;
+            }
 
             else {
 
@@ -1137,8 +1154,8 @@ public class Game {
             }
         }
 
-        // Just in Case of an event occuring
-        else if (temp.size() % 3 != 2){
+        // Just in Case of an event occurring
+        else if (temp.size() % 3 != 2) {
 
             return false;
         }
@@ -1148,7 +1165,9 @@ public class Game {
             // This section removes the first chi or pong in the players
             // hand, then applies the algorithm
             for (int i = 0; i < temp.size(); i++) {
+
                 for (int j = i + 1; j < temp.size(); j++) {
+
                     for (int k = j + 1; k < temp.size(); k++) {
 
                         // Remove Pong
@@ -1160,6 +1179,7 @@ public class Game {
                             // If so, remove the pong from temp
                             if (compareTile(copy.get(i),
                                     copy.get(k))) {
+
                                 copy.remove(k);
                                 copy.remove(j);
                                 copy.remove(i);
@@ -1188,18 +1208,18 @@ public class Game {
                             }
                         }
 
-
                         // Backtracking Algorthim Determine win
-                        if (win){
+                        if (win) {
 
                             return win;
                         }
 
                         // Not a Winning Combination, So retry with a
                         // different combination
-                        else{
+                        else {
 
                             copy.clear();
+
                             for (Tile t : temp) {
 
                                 copy.add(t);
@@ -1223,7 +1243,6 @@ public class Game {
 
         ArrayList<Tile> desired = new ArrayList<>();
         ArrayList<Integer> loc = new ArrayList<>();
-
 
         // Return Empty Array if discard is not a Suit Tile
         if (!(discard instanceof Suit)) {
@@ -1289,9 +1308,9 @@ public class Game {
      * @param tile2 The tile index of the second tile that is used to
      *              claim the chi.
      ******************************************************************/
-    public void takeChi(Player player, int tile1, int tile2){
+    public void takeChi(Player player, int tile1, int tile2) {
 
-        if (tile1 == tile2){
+        if (tile1 == tile2) {
 
             throw new IllegalArgumentException("Can not discard"
                     + " same tile");
@@ -1332,7 +1351,7 @@ public class Game {
      * @param pl The player that is claiming the kong.
      * @param tile The tile that is being used to claim the kong.
      ******************************************************************/
-    public void takeKong(Player pl, Tile tile){
+    public void takeKong(Player pl, Tile tile) {
 
         ArrayList<Tile> desired = new ArrayList<>();
         desired.add(tile);
@@ -1356,7 +1375,7 @@ public class Game {
      *
      * @param player Player who drew into a kong.
      ******************************************************************/
-    public void takeKongDraw(Player player){
+    public void takeKongDraw(Player player) {
 
         // Add the tile from hand to setpile
         int lastLoc = player.getHandTile().size() - 1;
@@ -1382,13 +1401,14 @@ public class Game {
         for (int i = 0; i < desired.size(); i++) {
 
             search:
+
             for (int hand_index = 0; hand_index < playerHand.size();
                  hand_index++) {
 
                 if (compareTile(desired.get(i),
                         playerHand.get(hand_index))) {
 
-                    if (!index_loc.contains(hand_index)){
+                    if (!index_loc.contains(hand_index)) {
 
                         index_loc.add(hand_index);
                         break search;
@@ -1418,6 +1438,7 @@ public class Game {
         for (int i = 0; i < desired.size(); i++) {
 
             search:
+
             for (int hand_index = 0; hand_index < playerHand.size();
                  hand_index++) {
 
@@ -1453,26 +1474,30 @@ public class Game {
         Wind compW = new Wind();
         Suit compS = new Suit();
 
-        for (int i = 0; i < dragonColor.length; i++){
+        for (int i = 0; i < dragonColor.length; i++) {
 
             compD.setColor(dragonColor[i]);
 
-            for (int k = 0; k < player.getHandTile().size(); k++){
+            for (int k = 0; k < player.getHandTile().size(); k++) {
+
                 playerTile = player.getHandTile().get(k);
-                if (compareTile(compD, playerTile)){
+
+                if (compareTile(compD, playerTile)) {
 
                     temp.add(playerTile);
                 }
             }
         }
 
-        for (int i = 0; i < windDir.length; i++){
+        for (int i = 0; i < windDir.length; i++) {
 
             compW.setDirection(windDir[i]);
 
-            for (int k = 0; k < player.getHandTile().size(); k++){
+            for (int k = 0; k < player.getHandTile().size(); k++) {
+
                 playerTile = player.getHandTile().get(k);
-                if (compareTile(compW, playerTile)){
+
+                if (compareTile(compW, playerTile)) {
 
                     temp.add(playerTile);
                 }
@@ -1483,6 +1508,7 @@ public class Game {
         compS.setDesign("Circle");
 
         for (int value = 1; value <= 9; value++) {
+
             for (int i = 0; i < player.getHandTile().size(); i++) {
 
                 playerTile = player.getHandTile().get(i);
@@ -1553,25 +1579,30 @@ public class Game {
         Wind compW = new Wind();
         Suit compS = new Suit();
 
-        for (int i = 0; i < dragonColor.length; i++){
+        for (int i = 0; i < dragonColor.length; i++) {
+
             compD.setColor(dragonColor[i]);
 
-            for (int k = 0; k < hand.size(); k++){
+            for (int k = 0; k < hand.size(); k++) {
+
                 playerTile = hand.get(k);
-                if (compareTile(compD, playerTile)){
+
+                if (compareTile(compD, playerTile)) {
 
                     temp.add(playerTile);
                 }
             }
         }
 
-        for (int i = 0; i < windDir.length; i++){
+        for (int i = 0; i < windDir.length; i++) {
 
             compW.setDirection(windDir[i]);
 
-            for (int k = 0; k < hand.size(); k++){
+            for (int k = 0; k < hand.size(); k++) {
+
                 playerTile = hand.get(k);
-                if (compareTile(compD, playerTile)){
+
+                if (compareTile(compD, playerTile)) {
 
                     temp.add(playerTile);
                 }
@@ -1582,6 +1613,7 @@ public class Game {
         compS.setDesign("Circle");
 
         for (int value = 1; value <= 9; value++) {
+
             for (int i = 0; i < hand.size(); i++) {
 
                 playerTile = hand.get(i);
@@ -1757,20 +1789,23 @@ public class Game {
      * @param tile the indicated Tile that might be part of a pair
      * @return true if pair is found, otherwise false
      ******************************************************************/
-    private boolean isPair(ArrayList<Tile> plHand, Tile tile){
+    private boolean isPair(ArrayList<Tile> plHand, Tile tile) {
 
         int counter = 0;
-        for (int i = 0; i < plHand.size(); i++){
 
-            if (compareTile(plHand.get(i), tile)){
+        for (int i = 0; i < plHand.size(); i++) {
+
+            if (compareTile(plHand.get(i), tile)) {
 
                 counter++;
             }
         }
 
-        if (counter == 2){
+        if (counter == 2) {
+
             return true;
         }
+
         return false;
     }
 
@@ -1783,7 +1818,7 @@ public class Game {
      * @param tile the Tile that may be part of an almost-Chi.
      * @return true if the Tile is part of an almost-Chi.
      ******************************************************************/
-    private boolean isAlmostChi(Player pl, Tile tile){
+    private boolean isAlmostChi(Player pl, Tile tile) {
 
         ArrayList<Tile> plHand = pl.getHandTile();
 
@@ -1812,8 +1847,10 @@ public class Game {
                                 if (compareConsecutiveSuits(suit1,
                                         suit2, (Suit) tiles.get(check)))
                                 {
+
                                     if (compareTile(suit1, tile) ||
                                             compareTile(suit2, tile)){
+
                                         return true;
                                     }
                                 }
@@ -1878,11 +1915,11 @@ public class Game {
      * This method determine if the game is a stalemate.
      * @return true if the game is going to result in a stalemate
      ******************************************************************/
-    public boolean isStalemate(){
+    public boolean isStalemate() {
 
-        for (int i = 0; i < tiles.size(); i++){
+        for (int i = 0; i < tiles.size(); i++) {
 
-            if (!isPointTile(tiles.get(i))){
+            if (!isPointTile(tiles.get(i))) {
 
                 return false;
             }
@@ -1922,7 +1959,7 @@ public class Game {
      ******************************************************************/
     private void dumbAIDiscard(Player player) {
 
-        if (player == null){
+        if (player == null) {
 
             throw new IllegalArgumentException("Player can not be "
                     + "Null");
@@ -1932,12 +1969,14 @@ public class Game {
         discard(player, rand.nextInt(player.getHandTile().size()));
     }
 
-
     /*******************************************************************
+     * AI design to get rid of a tiles and draw tiles. This
+     * method tells the AI to discard a random tile.
      *
-     * @param pl
+     * @param pl The player whose action will be determined by
+     *               an AI.
      ******************************************************************/
-    private void beginnerAIDiscard(Player pl){
+    private void beginnerAIDiscard(Player pl) {
 
         if (pl == null){
 
@@ -1956,9 +1995,9 @@ public class Game {
      * pile into account.
      * @param pl the AI player that needs to discard.
      ******************************************************************/
-    private void advancedAIDiscard(Player pl){
+    private void advancedAIDiscard(Player pl) {
 
-        if (pl == null){
+        if (pl == null) {
 
             throw new IllegalArgumentException("Player can not be "
                     + "Null");
@@ -1972,7 +2011,6 @@ public class Game {
             if (numInDiscard(pl.getHandTile()
                     .get(tileIndex)) == 3) {
                 discard(pl, tileIndex);
-                System.out.println("AI discarded useless Tile");
                 return;
             }
         }
@@ -1994,8 +2032,6 @@ public class Game {
                                 tileIndex))) {
 
                             discard(pl, tileIndex);
-                            System.out.println("AI discarded " +
-                                    "currently useless Tile");
                             return;
                         }
                     }
@@ -2011,7 +2047,6 @@ public class Game {
                     pl.getTileFromHand(tileIndex))) {
 
                 discard(pl, tileIndex);
-                System.out.println("AI discarded almost-Chi Tile");
                 return;
             }
         }
@@ -2025,14 +2060,12 @@ public class Game {
                     (pl.getTileFromHand(tileIndex)) == 2)) {
 
                 discard(pl, tileIndex);
-                System.out.println("AI discarded pair Tile");
                 return;
             }
         }
 
         Random rand = new Random();
         discard(pl, rand.nextInt(pl.getHandTile().size()));
-        System.out.println("AI randomly discarded a Tile");
     }
 
     /*******************************************************************
@@ -2133,7 +2166,8 @@ public class Game {
         ArrayList<Tile> hand = playerList[plIndex].getHandTile();
 
         discardPile.clear();
-        for (int i = 0; i < hand.size(); i++){
+
+        for (int i = 0; i < hand.size(); i++) {
 
             discardPile.add(hand.get(i));
         }
@@ -2386,7 +2420,7 @@ public class Game {
      ******************************************************************/
     public Player getPlayerList(int playerNum) {
 
-        if (playerNum < 0 || playerNum > 4){
+        if (playerNum < 0 || playerNum > 4) {
 
             throw new IndexOutOfBoundsException("Index is out of "
                     + "bounds. Must be from 0 - 3");
@@ -2401,9 +2435,9 @@ public class Game {
      * @param playerNum The index of the player.
      * @return The players hand based off the players index.
      ******************************************************************/
-    public ArrayList<Tile> getPlayerHand(int playerNum){
+    public ArrayList<Tile> getPlayerHand(int playerNum) {
 
-        if (playerNum < 0 || playerNum >= 4){
+        if (playerNum < 0 || playerNum >= 4) {
 
             throw new IndexOutOfBoundsException("Index is out of "
                     + "bounds. Must be from 0 - 3");
@@ -2427,9 +2461,9 @@ public class Game {
      *
      * @return The most recently discarded tile.
      ******************************************************************/
-    public Tile getRecentDiscard(){
+    public Tile getRecentDiscard() {
 
-        if (discardPile.size() == 0){
+        if (discardPile.size() == 0) {
 
             return null;
         }
@@ -2442,7 +2476,7 @@ public class Game {
      *
      * @return The tiles that are in the draw pile/ main deck.
      ******************************************************************/
-    public ArrayList<Tile> getDrawPile(){
+    public ArrayList<Tile> getDrawPile() {
 
         return tiles;
     }
@@ -2469,9 +2503,9 @@ public class Game {
      *
      * @param player Index of the next player in the sequence
      ******************************************************************/
-    public void setNextCurrentPlayer(int player){
+    public void setNextCurrentPlayer(int player) {
 
-        if (player >= TOTALPLAYER || player < 0){
+        if (player >= TOTALPLAYER || player < 0) {
 
             throw new IllegalArgumentException("Invalid Player Index");
         }
@@ -2483,6 +2517,7 @@ public class Game {
      * @return The game mode
      ******************************************************************/
     public boolean getGameOptionSimple() {
+
         return gameOptionSimple;
     }
 
@@ -2491,7 +2526,7 @@ public class Game {
      * @param mode True for simple game mode, false for complicated or
      *             more traditional format.
      ******************************************************************/
-    public void setGameOptionSimple(boolean mode){
+    public void setGameOptionSimple(boolean mode) {
 
         gameOptionSimple = mode;
     }
@@ -2517,4 +2552,5 @@ public class Game {
 
         AIDiff[playerIndex - 1] = difficulty;
     }
+
 }
