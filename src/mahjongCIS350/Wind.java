@@ -6,7 +6,7 @@ package mahjongCIS350;
  * @Authors: Wayne Chen, Jillian Huizenga, Chris Paul, Aron Zhao
  * @Version: 3/27/2020
  **********************************************************************/
-public class Wind extends Tile{
+public class Wind extends Tile {
 
     /** The direction of the Wind Tile **/
     private String direction;
@@ -25,7 +25,7 @@ public class Wind extends Tile{
      *
      * @param direction Direction of the wind tile.
      ******************************************************************/
-    public Wind(String direction) {
+    public Wind(final String direction) {
 
         super("Wind");
         this.direction = direction;
@@ -45,7 +45,7 @@ public class Wind extends Tile{
      * This method sets the direction of the wind tile.
      * @param direction Direction of the wind tile.
      ******************************************************************/
-    public void setDirection(String direction) {
+    public void setDirection(final String direction) {
 
         this.direction = direction;
     }

@@ -178,7 +178,7 @@ public class Setting extends JPanel {
         label.put(Game.BEGINNER, new JLabel("Beginner"));
         label.put(Game.ADVANCED, new JLabel("Advanced"));
 
-        for (int i = 0; i < Game.TOTALPLAYER - 1; i++){
+        for (int i = 0; i < Game.TOTALPLAYER - 1; i++) {
 
             // Set up Temp Slider
             JSlider temp = new JSlider(JSlider.HORIZONTAL, Game.DUMB,
@@ -263,12 +263,12 @@ public class Setting extends JPanel {
                             i);
                 }
 
-            } else if(event.getSource() == defaultSetting){
+            } else if (event.getSource() == defaultSetting) {
                 board.updateBgColor(defaultR, defaultG, defaultB);
                 bgColor.setBackground(new Color(defaultR, defaultG,
                         defaultB));
 
-                for (int i = 1; i < Game.TOTALPLAYER ; i++) {
+                for (int i = 1; i < Game.TOTALPLAYER; i++) {
 
                     board.setAIDiff(Game.defaultAI, i);
                     settingAI.get(i - 1).setValue(Game.defaultAI);

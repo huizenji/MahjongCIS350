@@ -207,7 +207,7 @@ public class Game {
     /*******************************************************************
      * Remove all the Tiles from all hands and regenerate the game.
      ******************************************************************/
-    public void reset(){
+    public void reset() {
 
         for(int i = 0; i < 4; i++) {
 
@@ -328,7 +328,7 @@ public class Game {
      * @param player The player hands that is being checked.
      * @return Returns the tile that forms the kong.
      ******************************************************************/
-    private Tile isKongHand(Player player) {
+    private Tile isKongHand(final Player player) {
 
         ArrayList<Tile> hand = player.getHandTile();
         Tile kong = null;
@@ -360,7 +360,7 @@ public class Game {
     /*******************************************************************
      * This method sets the AI to the basic level (beginner)
      ******************************************************************/
-    private void setupAIDiff(){
+    private void setupAIDiff() {
 
         AIDiff = new int[TOTALPLAYER - 1];
 
@@ -376,7 +376,8 @@ public class Game {
      * @param plIndex The player index who score is increased.
      * @param discard True if the player has won off a discard.
      ******************************************************************/
-     public void increaseScore(int plIndex , boolean discard) {
+     public void increaseScore(final int plIndex ,
+                               final boolean discard) {
 
         if (plIndex < 0 || plIndex >= TOTALPLAYER) {
 
@@ -421,7 +422,8 @@ public class Game {
      * @param player The player who score is increased.
      * @param discard True if the player has won off a discard.
      ******************************************************************/
-    private void scoreTrad (final Player player, boolean discard) {
+    private void scoreTrad(final Player player,
+                            final boolean discard) {
 
         int point = player.getPoint();
 
@@ -429,12 +431,12 @@ public class Game {
         ArrayList<Tile> setCopy = new ArrayList<>();
 
         // Making Copies of Hand and Set Pile
-        for (Tile t: player.getHandTile()){
+        for (Tile t: player.getHandTile()) {
 
             handCopy.add(t);
         }
 
-        for (Tile t: player.getSetPile()){
+        for (Tile t: player.getSetPile()) {
 
             setCopy.add(t);
         }
@@ -473,7 +475,7 @@ public class Game {
      * @param setPile The score of the set pile
      * @return The score of the set pile
      ******************************************************************/
-    private int scoreSet (ArrayList<Tile> setPile) {
+    private int scoreSet(final ArrayList<Tile> setPile) {
 
         int point = 0;
 
@@ -498,9 +500,8 @@ public class Game {
                 if (setPile.get(i) instanceof Suit) {
 
                     point = point + 2;
-                }
 
-                else {
+                } else {
 
                     point = point + 4;
                 }
@@ -523,7 +524,8 @@ public class Game {
      * @param discard True if the player has won off a discard.
      * @return The score of the player hand.
      ******************************************************************/
-    private int scoreHand(ArrayList<Tile> hand, boolean discard) {
+    private int scoreHand(final ArrayList<Tile> hand,
+                          final boolean discard) {
 
         ArrayList<Tile> temp = new ArrayList<>();
 
@@ -548,7 +550,7 @@ public class Game {
      * @param hand Hand of the Player
      * @return The Tile in order of the Combination
      ******************************************************************/
-    private ArrayList<Tile> findHandComb(ArrayList<Tile> hand) {
+    private ArrayList<Tile> findHandComb(final ArrayList<Tile> hand) {
 
         ArrayList<Tile> temp = new ArrayList<>();
         ArrayList<Tile> handComb = new ArrayList<>();
@@ -583,7 +585,7 @@ public class Game {
                     handComb.add(tile3);
 
                     // The combination picked should be chi or pong
-                    if ( (compareTile(tile1, tile2) &&
+                    if ((compareTile(tile1, tile2) &&
                             compareTile(tile1, tile3))) {
 
                         validComb = true;
@@ -635,7 +637,7 @@ public class Game {
      * @param tile The hand or set pile that is scored.
      * @return The score that consist of only chi and pongs.
      ******************************************************************/
-    private int scoreChiPong (ArrayList<Tile> tile) {
+    private int scoreChiPong (final ArrayList<Tile> tile) {
 
         int point = 0;
 
@@ -645,7 +647,7 @@ public class Game {
         }
 
         // Scan Through and Total for Each chi and Pong
-        for (int i = 0; i < tile.size(); i+= 3) {
+        for (int i = 0; i < tile.size(); i += 3) {
 
             Tile tile1 = tile.get(i);
             Tile tile2 = tile.get(i + 1);
@@ -658,9 +660,8 @@ public class Game {
                 if (tile1 instanceof Suit) {
 
                     point++;
-                }
 
-                else {
+                } else {
 
                     point = point + 2;
                 }
@@ -670,24 +671,22 @@ public class Game {
             else if (tile1 instanceof Suit
                     && tile2 instanceof Suit && tile3 instanceof Suit) {
 
-                if (compareConsecutiveSuits( (Suit)(tile1),
-                        (Suit)(tile2), (Suit)(tile3))) {
+                if (compareConsecutiveSuits((Suit) (tile1),
+                        (Suit) (tile2), (Suit) (tile3))) {
 
                     if (((Suit) tile1).getValue() == 1
                             || ((Suit) tile2).getValue() == 1
                             || ((Suit) tile3).getValue() == 1) {
 
                         point = point + 2;
-                    }
 
-                    else if (((Suit) tile1).getValue() == 9
+                    } else if (((Suit) tile1).getValue() == 9
                             || ((Suit) tile2).getValue() == 9
                             || ((Suit) tile3).getValue() == 9) {
 
                         point = point + 2;
-                    }
 
-                    else {
+                    } else {
 
                         point++;
                     }
@@ -706,8 +705,9 @@ public class Game {
      * @param discard True if the player has won off a discard.
      * @return True if won with one of these conditions.
      ******************************************************************/
-    private boolean allSame(ArrayList<Tile> hand, ArrayList<Tile> set,
-                            boolean discard) {
+    private boolean allSame(final ArrayList<Tile> hand,
+                            final ArrayList<Tile> set,
+                            final boolean discard) {
 
         // All Kongs and Flowers are removed due to previous call other
         // other methods
@@ -874,7 +874,7 @@ public class Game {
      *              player of the current player
      * @return True if the player can claim a chi.
      ******************************************************************/
-    public boolean isChi(Player pl, Tile check) {
+    public boolean isChi(final Player pl, final Tile check) {
 
         ArrayList<Tile> plHand = pl.getHandTile();
 
@@ -920,7 +920,8 @@ public class Game {
      *                 for a pong.
      * @param check The tile checked if it can be made into a pong
      ******************************************************************/
-    public boolean isPong(ArrayList<Tile> handTile, Tile check) {
+    public boolean isPong(final ArrayList<Tile> handTile,
+                          final Tile check) {
 
         // Number of Tiles in Player hand that can used for a pong
         int matchTile = 0;
@@ -944,6 +945,7 @@ public class Game {
         if (matchTile >= 2) {
 
             return true;
+
         } else {
 
             return false;
@@ -959,7 +961,7 @@ public class Game {
      * @param tile2 The second tile that is being compared.
      * @return true if both tiles are the same.
      ******************************************************************/
-    private boolean compareTile(Tile tile1, Tile tile2) {
+    private boolean compareTile(final Tile tile1, final Tile tile2) {
 
         //If we have null tile throw an exception
         if (tile1 == null) {
@@ -1020,11 +1022,12 @@ public class Game {
      * @param check The Tile that is checked if it can be made into a
      *              Kong.
      ******************************************************************/
-    public boolean isKong(ArrayList<Tile> search, Tile check) {
+    public boolean isKong(final ArrayList<Tile> search,
+                          final Tile check) {
 
         int numOfMatch = 0;
 
-        if (check == null){
+        if (check == null) {
 
             return false;
         }
@@ -1058,7 +1061,7 @@ public class Game {
      * @param player The player that is being checked.
      * @return true if the player can form a kong using the set pile.
      ******************************************************************/
-    public boolean isKongDraw(Player player) {
+    public boolean isKongDraw(final Player player) {
 
         boolean kong = false;
         // Note when a tile is draw, the tile is in the last index in
@@ -1077,7 +1080,7 @@ public class Game {
 
         for (int i = 0; i < setPile.size(); i++) {
 
-            if(compareTile(setPile.get(i), player.getHandTile().get(
+            if (compareTile(setPile.get(i), player.getHandTile().get(
                     player.getHandTile().size() - 1))) {
 
                 totalTile++;
@@ -1102,7 +1105,8 @@ public class Game {
      * @param check The Tile checked to see if it lets the Player
      *              Mahjong.
      ******************************************************************/
-    public boolean isMahjong(ArrayList<Tile> handTile, Tile check) {
+    public boolean isMahjong(final ArrayList<Tile> handTile,
+                             final Tile check) {
 
         // Make a copy of what is in the Player's hand
         ArrayList<Tile> temp = new ArrayList<>();
@@ -1127,7 +1131,7 @@ public class Game {
      * @param hand The hand that is checked
      * @return True if the hand has a Mahjong, false if not.
      ******************************************************************/
-    private boolean isMahjongBacktrackAlg(ArrayList<Tile> hand) {
+    private boolean isMahjongBacktrackAlg(final ArrayList<Tile> hand) {
 
         // Make a copy of what is in the Player's hand
         ArrayList<Tile> temp = new ArrayList<>();
@@ -1141,14 +1145,13 @@ public class Game {
             copy.add(t);
         }
 
-        if (temp.size() == 2 ) {
+        if (temp.size() == 2) {
 
             if (compareTile(temp.get(0), temp.get(1))) {
 
                 return true;
-            }
 
-            else {
+            } else {
 
                 return false;
             }
@@ -1158,9 +1161,8 @@ public class Game {
         else if (temp.size() % 3 != 2) {
 
             return false;
-        }
 
-        else {
+        } else {
 
             // This section removes the first chi or pong in the players
             // hand, then applies the algorithm
@@ -1234,12 +1236,13 @@ public class Game {
     }
 
     /*******************************************************************
-     * This method finds the tiles the player can used to claim a chi
+     * This method finds the tiles the player can used to claim a chi.
      * @param pl The player that claimed the chi.
      * @param discard The tile that is discarded to claim the chi.
      * @return AN array list of integers the chi consisting of index.
      ******************************************************************/
-     public ArrayList<Integer> getChiTile(Player pl, Tile discard) {
+     public ArrayList<Integer> getChiTile(final Player pl,
+                                          final Tile discard) {
 
         ArrayList<Tile> desired = new ArrayList<>();
         ArrayList<Integer> loc = new ArrayList<>();
@@ -1285,9 +1288,8 @@ public class Game {
                 loc.remove(i);
                 loc.remove(i);
                 i = i - 2;
-            }
 
-            else if (loc.get(i) == loc.get(i + 3)
+            } else if (loc.get(i) == loc.get(i + 3)
                     && loc.get(i + 1) == loc.get(i + 2)) {
 
                 loc.remove(i + 2);
@@ -1308,7 +1310,8 @@ public class Game {
      * @param tile2 The tile index of the second tile that is used to
      *              claim the chi.
      ******************************************************************/
-    public void takeChi(Player player, int tile1, int tile2) {
+    public void takeChi(final Player player, final int tile1,
+                        final int tile2) {
 
         if (tile1 == tile2) {
 
@@ -1329,7 +1332,7 @@ public class Game {
      * @param tile The discard tile that is being used to claim the
      *             pong.
      ******************************************************************/
-    public void takePong(Player pl, Tile tile) {
+    public void takePong(final Player pl, final Tile tile) {
 
         ArrayList<Tile> desired = new ArrayList<>();
         desired.add(tile);
@@ -1351,7 +1354,7 @@ public class Game {
      * @param pl The player that is claiming the kong.
      * @param tile The tile that is being used to claim the kong.
      ******************************************************************/
-    public void takeKong(Player pl, Tile tile) {
+    public void takeKong(final Player pl, final Tile tile) {
 
         ArrayList<Tile> desired = new ArrayList<>();
         desired.add(tile);
@@ -1375,7 +1378,7 @@ public class Game {
      *
      * @param player Player who drew into a kong.
      ******************************************************************/
-    public void takeKongDraw(Player player) {
+    public void takeKongDraw(final Player player) {
 
         // Add the tile from hand to setpile
         int lastLoc = player.getHandTile().size() - 1;
@@ -1393,8 +1396,8 @@ public class Game {
      *                as an arraylist.
      * @return The index where the searched tiles are found.
      ******************************************************************/
-    private ArrayList<Integer> findTile(ArrayList<Tile> playerHand,
-                                        ArrayList<Tile> desired) {
+    private ArrayList<Integer> findTile(final ArrayList<Tile> playerHand,
+                                        final ArrayList<Tile> desired) {
 
         ArrayList<Integer> index_loc = new ArrayList();
 
@@ -1430,8 +1433,9 @@ public class Game {
      *                as an arraylist.
      * @return The index where the searched tiles are found.
      ******************************************************************/
-    private ArrayList<Integer> findTileVer2(ArrayList<Tile> playerHand,
-                                        ArrayList<Tile> desired) {
+    private ArrayList<Integer> findTileVer2(final ArrayList<Tile>
+                                                    playerHand,
+                                       final  ArrayList<Tile> desired) {
 
         ArrayList<Integer> index_loc = new ArrayList();
 
@@ -1460,7 +1464,7 @@ public class Game {
      *
      * @param player The player hand that is being sorted.
      ******************************************************************/
-    private void autoSort(Player player) {
+    private void autoSort(final Player player) {
 
         ArrayList<Tile> temp = new ArrayList<>();
         String[] dragonColor = {"Red", "Green", "White"};
@@ -1565,7 +1569,7 @@ public class Game {
      *
      * @param hand The hand the is being autosorted
      ******************************************************************/
-    private ArrayList<Tile> autoSort(ArrayList<Tile> hand) {
+    private ArrayList<Tile> autoSort(final ArrayList<Tile> hand) {
 
         ArrayList<Tile> temp = new ArrayList<>();
         String[] dragonColor = {"Red", "Green", "White"};
@@ -1671,7 +1675,7 @@ public class Game {
      * @param tile2 The second Tile that is being compared.
      * @return true if both Tiles are the same.
      ******************************************************************/
-    private boolean compareSuit(Suit tile1, Suit tile2) {
+    private boolean compareSuit(final Suit tile1, final Suit tile2) {
 
         if (tile1 == null) {
 
@@ -1703,8 +1707,9 @@ public class Game {
      * @return True if the tiles are the same suit and are consecutive
      *         with respective to each other.
      *****************************************************************/
-    private boolean compareConsecutiveSuits(Suit tile1, Suit tile2,
-                                            Suit tile3) {
+    private boolean compareConsecutiveSuits(final Suit tile1,
+                                            final Suit tile2,
+                                            final Suit tile3) {
 
         // make an array to hold the three values of the three Tiles
         int[] array = {tile1.getValue(), tile2.getValue(),
@@ -1789,7 +1794,8 @@ public class Game {
      * @param tile the indicated Tile that might be part of a pair
      * @return true if pair is found, otherwise false
      ******************************************************************/
-    private boolean isPair(ArrayList<Tile> plHand, Tile tile) {
+    private boolean isPair(final ArrayList<Tile> plHand,
+                           final Tile tile) {
 
         int counter = 0;
 
@@ -1818,7 +1824,7 @@ public class Game {
      * @param tile the Tile that may be part of an almost-Chi.
      * @return true if the Tile is part of an almost-Chi.
      ******************************************************************/
-    private boolean isAlmostChi(Player pl, Tile tile) {
+    private boolean isAlmostChi(final Player pl, final Tile tile) {
 
         ArrayList<Tile> plHand = pl.getHandTile();
 
@@ -1845,11 +1851,11 @@ public class Game {
                                 Suit suit2 = (Suit) plHand.get(j);
 
                                 if (compareConsecutiveSuits(suit1,
-                                        suit2, (Suit) tiles.get(check)))
-                                {
+                                        suit2,
+                                        (Suit) tiles.get(check))) {
 
                                     if (compareTile(suit1, tile) ||
-                                            compareTile(suit2, tile)){
+                                            compareTile(suit2, tile)) {
 
                                         return true;
                                     }
@@ -1884,9 +1890,8 @@ public class Game {
 
             pl.getHandTile().add(drawn);
             removeKongHand();
-        }
 
-        else {
+        } else {
 
             pl.getHandTile().add(drawn);
         }
@@ -1899,7 +1904,7 @@ public class Game {
      * @param player The player that is discarding the tile.
      * @param tileIndex The tile index in the selected players hand.
      ******************************************************************/
-    public void discard(Player player, int tileIndex) {
+    public void discard(final Player player, final int tileIndex) {
 
         if (tileIndex >= player.getHandTile().size() || tileIndex < 0) {
 
@@ -1935,9 +1940,9 @@ public class Game {
      *
      * @param pl The player whose action will be determined by an AI.
      ******************************************************************/
-    public void dumbAIDraw(Player pl) {
+    public void dumbAIDraw(final Player pl) {
 
-        if (pl == null){
+        if (pl == null) {
 
             throw new IllegalArgumentException("Player can not be "
                     + "Null");
@@ -1957,7 +1962,7 @@ public class Game {
      * @param player The player whose action will be determined by
      *               an AI.
      ******************************************************************/
-    private void dumbAIDiscard(Player player) {
+    private void dumbAIDiscard(final Player player) {
 
         if (player == null) {
 
@@ -1976,9 +1981,9 @@ public class Game {
      * @param pl The player whose action will be determined by
      *               an AI.
      ******************************************************************/
-    private void beginnerAIDiscard(Player pl) {
+    private void beginnerAIDiscard(final Player pl) {
 
-        if (pl == null){
+        if (pl == null) {
 
             throw new IllegalArgumentException("Player can not be "
                     + "Null");
@@ -2073,7 +2078,7 @@ public class Game {
      * choose a Tile discard based on the AI difficulty.
      * @param pl player that is discarding
      ******************************************************************/
-    public void generalAIDiscard(Player pl) {
+    public void generalAIDiscard(final Player pl) {
 
         if (pl.equals(playerList[1])) {
 
@@ -2081,42 +2086,42 @@ public class Game {
 
                 dumbAIDiscard(pl);
 
-            }else if (AIDiff[0] == BEGINNER) {
+            } else if (AIDiff[0] == BEGINNER) {
 
                 beginnerAIDiscard(pl);
 
-            }else {
+            } else {
 
                 advancedAIDiscard(pl);
             }
 
-        }else if (pl.equals(playerList[2])) {
+        } else if (pl.equals(playerList[2])) {
 
             if (AIDiff[1] == DUMB) {
 
                 dumbAIDiscard(pl);
 
-            }else if (AIDiff[1] == BEGINNER) {
+            } else if (AIDiff[1] == BEGINNER) {
 
                 beginnerAIDiscard(pl);
 
-            }else {
+            } else {
 
                 advancedAIDiscard(pl);
             }
 
 
-        }else if (pl.equals(playerList[3])) {
+        } else if (pl.equals(playerList[3])) {
 
             if (AIDiff[2] == DUMB) {
 
                 dumbAIDiscard(pl);
 
-            }else if (AIDiff[2] == BEGINNER) {
+            } else if (AIDiff[2] == BEGINNER) {
 
                 beginnerAIDiscard(pl);
 
-            }else {
+            } else {
 
                 advancedAIDiscard(pl);
             }
@@ -2135,7 +2140,7 @@ public class Game {
      * @return the number of the indicated Tile that is in the 
      * discard pile
      ******************************************************************/
-    private int numInDiscard(Tile tile) {
+    private int numInDiscard(final Tile tile) {
 
         int count = 0;
 
@@ -2156,9 +2161,9 @@ public class Game {
      * in the discard pile.
      * @param plIndex The winning player index.
      ******************************************************************/
-    public void showWinningHand(int plIndex) {
+    public void showWinningHand(final int plIndex) {
 
-        if (plIndex < 0 || plIndex >= playerList.length){
+        if (plIndex < 0 || plIndex >= playerList.length) {
 
             throw new IllegalArgumentException("Not a valid index");
         }
@@ -2399,7 +2404,7 @@ public class Game {
      *
      * @return The current player.
      ******************************************************************/
-    public Player getCurrentPlayer(){
+    public Player getCurrentPlayer() {
 
         return playerList[currentPlayer];
     }
@@ -2418,7 +2423,7 @@ public class Game {
      * @param playerNum THe index of the player.
      * @return The player based of the index.
      ******************************************************************/
-    public Player getPlayerList(int playerNum) {
+    public Player getPlayerList(final int playerNum) {
 
         if (playerNum < 0 || playerNum > 4) {
 
@@ -2503,7 +2508,7 @@ public class Game {
      *
      * @param player Index of the next player in the sequence
      ******************************************************************/
-    public void setNextCurrentPlayer(int player) {
+    public void setNextCurrentPlayer(final int player) {
 
         if (player >= TOTALPLAYER || player < 0) {
 
@@ -2526,7 +2531,7 @@ public class Game {
      * @param mode True for simple game mode, false for complicated or
      *             more traditional format.
      ******************************************************************/
-    public void setGameOptionSimple(boolean mode) {
+    public void setGameOptionSimple(final boolean mode) {
 
         gameOptionSimple = mode;
     }
@@ -2536,7 +2541,7 @@ public class Game {
      * @param difficulty Difficult of the AI.
      * @param playerIndex Which AI at the player index.
      ******************************************************************/
-    public void setAIDiff(int difficulty, int playerIndex) {
+    public void setAIDiff(final int difficulty, final int playerIndex) {
 
         if (difficulty < Game.DUMB || difficulty > Game.ADVANCED) {
 

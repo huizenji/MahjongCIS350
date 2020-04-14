@@ -100,9 +100,9 @@ public class Player {
      *
      * @param index The index of which the tile is located at.
      ******************************************************************/
-    public void removeTileSet(final int index){
+    public void removeTileSet(final int index) {
 
-        if (index < 0 || index >= handTile.size()){
+        if (index < 0 || index >= handTile.size()) {
 
             throw new IllegalArgumentException("Invalid position: "
                     + index);
@@ -127,13 +127,14 @@ public class Player {
      * @param index The index where the tile is located at
      * @return The tile of located at the specific index.
      ******************************************************************/
-    public Tile getTileFromHand(final int index){
+    public Tile getTileFromHand(final int index) {
 
-        if (index < 0 || index >= handTile.size()){
+        if (index < 0 || index >= handTile.size()) {
 
             throw new IllegalArgumentException("Invalid position: "
                     + index);
         }
+
         return handTile.get(index);
     }
 
@@ -169,7 +170,10 @@ public class Player {
      *
      * @return An arraylist containing the tiles in the players setpile.
      ******************************************************************/
-    public ArrayList<Tile> getSetPile(){return setPile;}
+    public ArrayList<Tile> getSetPile() {
+
+        return setPile;
+    }
 
     /*******************************************************************
      * This method gets a tile in the player's set pile at a specific
@@ -178,9 +182,9 @@ public class Player {
      * @param index The index of the tile.
      * @return The tile in the set pile at the specfic index.
      ******************************************************************/
-    public Tile getSetTile(final int index){
+    public Tile getSetTile(final int index) {
 
-        if (index < 0 || index >= setPile.size()){
+        if (index < 0 || index >= setPile.size()) {
 
             throw new IllegalArgumentException("Tile index does"
                     + " not exist.");
@@ -194,9 +198,9 @@ public class Player {
      *
      * @param points The number of points that player will have.
      ******************************************************************/
-    public void setPoint(int points) {
+    public void setPoint(final int points) {
 
-        if (points < 0 ){
+        if (points < 0) {
 
             throw new IllegalArgumentException("Point Value should "
                     + "be greater than 0");
@@ -211,6 +215,7 @@ public class Player {
      * @return The number of points the player has.
      ******************************************************************/
     public int getPoint() {
+
         return point;
     }
 }

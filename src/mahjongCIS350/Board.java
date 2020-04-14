@@ -109,6 +109,12 @@ public class Board extends JPanel {
     /** Default Background color of Blue Shade. **/
     private final int defaultB = 100;
 
+    /** Default discard pile width **/
+    private final int disWid = 350;
+
+    /** Default discard pile height **/
+    private final int disHei = 225;
+
     /*******************************************************************
      * This is the Board class constructor. This implements all global
      * variables, sets up the board display, deals the Tiles, and
@@ -173,7 +179,7 @@ public class Board extends JPanel {
         discardPilePanel.setBorder(BorderFactory.
                 createBevelBorder(1));
         discardPilePanel.setPreferredSize(
-                new Dimension(350, 225));
+                new Dimension(disWid, disHei));
         gameBoard.setBorder(BorderFactory.createLineBorder(Color.BLACK,
                 2));
 
@@ -271,7 +277,7 @@ public class Board extends JPanel {
                         gameModeSwap();
 
                         if (game.getCurrentPlayerIndex()
-                                != game.getStartingPlayer()){
+                                != game.getStartingPlayer()) {
 
                             game.setNextStartingPlayer();
                         }
@@ -284,7 +290,7 @@ public class Board extends JPanel {
                         game.takeKongDraw(game.getCurrentPlayer());
                     }
 
-                    else{
+                    else {
 
                         game.generalAIDiscard(game.getCurrentPlayer());
                     }
@@ -342,7 +348,7 @@ public class Board extends JPanel {
                                         false);
                                 gameModeSwap();
 
-                                if (0 != game.getStartingPlayer()){
+                                if (0 != game.getStartingPlayer()) {
 
                                     game.setNextStartingPlayer();
                                 }
@@ -444,7 +450,7 @@ public class Board extends JPanel {
 
                         c.gridx = col;
                         c.gridy = row;
-                        drawPilePanel.add(drawPile.get((index)), c);
+                        drawPilePanel.add(drawPile.get(index), c);
                         index++;
                     }
 
@@ -452,7 +458,7 @@ public class Board extends JPanel {
 
                     c.gridx = col;
                     c.gridy = row;
-                    drawPilePanel.add(drawPile.get((index)), c);
+                    drawPilePanel.add(drawPile.get(index), c);
                     index++;
                 }
             }
@@ -538,9 +544,10 @@ public class Board extends JPanel {
      * Helper method that reveals the winning player's hand.
      * @param playerIndex index of winning player
      ******************************************************************/
-    private void revealWinningAIHand(int playerIndex){
+    private void revealWinningAIHand(final int playerIndex) {
 
-         for (int i = 0; i < game.getCurrentPlayer().getHandTile().size(); i++) {
+         for (int i = 0; i < game.getCurrentPlayer().getHandTile()
+                 .size(); i++) {
 
              if (playerIndex == 1) {
 
@@ -549,13 +556,14 @@ public class Board extends JPanel {
                  p2Hand.get(i).setPreferredSize(new Dimension(
                          50, 50));
 
-             }else if (playerIndex == 2) {
+             } else if (playerIndex == 2) {
 
                  p3Hand.get(i).setIcon(updatedImage(game.getPlayerList(
                          0).getTileFromHand(i)));
                  p3Hand.get(i).setPreferredSize(new Dimension(
                          50, 50));
-             }else if (playerIndex == 3) {
+
+             } else if (playerIndex == 3) {
 
                  p4Hand.get(i).setIcon(updatedImage(game.getPlayerList(
                          0).getTileFromHand(i)));
@@ -563,11 +571,10 @@ public class Board extends JPanel {
                          50, 50));
              } else {
 
-                 throw new IllegalArgumentException("Player 1 Hand " +
-                         "already revealed");
+                 throw new IllegalArgumentException("Player 1 Hand "
+                         + "already revealed");
              }
          }
-
     }
 
     /*******************************************************************
@@ -601,7 +608,7 @@ public class Board extends JPanel {
                     return getFlowerImage(((Flower) tile).getNumber());
             }
         }
-        System.out.println("Error in updatedImage()");
+
         return tileBack;
     }
 
@@ -742,6 +749,7 @@ public class Board extends JPanel {
             case 9:
                 return circle9;
         }
+
         return tileBack;
     }
 
@@ -753,7 +761,7 @@ public class Board extends JPanel {
      * @return an Image that correctly matches the indicated value,
      *         will return tileBack if there is an error.
      ******************************************************************/
-    private ImageIcon getBambooImage(int value) {
+    private ImageIcon getBambooImage(final int value) {
 
         switch (value) {
 
@@ -918,12 +926,6 @@ public class Board extends JPanel {
 
         int p1HandSize = game.getPlayerList(
                 0).getHandTile().size();
-        int p2HandSize = game.getPlayerList(
-                1).getHandTile().size();
-        int p3HandSize = game.getPlayerList(
-                2).getHandTile().size();
-        int p4HandSize = game.getPlayerList(
-                3).getHandTile().size();
         
         int discardPileSize = game.getDiscardPile().size();
         int drawPileSize = game.getDrawPile().size();
@@ -938,9 +940,6 @@ public class Board extends JPanel {
                 3).getSetPile().size();
 
         updateP1Hand(p1HandSize);
-//        updateP2Hand(p2HandSize);
-//        updateP3Hand(p3HandSize);
-//        updateP4Hand(p4HandSize);
 
         updateP1SetPile(p1SetSize);
         updateP2SetPile(p2SetSize);
@@ -963,17 +962,17 @@ public class Board extends JPanel {
             p1HandPanel.setBackground(Color.GREEN);
             p4HandPanel.setBackground(color);
 
-        }else if (game.getCurrentPlayerIndex() == 1) {
+        } else if (game.getCurrentPlayerIndex() == 1) {
 
             p2HandPanel.setBackground(Color.GREEN);
             p1HandPanel.setBackground(color);
 
-        }else if (game.getCurrentPlayerIndex() == 2) {
+        } else if (game.getCurrentPlayerIndex() == 2) {
 
             p3HandPanel.setBackground(Color.GREEN);
             p2HandPanel.setBackground(color);
 
-        }else if (game.getCurrentPlayerIndex() == 3) {
+        } else if (game.getCurrentPlayerIndex() == 3) {
 
             p4HandPanel.setBackground(Color.GREEN);
             p3HandPanel.setBackground(color);
@@ -1307,13 +1306,14 @@ public class Board extends JPanel {
         String message = "Would you like to play ";
         String message2;
 
-        if (!game.getGameOptionSimple()){
+        if (!game.getGameOptionSimple()) {
 
             message2 = "Simple Mode?";
         } else {
 
             message2 = "Traditional Mode?";
         }
+
         int swap = JOptionPane.showConfirmDialog(
                 null, message + message2,
                 "Mode Switch",
@@ -1327,8 +1327,6 @@ public class Board extends JPanel {
             resetBtn.setEnabled(false);
         }
     }
-
-
 
     /*******************************************************************
      * This method checks all the Players and returns a Player who has
@@ -1346,11 +1344,11 @@ public class Board extends JPanel {
         }
 
         for (int i = game.getCurrentPlayerIndex() + 1;
-             i < (game.getCurrentPlayerIndex() + game.TOTALPLAYER)
-                ; i++) {
+             i < (game.getCurrentPlayerIndex() + game.TOTALPLAYER);
+             i++) {
 
-            if (game.isMahjong(game.getPlayerHand((i %
-                    game.TOTALPLAYER)), game.getRecentDiscard())) {
+            if (game.isMahjong(game.getPlayerHand(
+                    (i % game.TOTALPLAYER)), game.getRecentDiscard())) {
 
                 return i % game.TOTALPLAYER;
             }
@@ -1392,8 +1390,8 @@ public class Board extends JPanel {
 
         int takeChi = JOptionPane.showConfirmDialog(null,
                 message, msgTitle,
-                JOptionPane.YES_NO_OPTION, JOptionPane.INFORMATION_MESSAGE
-                ,updatedImage(disTile));
+                JOptionPane.YES_NO_OPTION,
+                JOptionPane.INFORMATION_MESSAGE, updatedImage(disTile));
 
         if (takeChi == JOptionPane.YES_OPTION) {
 
@@ -1403,7 +1401,7 @@ public class Board extends JPanel {
                     game.getRecentDiscard());
 
             // Loop Through Options
-            while (options.size() > 0){
+            while (options.size() > 0) {
 
                 Suit tile1 = (Suit) game.getPlayerList(0).
                         getHandTile().get(options.get(0));
@@ -1418,8 +1416,7 @@ public class Board extends JPanel {
                                 message, icon2, SwingConstants.LEFT),
                         msgTitle,
                         JOptionPane.YES_NO_OPTION,
-                        JOptionPane.INFORMATION_MESSAGE
-                        , icon1);
+                        JOptionPane.INFORMATION_MESSAGE, icon1);
 
                 if (claimChi == JOptionPane.YES_OPTION) {
 
@@ -1553,7 +1550,7 @@ public class Board extends JPanel {
                 drawFlag = false;
                 resetBtn.setEnabled(true);
 
-                if (winner != game.getStartingPlayer()){
+                if (winner != game.getStartingPlayer()) {
 
                     game.setNextStartingPlayer();
                 }
@@ -1573,7 +1570,7 @@ public class Board extends JPanel {
             drawFlag = false;
             resetBtn.setEnabled(true);
 
-            if (winner != game.getStartingPlayer()){
+            if (winner != game.getStartingPlayer()) {
 
                 game.setNextStartingPlayer();
             }
@@ -1602,6 +1599,7 @@ public class Board extends JPanel {
         for (int i = game.getCurrentPlayerIndex() + 1;
              i < (game.getCurrentPlayerIndex() + game.TOTALPLAYER)
                      ; i++) {
+
             if (game.isKong(game.getPlayerHand(i %
                     game.TOTALPLAYER), game.getRecentDiscard())
                     && drawFlag) {
@@ -1625,21 +1623,21 @@ public class Board extends JPanel {
         }
 
         // Check for pongs that can be claimed
-        /** To do Check for all players in order later **/
+        // to do: check for all players in order later
         if (drawFlag) {
             for (int i = game.getCurrentPlayerIndex() + 1;
-                 i < (game.getCurrentPlayerIndex() + game.TOTALPLAYER)
-                    ; i++) {
+                 i < (game.getCurrentPlayerIndex() + game.TOTALPLAYER);
+                 i++) {
 
                 if (game.isPong(game.getPlayerHand(0),
                         game.getRecentDiscard())) {
 
                     // Human Action
                     if (i % game.TOTALPLAYER == 0) {
-                        pongSeq(game.getRecentDiscard());
-                    }
 
-                    else {
+                        pongSeq(game.getRecentDiscard());
+
+                    } else {
                               game.takePong(game.getPlayerList(
                                       i % game.TOTALPLAYER),
                                       game.getRecentDiscard());
@@ -1660,11 +1658,13 @@ public class Board extends JPanel {
                 game.TOTALPLAYER;
 
         if (drawFlag) {
+
             if (game.isChi(game.getPlayerList(nextPlIndex),
                      game.getRecentDiscard())) {
 
                 // If Human Player
                 if (nextPlIndex == 0) {
+
                     chiSeq((Suit) game.getRecentDiscard());
                 }
 
@@ -1675,7 +1675,7 @@ public class Board extends JPanel {
                                 game.getRecentDiscard());
 
                         // Loop Through Options
-                        while (options.size() > 0){
+                        while (options.size() > 0) {
 
                                 game.takeChi(game.getPlayerList(
                                         nextPlIndex),
@@ -1781,7 +1781,8 @@ public class Board extends JPanel {
      * @param green The shade of the green element.
      * @param blue The shade of the blue element.
      ******************************************************************/
-    public void updateBgColor(int red, int green, int blue) {
+    public void updateBgColor(final int red, final int green,
+                              final int blue) {
 
         color = new Color(red, green, blue);
         updateBackground();
@@ -1793,7 +1794,7 @@ public class Board extends JPanel {
      * @param difficulty Difficult of the AI.
      * @param playerIndex Which AI.
      ******************************************************************/
-    public void setAIDiff (int difficulty, int playerIndex) {
+    public void setAIDiff(final int difficulty, final int playerIndex) {
 
         if (difficulty < Game.DUMB || difficulty > Game.ADVANCED) {
 
@@ -1831,11 +1832,11 @@ public class Board extends JPanel {
      * pile.
      * @param plIndex The winning player index.
      ******************************************************************/
-    private void displayWinningHand(int plIndex) {
+    private void displayWinningHand(final int plIndex) {
 
         int index = 0;
         updateDiscardPile(0);
-        game.showWinningHand(index);
+        game.showWinningHand(plIndex);
 
         while (discardPile.size() < game.getDiscardPile().size()) {
 
@@ -1905,7 +1906,7 @@ public class Board extends JPanel {
                 }
             }
 
-            if (event.getSource() == resetBtn){
+            if (event.getSource() == resetBtn) {
 
                 game.reset();
                 resetBoard();
@@ -1914,6 +1915,7 @@ public class Board extends JPanel {
             }
         }
     }
+
 }
 
 
